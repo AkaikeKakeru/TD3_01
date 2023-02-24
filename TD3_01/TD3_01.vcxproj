@@ -166,7 +166,6 @@
     <ClCompile Include="Engine\3d\Camera\Camera.cpp" />
     <ClCompile Include="Application\Function\Collider\Collision.cpp" />
     <ClCompile Include="Application\Function\Cursor.cpp" />
-    <ClCompile Include="Application\Math\Degree.cpp" />
     <ClCompile Include="Application\Base\DirectXBasis.cpp" />
     <ClCompile Include="Engine\2d\DrawBasis.cpp" />
     <ClCompile Include="Application\Base\FixFPS.cpp" />
@@ -208,7 +207,6 @@
     <ClInclude Include="Application\Function\Collider\Collision.h" />
     <ClInclude Include="Application\Function\Cursor.h" />
     <ClInclude Include="Engine\Debugger\DebugText.h" />
-    <ClInclude Include="Application\Math\Degree.h" />
     <ClInclude Include="Application\Base\DirectXBasis.h" />
     <ClInclude Include="Engine\2d\DrawBasis.h" />
     <ClInclude Include="Application\Base\FixFPS.h" />

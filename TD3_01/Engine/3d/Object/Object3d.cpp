@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "Degree.h"
+#include "MyMath.h"
 #include "WinApp.h"
 #include "Model.h"
 

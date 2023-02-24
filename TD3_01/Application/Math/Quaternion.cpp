@@ -1,6 +1,6 @@
 #include "Quaternion.h"
 #include <cmath>
-#include "Degree.h"
+#include "MyMath.h"
 
 Quaternion& operator+(Quaternion q0, Quaternion q1) {
 	q0.x += q1.x;

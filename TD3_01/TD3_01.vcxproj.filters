@@ -165,9 +165,6 @@
     <ClCompile Include="Application\Base\FixFPS.cpp">
       <Filter>ソース ファイル\Application\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Math\Degree.cpp">
-      <Filter>ソース ファイル\Application\math</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\ConstBuffer\ViewProjection.cpp">
       <Filter>ソース ファイル\Engine\ConstBuffer</Filter>
     </ClCompile>
@@ -270,9 +267,6 @@
       <Filter>ヘッダー ファイル\Application\math</Filter>
     </ClInclude>
     <ClInclude Include="Application\Math\Matrix4.h">
-      <Filter>ヘッダー ファイル\Application\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Math\Degree.h">
       <Filter>ヘッダー ファイル\Application\math</Filter>
     </ClInclude>
     <ClInclude Include="Application\Base\Input.h">
