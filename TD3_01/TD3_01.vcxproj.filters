@@ -249,9 +249,6 @@
     <ClCompile Include="Application\Math\MyMath.cpp">
       <Filter>ソース ファイル\Application\math</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Function\Collider\BaseCollider.cpp">
-      <Filter>ソース ファイル\Application\Function\Collider</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Base\DirectXBasis.h">
