@@ -1,6 +1,6 @@
 #include "Quaternion.h"
 #include <cmath>
-
+#include "Degree.h"
 
 Quaternion& operator+(Quaternion q0, Quaternion q1) {
 	q0.x += q1.x;
@@ -156,6 +156,13 @@ Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion) {
 	rotated = { r.x,r.y,r.z };
 
 	return rotated;
+}
+
+Vector3 CreateRotationVector(Vector3 axisAngle, float angleRadian) {
+	Quaternion rotation = MakeAxisAngle(axisAngle, ConvertToRadian(1.0f));
+	Vector3 point = axisAngle * angleRadian;
+
+	return RotateVector(point, rotation);
 }
 
 Matrix4 MakeRotateMatrix(const Quaternion& quaternion) {
