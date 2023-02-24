@@ -249,6 +249,9 @@
     <ClCompile Include="Application\Function\Collider\CollisionPrimitive.cpp">
       <Filter>ソース ファイル\Application\Function\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Math\MyMath.cpp">
+      <Filter>ソース ファイル\Application\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Base\DirectXBasis.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="Application\Function\Collider\CollisionPrimitive.h">
       <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Math\MyMath.h">
+      <Filter>ヘッダー ファイル\Application\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
