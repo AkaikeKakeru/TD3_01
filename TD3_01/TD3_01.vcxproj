@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Function\Collider\CollisionPrimitive.cpp" />
     <ClCompile Include="Application\Game\Scene\GamePlayScene.cpp" />
     <ClCompile Include="Application\Game\Scene\Manager\BaseScene.cpp" />
     <ClCompile Include="Application\Game\Skydome\Skydome.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Application\Game\Player\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Function\Collider\CollisionPrimitive.h" />
     <ClInclude Include="Application\Game\GameMain.h" />
     <ClInclude Include="Application\Game\Scene\Manager\AbstractSceneFactory.h" />
     <ClInclude Include="Application\Game\Scene\Manager\BaseScene.h" />

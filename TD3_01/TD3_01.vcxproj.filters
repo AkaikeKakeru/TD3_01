@@ -246,6 +246,9 @@
     <ClCompile Include="Application\Function\Collider\Collision.cpp">
       <Filter>ソース ファイル\Application\Function\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Function\Collider\CollisionPrimitive.cpp">
+      <Filter>ソース ファイル\Application\Function\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Base\DirectXBasis.h">
@@ -357,6 +360,9 @@
       <Filter>ヘッダー ファイル\Application\Game\Skydome</Filter>
     </ClInclude>
     <ClInclude Include="Application\Function\Collider\Collision.h">
+      <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Function\Collider\CollisionPrimitive.h">
       <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
     </ClInclude>
   </ItemGroup>
