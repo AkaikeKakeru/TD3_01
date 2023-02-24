@@ -130,6 +130,12 @@
     <Filter Include="ヘッダー ファイル\Application\Game\Skydome">
       <UniqueIdentifier>{eaa8aa2c-531c-44de-98a5-23beee2f2948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Application\Function\Collider">
+      <UniqueIdentifier>{acbdef45-3b85-45d1-a4fb-de80a691ce14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Application\Function\Collider">
+      <UniqueIdentifier>{32100932-1a99-4c67-93db-be7d37e99b4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -175,9 +181,6 @@
       <Filter>ソース ファイル\Application\Function</Filter>
     </ClCompile>
     <ClCompile Include="Application\Function\Random.cpp">
-      <Filter>ソース ファイル\Application\Function</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Function\Collision.cpp">
       <Filter>ソース ファイル\Application\Function</Filter>
     </ClCompile>
     <ClCompile Include="Application\Base\Framework.cpp">
@@ -240,6 +243,9 @@
     <ClCompile Include="Application\Game\Skydome\Skydome.cpp">
       <Filter>ソース ファイル\Application\Game\Skydome</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Function\Collider\Collision.cpp">
+      <Filter>ソース ファイル\Application\Function\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Base\DirectXBasis.h">
@@ -282,9 +288,6 @@
       <Filter>ヘッダー ファイル\Application\Function</Filter>
     </ClInclude>
     <ClInclude Include="Application\Function\Random.h">
-      <Filter>ヘッダー ファイル\Application\Function</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Function\Collision.h">
       <Filter>ヘッダー ファイル\Application\Function</Filter>
     </ClInclude>
     <ClInclude Include="Application\Base\Framework.h">
@@ -352,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="Application\Game\Skydome\Skydome.h">
       <Filter>ヘッダー ファイル\Application\Game\Skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Function\Collider\Collision.h">
+      <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
