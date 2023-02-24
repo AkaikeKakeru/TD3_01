@@ -4,18 +4,18 @@
 #include "Input.h"
 
 void Player::Initialize() {
-	camera_player = new Camera();
+	camera_ = new Camera();
 
-	planeModel_ = new Model();
-	planeModel_ = Model::LoadFromOBJ("plane", true);
+	model_ = new Model();
+	model_ = Model::LoadFromOBJ("plane", true);
 
-	planeObj_ = new Object3d();
-	planeObj_ = Object3d::Create();
-	planeObj_->SetModel(planeModel_);
-	planeObj_->SetScale({ 1, 1, 1 });
-	planeObj_->SetRotation(CreateRotationVector(
+	object_ = new Object3d();
+	object_ = Object3d::Create();
+	object_->SetModel(model_);
+	object_->SetScale({ 1, 1, 1 });
+	object_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
-	planeObj_->SetCamera(camera_player);
+	object_->SetCamera(camera_);
 }
 
 void Player::Update() {
@@ -28,9 +28,9 @@ void Player::Update() {
 		input_->PressKey(DIK_LEFT))
 	{
 		// 現在の座標を取得
-		Vector3 position = planeObj_->GetPosition();
+		Vector3 position = object_->GetPosition();
 		// 現在の座標を取得
-		Vector3 rot = planeObj_->GetRotation();
+		Vector3 rot = object_->GetRotation();
 
 		//回転ベクトル
 		Vector3 rotVector = {};
@@ -76,23 +76,23 @@ void Player::Update() {
 		rot += rotVector;
 
 		// 座標の変更を反映
-		planeObj_->SetRotation(rot);
+		object_->SetRotation(rot);
 
 		// 座標の変更を反映
-		planeObj_->SetPosition(position);
+		object_->SetPosition(position);
 	}
 
-	camera_player->Update();
-	planeObj_->Update();
+	camera_->Update();
+	object_->Update();
 }
 
 void Player::Draw() {
-	planeObj_->Draw();
+	object_->Draw();
 }
 
 void Player::Finalize() {
-	SafeDelete(planeObj_);
-	SafeDelete(planeModel_);
+	SafeDelete(object_);
+	SafeDelete(model_);
 
-	SafeDelete(camera_player);
+	SafeDelete(camera_);
 }

@@ -11,7 +11,7 @@ public://ƒƒ“ƒoŠÖ”
 	void Finalize();
 
 private://ƒƒ“ƒo•Ï”
-	Object3d* planeObj_ = nullptr;
-	Model* planeModel_ = nullptr;
-	Camera* camera_player = nullptr;
+	Object3d* object_ = nullptr;
+	Model* model_ = nullptr;
+	Camera* camera_ = nullptr;
 };

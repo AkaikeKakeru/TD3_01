@@ -29,12 +29,13 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Initialize3d() {
+	camera_ = new Camera();
 
 	player_ = new Player();
 	player_->Initialize();
 
 	skydome_ = new Skydome();
-	skydome_->Initialize();
+	skydome_->Initialize(camera_);
 
 	//ライト生成
 	light_ = new Light();
@@ -67,7 +68,19 @@ void GamePlayScene::Update3d() {
 		light_->SetLightDir(lightDir);
 	}
 
+	// カメラ移動
+	if (input_->PressKey(DIK_W) ||
+		input_->PressKey(DIK_S) ||
+		input_->PressKey(DIK_D) ||
+		input_->PressKey(DIK_A)) {
+		if (input_->PressKey(DIK_W)) { camera_->MoveVector({ 0.0f,+1.0f,0.0f }); }
+		else if (input_->PressKey(DIK_S)) { camera_->MoveVector({ 0.0f,-1.0f,0.0f }); }
+		if (input_->PressKey(DIK_D)) { camera_->MoveVector({ +1.0f,0.0f,0.0f }); }
+		else if (input_->PressKey(DIK_A)) { camera_->MoveVector({ -1.0f,0.0f,0.0f }); }
+	}
+
 	light_->Update();
+	camera_->Update();
 
 	skydome_->Update();
 	player_->Update();
@@ -104,4 +117,5 @@ void GamePlayScene::Finalize() {
 	SafeDelete(sprite_);
 
 	SafeDelete(light_);
+	SafeDelete(camera_);
 }
