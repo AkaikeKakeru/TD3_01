@@ -371,6 +371,9 @@
     <ClInclude Include="Application\Function\Collider\CollisionTypes.h">
       <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Function\Collider\CollisionInfo.h">
+      <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\shader\ObjPS.hlsl">
