@@ -190,6 +190,7 @@
     <ClCompile Include="Engine\ConstBuffer\ViewProjection.cpp" />
     <ClCompile Include="Application\Base\WinApp.cpp" />
     <ClCompile Include="Engine\ConstBuffer\WorldTransform.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Game\GameMain.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="Application\Base\WinApp.h" />
     <ClInclude Include="Engine\ConstBuffer\WorldTransform.h" />
     <ClInclude Include="Engine\Debugger\ImGuiManager.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\shader\ObjPS.hlsl">
