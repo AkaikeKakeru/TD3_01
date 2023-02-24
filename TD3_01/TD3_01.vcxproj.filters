@@ -124,6 +124,12 @@
     <Filter Include="ソース ファイル\Application\Game\Player">
       <UniqueIdentifier>{8457ac97-cbe6-4c14-913f-cce114bd224e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Application\Game\Skydome">
+      <UniqueIdentifier>{fe736b94-2204-4989-842b-0131b968d39a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\Game\Skydome">
+      <UniqueIdentifier>{eaa8aa2c-531c-44de-98a5-23beee2f2948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -228,8 +234,11 @@
     <ClCompile Include="Engine\Debugger\DebugText.cpp">
       <Filter>ソース ファイル\Engine\Debugger</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Application\Game\Player\Player.cpp">
       <Filter>ソース ファイル\Application\Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Game\Skydome\Skydome.cpp">
+      <Filter>ソース ファイル\Application\Game\Skydome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,8 +347,11 @@
     <ClInclude Include="Engine\Debugger\ImGuiManager.h">
       <Filter>ヘッダー ファイル\Engine\Debugger</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Application\Game\Player\Player.h">
       <Filter>ヘッダー ファイル\Application\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Game\Skydome\Skydome.h">
+      <Filter>ヘッダー ファイル\Application\Game\Skydome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
