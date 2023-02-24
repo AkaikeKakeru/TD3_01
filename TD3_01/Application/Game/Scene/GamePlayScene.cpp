@@ -29,12 +29,13 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Initialize3d() {
+	camera_ = new Camera();
 
 	player_ = new Player();
 	player_->Initialize();
 
 	skydome_ = new Skydome();
-	skydome_->Initialize();
+	skydome_->Initialize(camera_);
 
 	//ライト生成
 	light_ = new Light();
@@ -104,4 +105,5 @@ void GamePlayScene::Finalize() {
 	SafeDelete(sprite_);
 
 	SafeDelete(light_);
+	SafeDelete(camera_);
 }
