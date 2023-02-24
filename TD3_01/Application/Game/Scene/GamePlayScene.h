@@ -13,6 +13,9 @@
 #include <memory>
 #include <List>
 
+#include "Player.h"
+#include "Skydome.h"
+
 class GamePlayScene : public BaseScene {
 public:
 	void Initialize() override;
@@ -29,8 +32,6 @@ private:
 
 	void Draw3d();
 	void Draw2d();
-public:
-	Vector3 CreateRotationVector(Vector3 axisAngle, float angleRadian);
 
 private:
 	//基盤
@@ -39,17 +40,14 @@ private:
 	static DrawBasis* drawBas_;
 
 	Camera* camera_ = nullptr;
-	Camera* camera_player = nullptr;
 	Light* light_ = nullptr;
 
 	/// <summary>
 	/// オブジェクト
 	/// </summary>
-	Object3d* planeObj_ = nullptr;
-	Model* planeModel_ = nullptr;
-
-	Object3d* skydomeObj_ = nullptr;
-	Model* skydomeModel_ = nullptr;
+	
+	Player* player_;
+	Skydome* skydome_;
 
 	/// <summary>
 	/// スプライト
