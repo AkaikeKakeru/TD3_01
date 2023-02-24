@@ -40,18 +40,6 @@ void Skydome::Update() {
 		object_->SetRotation(rot);
 	}
 
-	// ƒJƒƒ‰ˆÚ“®
-	if (input_->PressKey(DIK_W) ||
-		input_->PressKey(DIK_S) ||
-		input_->PressKey(DIK_D) ||
-		input_->PressKey(DIK_A)) {
-		if (input_->PressKey(DIK_W)) { camera_->MoveVector({ 0.0f,+1.0f,0.0f }); }
-		else if (input_->PressKey(DIK_S)) { camera_->MoveVector({ 0.0f,-1.0f,0.0f }); }
-		if (input_->PressKey(DIK_D)) { camera_->MoveVector({ +1.0f,0.0f,0.0f }); }
-		else if (input_->PressKey(DIK_A)) { camera_->MoveVector({ -1.0f,0.0f,0.0f }); }
-	}
-
-	camera_->Update();
 	object_->Update();
 }
 
