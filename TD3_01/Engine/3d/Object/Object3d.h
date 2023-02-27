@@ -136,7 +136,7 @@ protected: // メンバ変数
 	//コライダー
 	BaseCollider* collider_ = nullptr;
 
-private: //コンストデスト
+public: //コンストデスト
 	//コンストラクタ
 	Object3d() = default;
 	//デストラクタ
