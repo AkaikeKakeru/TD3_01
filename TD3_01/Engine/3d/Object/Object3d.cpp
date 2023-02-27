@@ -11,6 +11,7 @@
 #include "Model.h"
 
 #include "BaseCollider.h"
+#include "CollisionManager.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -331,10 +332,17 @@ void Object3d::TransferMatrixWorld() {
 void Object3d::SetCollider(BaseCollider* collider) {
 	collider_->SetObject(this);
 	this->collider_ = collider;
+
+	//衝突マネージャーに登録
+	CollisionManager::GetInstance()->AddCollider(collider);
+	//コライダーの更新
+	collider->Update();
 }
 
 Object3d::~Object3d() {
 	if (collider_) {
+		//衝突マネージャーから登録を解除
+		CollisionManager::GetInstance()->RemoveCollider(collider_);
 		delete collider_;
 	}
 }
