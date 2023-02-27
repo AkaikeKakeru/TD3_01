@@ -125,7 +125,7 @@ void GamePlayScene::Draw2d() {
 
 void GamePlayScene::Finalize() {
 	player_->Finalize();
-	//SafeDelete(player_);
+	SafeDelete(player_);
 	SafeDelete(playerModel_);
 
 	skydome_->Finalize();

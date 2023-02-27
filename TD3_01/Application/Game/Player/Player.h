@@ -18,7 +18,7 @@ public://メンバ関数
 	//衝突時コールバック関数
 	void OnCollision(const CollisionInfo & info) override;
 
-private:
+public:
 	Player() = default;
 	~Player() = default;
 };
