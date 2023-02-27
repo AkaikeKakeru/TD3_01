@@ -202,6 +202,7 @@
     <ClInclude Include="Application\Function\Collider\CollisionManager.h" />
     <ClInclude Include="Application\Function\Collider\CollisionPrimitive.h" />
     <ClInclude Include="Application\Function\Collider\CollisionTypes.h" />
+    <ClInclude Include="Application\Function\Collider\RaycastHit.h" />
     <ClInclude Include="Application\Function\Collider\SphereCollider.h" />
     <ClInclude Include="Application\Game\GameMain.h" />
     <ClInclude Include="Application\Game\Scene\Manager\AbstractSceneFactory.h" />
