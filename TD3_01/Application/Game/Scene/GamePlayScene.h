@@ -13,8 +13,10 @@
 #include <memory>
 #include <List>
 
-#include "Player.h"
 #include "Skydome.h"
+
+class CollisionManager;
+class Player;
 
 class GamePlayScene : public BaseScene {
 public:
@@ -42,15 +44,21 @@ private:
 	Camera* camera_ = nullptr;
 	Light* light_ = nullptr;
 
+	//衝突マネージャー
+	CollisionManager* collisionManager_ = nullptr;
+
 	/// <summary>
 	/// オブジェクト
 	/// </summary>
 	
-	Player* player_;
-	Skydome* skydome_;
+	Player* player_ = nullptr;
+	Model* playerModel_ = nullptr;
+
+	Skydome* skydome_ = nullptr;
 
 	/// <summary>
 	/// スプライト
 	/// </summary>
 	Sprite* sprite_ = new Sprite();
+
 };

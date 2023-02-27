@@ -1,6 +1,9 @@
 #include "GamePlayScene.h"
 #include "SafeDelete.h"
 #include "Quaternion.h"
+#include "SphereCollider.h"
+#include "CollisionManager.h"
+#include "Player.h"
 
 DirectXBasis* GamePlayScene::dxBas_ = DirectXBasis::GetInstance();
 Input* GamePlayScene::input_ = Input::GetInstance();
@@ -29,10 +32,20 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Initialize3d() {
+	collisionManager_ = CollisionManager::GetInstance();
+
 	camera_ = new Camera();
 
-	player_ = new Player();
+	playerModel_ = new Model();
+	playerModel_ = Model::LoadFromOBJ("plane", true);
+
+	player_ = Player::Create(playerModel_);
 	player_->Initialize();
+	player_->SetCamera(camera_);
+	player_->SetScale({ 1, 1, 1 });
+	player_->SetRotation(CreateRotationVector(
+		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
+	player_->SetCamera(camera_);
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(camera_);
@@ -84,6 +97,9 @@ void GamePlayScene::Update3d() {
 
 	skydome_->Update();
 	player_->Update();
+
+	//全ての衝突をチェック
+	collisionManager_->CheckAllCollisions();
 }
 
 void GamePlayScene::Update2d() {
@@ -109,7 +125,8 @@ void GamePlayScene::Draw2d() {
 
 void GamePlayScene::Finalize() {
 	player_->Finalize();
-	SafeDelete(player_);
+	//SafeDelete(player_);
+	SafeDelete(playerModel_);
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
