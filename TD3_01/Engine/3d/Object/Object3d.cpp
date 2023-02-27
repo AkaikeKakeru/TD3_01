@@ -6,9 +6,12 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "Degree.h"
+#include "MyMath.h"
 #include "WinApp.h"
 #include "Model.h"
+
+#include "BaseCollider.h"
+#include "CollisionManager.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -276,6 +279,10 @@ void Object3d::InitializeGraphicsPipeline() {
 
 bool Object3d::Initialize() {
 	worldTransform_.Initialize();
+
+	//クラス名の文字列を取得
+	name_ = typeid(*this).name();
+
 	return true;
 }
 
@@ -286,6 +293,11 @@ void Object3d::Update() {
 
 	//定数バッファへ転送
 	TransferMatrixWorld();
+
+	//衝突判定更新
+	if (collider_) {
+		collider_->Update();
+	}
 }
 
 void Object3d::Draw() {
@@ -315,4 +327,22 @@ void Object3d::TransferMatrixWorld() {
 	worldTransform_.constMap_->viewproj_ = matViewProjection;
 	worldTransform_.constMap_->world_ = worldTransform_.matWorld_;
 	worldTransform_.constMap_->cameraPos_ = cameraPos;
+}
+
+void Object3d::SetCollider(BaseCollider* collider) {
+	collider->SetObject(this);
+	collider_ = collider;
+
+	//衝突マネージャーに登録
+	CollisionManager::GetInstance()->AddCollider(collider);
+	//コライダーの更新
+	collider->Update();
+}
+
+Object3d::~Object3d() {
+	if (collider_) {
+		//衝突マネージャーから登録を解除
+		CollisionManager::GetInstance()->RemoveCollider(collider_);
+		delete collider_;
+	}
 }
