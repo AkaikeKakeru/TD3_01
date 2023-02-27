@@ -2,20 +2,44 @@
 #include "Quaternion.h"
 #include "SafeDelete.h"
 #include "Input.h"
+#include "SphereCollider.h"
+#include <cassert>
 
-void Player::Initialize() {
-	camera_ = new Camera();
+Player* Player::Create(Model* model) {
+	//オブジェクトのインスタンスを生成
+	Player* instance = new Player();
+	if (instance == nullptr) {
+		return nullptr;
+	}
 
-	model_ = new Model();
-	model_ = Model::LoadFromOBJ("plane", true);
+	//初期化
+	if (!instance->Initialize()) {
+		delete instance;
+		assert(0);
+	}
 
-	object_ = new Object3d();
-	object_ = Object3d::Create();
-	object_->SetModel(model_);
-	object_->SetScale({ 1, 1, 1 });
-	object_->SetRotation(CreateRotationVector(
-		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
-	object_->SetCamera(camera_);
+	//モデルのセット
+	if (!model) {
+		instance->SetModel(model);
+	}
+
+	return instance;
+}
+
+bool Player::Initialize() {
+	if (!Object3d::Initialize()) {
+		return false;
+	}
+
+	//コライダ－追加
+	float radius = 0.6f;
+	//半径分だけ足元から浮いた座標を球の中心にする
+	SetCollider(new SphereCollider(
+		Vector3{ 0,radius,0 },
+		radius)
+	);
+
+	return true;
 }
 
 void Player::Update() {
@@ -28,9 +52,9 @@ void Player::Update() {
 		input_->PressKey(DIK_LEFT))
 	{
 		// 現在の座標を取得
-		Vector3 position = object_->GetPosition();
+		Vector3 position = Object3d::GetPosition();
 		// 現在の座標を取得
-		Vector3 rot = object_->GetRotation();
+		Vector3 rot = Object3d::GetRotation();
 
 		//回転ベクトル
 		Vector3 rotVector = {};
@@ -76,23 +100,22 @@ void Player::Update() {
 		rot += rotVector;
 
 		// 座標の変更を反映
-		object_->SetRotation(rot);
+		Object3d::SetRotation(rot);
 
 		// 座標の変更を反映
-		object_->SetPosition(position);
+		Object3d::SetPosition(position);
 	}
 
 	camera_->Update();
-	object_->Update();
+	Object3d::Update();
 }
 
 void Player::Draw() {
-	object_->Draw();
+	Object3d::Draw();
 }
 
 void Player::Finalize() {
-	SafeDelete(object_);
-	SafeDelete(model_);
+}
 
-	SafeDelete(camera_);
+void Player::OnCollision(const CollisionInfo& info) {
 }

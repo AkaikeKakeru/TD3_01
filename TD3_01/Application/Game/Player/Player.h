@@ -3,15 +3,22 @@
 #include "Object3d.h"
 #include "Camera.h"
 
-class Player{
+class Player 
+	: public Object3d {
+public: //静的メンバ関数
+		//オブジェクト生成
+	static Player* Create(Model* model = nullptr);
+
 public://メンバ関数
-	void Initialize();
-	void Update();
+	bool Initialize() override;
+	void Update() override;
 	void Draw();
 	void Finalize();
 
-private://メンバ変数
-	Object3d* object_ = nullptr;
-	Model* model_ = nullptr;
-	Camera* camera_ = nullptr;
+	//衝突時コールバック関数
+	void OnCollision(const CollisionInfo & info) override;
+
+private:
+	Player() = default;
+	~Player() = default;
 };
