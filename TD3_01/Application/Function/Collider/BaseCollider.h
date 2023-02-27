@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CollisionTypes.h"
+#include "CollisionInfo.h"
 #include "Object3d.h"
 
 class BaseCollider {
@@ -18,6 +19,11 @@ public: //アクセッサ
 	//形状タイプ取得
 	inline CollisionShapeType GetShapeType() {
 		return shapeType_; }
+
+	//衝突時コールバック関数
+	inline void OnCollision(const CollisionInfo& info) {
+		object_->OnCollision(info);
+	}
 
 protected: //メンバ変数
 	Object3d* object_ = nullptr;
