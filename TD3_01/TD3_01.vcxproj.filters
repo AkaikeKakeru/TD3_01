@@ -252,6 +252,9 @@
     <ClCompile Include="Application\Function\Collider\SphereCollider.cpp">
       <Filter>ソース ファイル\Application\Function\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Function\Collider\CollisionManager.cpp">
+      <Filter>ソース ファイル\Application\Function\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Base\DirectXBasis.h">
