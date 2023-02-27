@@ -9,18 +9,18 @@ public: //メンバ関数
 
 public: //アクセッサ
 	//オブジェクトセット
-	inline void SetObject3d(Object3d* object) {
-		object3d_ = object; }
+	inline void SetObject(Object3d* object) {
+		object_ = object; }
 	//オブジェクト取得
 	inline Object3d* GetObject3d() {
-		return object3d_; }
+		return object_; }
 
 	//形状タイプ取得
 	inline CollisionShapeType GetShapeType() {
 		return shapeType_; }
 
 protected: //メンバ変数
-	Object3d* object3d_ = nullptr;
+	Object3d* object_ = nullptr;
 	//形状タイプ
 	CollisionShapeType shapeType_ = SHAPE_UNKNOWN;
 
