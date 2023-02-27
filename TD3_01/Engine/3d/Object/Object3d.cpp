@@ -330,8 +330,8 @@ void Object3d::TransferMatrixWorld() {
 }
 
 void Object3d::SetCollider(BaseCollider* collider) {
-	collider_->SetObject(this);
-	this->collider_ = collider;
+	collider->SetObject(this);
+	collider_ = collider;
 
 	//衝突マネージャーに登録
 	CollisionManager::GetInstance()->AddCollider(collider);
