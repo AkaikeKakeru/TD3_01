@@ -19,7 +19,7 @@ Player* Player::Create(Model* model) {
 	}
 
 	//モデルのセット
-	if (!model) {
+	if (model) {
 		instance->SetModel(model);
 	}
 
