@@ -2,7 +2,7 @@
 #include <cmath>	//sqrt
 
 Vector3::Vector3()
-	: x(0), y(0), z(0) {
+	: x(0.0f), y(0.0f), z(0.0f) {
 }
 
 Vector3::Vector3(float x, float y, float z)
@@ -135,9 +135,9 @@ const Vector3 CatmullRomSpline(
 	Vector3 P2,
 	Vector3 P3,
 	float t) {
-	Vector3 a = (2 * P1) + ((-P0 + P2) * t);
-	Vector3 b = ((2 * P0) - (5 * P1) + (4 * P2) - P3) * t * t;
-	Vector3 c = (-P0 + (3 * P1) - (3 * P2) + P3) * t * t * t;
+	Vector3 a = (2.0f * P1) + ((-P0 + P2) * t);
+	Vector3 b = ((2.0f * P0) - (5.0f * P1) + (4.0f * P2) - P3) * t * t;
+	Vector3 c = (-P0 + (3.0f * P1) - (3.0f * P2) + P3) * t * t * t;
 
 	return 0.5f * (a + b + c);
 }

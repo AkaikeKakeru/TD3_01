@@ -35,7 +35,7 @@ bool Player::Initialize() {
 	float radius = 0.6f;
 	//”¼Œa•ª‚¾‚¯‘«Œ³‚©‚ç•‚‚¢‚½À•W‚ğ‹…‚Ì’†S‚É‚·‚é
 	SetCollider(new SphereCollider(
-		Vector3{ 0,radius,0 },
+		Vector3{ 0.0f,radius,0.0f },
 		radius)
 	);
 

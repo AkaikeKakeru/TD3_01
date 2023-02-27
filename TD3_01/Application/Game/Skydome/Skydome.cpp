@@ -12,7 +12,7 @@ void Skydome::Initialize(Camera* camera) {
 	object_ = new Object3d();
 	object_ = Object3d::Create();
 	object_->SetModel(model_);
-	object_->SetScale({ 30, 30, 30 });
+	object_->SetScale({ 30.0f, 30.0f, 30.0f });
 	object_->SetCamera(camera_);
 }
 

@@ -37,7 +37,7 @@ void TitleScene::Initialize(){
 	//ライト生成
 	light_ = new Light();
 	light_ = Light::Create();
-	light_->SetLightColor({ 1,1,1 });
+	light_->SetLightColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(light_);
 
 	//描画基盤
