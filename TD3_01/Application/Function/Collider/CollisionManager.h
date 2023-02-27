@@ -22,6 +22,9 @@ public: //メンバ関数
 	//全ての衝突チェック
 	void CheckAllCollisions();
 
+	//ともに球の時
+	void CheckSphere2Sphere(BaseCollider* colA ,BaseCollider* colB);
+
 private: //メンバ変数
 	CollisionManager() = default;
 	CollisionManager(const CollisionManager&) = delete;
