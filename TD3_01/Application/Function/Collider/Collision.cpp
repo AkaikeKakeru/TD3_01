@@ -152,7 +152,7 @@ bool Collision::CheckRay2Plane(const Ray& ray, const Plane& plane, float* distan
 	float t = dist / -d1;
 
 	//交点が始点より後ろにあるので、当たらない
-	if (t < 0)return false;
+	if (t < 0.0f)return false;
 
 	//距離を書き込む
 	if (distance) { *distance = t; }
@@ -223,7 +223,7 @@ bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* dis
 	float t = -b - SquareRoot(discr);
 
 	//tが負である場合、レイが球の内側から開始しているので、tをゼロにクランプ
-	if (t < 0)t = 0.0f;
+	if (t < 0.0f)t = 0.0f;
 	if (distance) { *distance = t; }
 
 	if (inter) { *inter = ray.start_ + t * ray.dir_; }

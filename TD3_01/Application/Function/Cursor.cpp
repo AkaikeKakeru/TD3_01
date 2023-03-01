@@ -30,10 +30,10 @@ void Corsor::GetMousePosition() {
 
 void Corsor::CreateMatrixInverseViewPort(){
 	Matrix4 matViewPort = Matrix4Identity();
-	matViewPort.m[0][0] = static_cast<float>(WinApp::Win_Width) / 2;
-	matViewPort.m[1][1] = static_cast<float>(-(WinApp::Win_Height)) / 2;
-	matViewPort.m[3][0] = static_cast<float>(WinApp::Win_Width) / 2;
-	matViewPort.m[3][1] = static_cast<float>(WinApp::Win_Height) / 2;
+	matViewPort.m[0][0] = static_cast<float>(WinApp::Win_Width) / 2.0f;
+	matViewPort.m[1][1] = static_cast<float>(-(WinApp::Win_Height)) / 2.0f;
+	matViewPort.m[3][0] = static_cast<float>(WinApp::Win_Width) / 2.0f;
+	matViewPort.m[3][1] = static_cast<float>(WinApp::Win_Height) / 2.0f;
 
 	Matrix4 matVPV = camera_->GetViewMatrix()
 		* camera_->GetProjectionMatrix()
@@ -48,13 +48,13 @@ void Corsor::CheckRayDirection(){
 	posNear_ = Vector3(
 		mousePosition_.x,
 		mousePosition_.y,
-		0);
+		0.0f);
 	posNear_ = Vector3Transform(posNear_, matInverseVPV_);
 	//ファー
 	posFar_ = Vector3(
 		mousePosition_.x,
 		mousePosition_.y,
-		1);
+		1.0f);
 	posFar_ = Vector3Transform(posFar_, matInverseVPV_);
 
 	//レイ

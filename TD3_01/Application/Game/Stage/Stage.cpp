@@ -288,7 +288,7 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3 pos,
 
 	// s—ñXV
 	block->worldTransform_.matWorld_ = Matrix4Identity();
-	block->worldTransform_.matWorld_ *= Matrix4WorldTransform(block->worldTransform_);
+	block->worldTransform_.matWorld_ *= Matrix4WorldTransform(block->worldTransform_.scale_, block->worldTransform_.rotation_, block->worldTransform_.position_);
 	block->worldTransform_.UpdateMatrix();
 
 	block->line_ = line;
@@ -369,5 +369,5 @@ Vector3 Stage::GetBlockPosition(int line, int row) {
 		}
 	}
 	// ‚È‚©‚Á‚½‚ç0‚ð•Ô‚·
-	return Vector3(0, 0, 0);
+	return Vector3(0.0f, 0.0f, 0.0f);
 }

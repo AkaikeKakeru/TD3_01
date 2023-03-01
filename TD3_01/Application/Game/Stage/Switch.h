@@ -42,7 +42,7 @@ public: // アクセッサ
 		worldTransform_.position_ = pos;
 		// 行列更新
 		worldTransform_.matWorld_ = Matrix4Identity();
-		worldTransform_.matWorld_ *= Matrix4WorldTransform(worldTransform_);
+		worldTransform_.matWorld_ *= Matrix4WorldTransform(worldTransform_.scale_,worldTransform_.rotation_,worldTransform_.position_);
 		worldTransform_.UpdateMatrix();
 	}
 };

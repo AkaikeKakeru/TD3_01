@@ -5,7 +5,7 @@
 #include <wrl.h>
 
 // 定数バッファデータワールド変換
-struct ConstBufferDataWorldTransform{
+struct ConstBufferDataWorldTransform {
 	Matrix4 viewproj_;//ビュープロジェクション行列
 	Matrix4 world_;//ワールド行列
 	Vector3 cameraPos_;//カメラ座標(ワールド座標)

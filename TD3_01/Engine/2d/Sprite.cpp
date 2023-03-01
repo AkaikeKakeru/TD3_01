@@ -18,9 +18,9 @@ void Sprite::Initialize(DrawBasis* drawBas, uint32_t textureIndex) {
 		size_ = textureSize_;
 	}
 
-	worldTransform_.scale = { 1,1,1 };
+	worldTransform_.scale = { 1.0f,1.0f,1.0f };
 	worldTransform_.rotation = ConvertToRadian(0.0f);
-	worldTransform_.position = { 0,0 };
+	worldTransform_.position = { 0.0f,0.0f };
 	worldTransform_.matWorld = Matrix4Identity();
 
 	matOrtGrapricProjection_ = Matrix4Identity();
@@ -55,10 +55,10 @@ void Sprite::Update() {
 	}
 
 	//頂点データを設定
-	vertices_[LeftBottom].pos = Vector3(dir_.left, dir_.bottom, 0);
-	vertices_[LeftTop].pos = Vector3(dir_.left, dir_.top, 0);
-	vertices_[RightBottom].pos = Vector3(dir_.right, dir_.bottom, 0);
-	vertices_[RightTop].pos = Vector3(dir_.right, dir_.top, 0);
+	vertices_[LeftBottom].pos = Vector3(dir_.left, dir_.bottom, 0.0f);
+	vertices_[LeftTop].pos = Vector3(dir_.left, dir_.top, 0.0f);
+	vertices_[RightBottom].pos = Vector3(dir_.right, dir_.bottom, 0.0f);
+	vertices_[RightTop].pos = Vector3(dir_.right, dir_.top, 0.0f);
 
 	ID3D12Resource* textureBuffer = drawBas_->GetTextureBuffer(textureIndex_);
 	//指定番号の画像が読み込み済みなら
@@ -142,10 +142,10 @@ void Sprite::CreateVertexBufferView() {
 	}
 
 	//頂点データを設定
-	vertices_[LeftBottom].pos = Vector3(dir_.left, dir_.bottom, 0);
-	vertices_[LeftTop].pos = Vector3(dir_.left, dir_.top, 0);
-	vertices_[RightBottom].pos = Vector3(dir_.right, dir_.bottom, 0);
-	vertices_[RightTop].pos = Vector3(dir_.right, dir_.top, 0);
+	vertices_[LeftBottom].pos = Vector3(dir_.left, dir_.bottom, 0.0f);
+	vertices_[LeftTop].pos = Vector3(dir_.left, dir_.top, 0.0f);
+	vertices_[RightBottom].pos = Vector3(dir_.right, dir_.bottom, 0.0f);
+	vertices_[RightTop].pos = Vector3(dir_.right, dir_.top, 0.0f);
 
 	vertices_[LeftBottom].uv = Vector2(leftUv, bottomUv);
 	vertices_[LeftTop].uv = Vector2(leftUv, topUv);
