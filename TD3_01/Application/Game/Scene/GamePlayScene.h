@@ -15,6 +15,8 @@
 
 #include "Skydome.h"
 
+#include "CollisionPrimitive.h"
+
 class CollisionManager;
 class Player;
 
@@ -44,6 +46,9 @@ private:
 	Camera* camera_ = nullptr;
 	Light* light_ = nullptr;
 
+	//当たり判定 レイ
+	Ray ray_;
+
 	//衝突マネージャー
 	CollisionManager* collisionManager_ = nullptr;
 
@@ -51,6 +56,10 @@ private:
 	/// オブジェクト
 	/// </summary>
 	
+
+	Object3d* rayObj_ = nullptr;
+	Model* rayModel_ = nullptr;
+
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
 

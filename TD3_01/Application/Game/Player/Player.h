@@ -5,18 +5,19 @@
 
 class Player 
 	: public Object3d {
-public: //Ã“Iƒƒ“ƒoŠÖ”
-		//ƒIƒuƒWƒFƒNƒg¶¬
+public: //é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
+		//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	static Player* Create(Model* model = nullptr);
 
-public://ƒƒ“ƒoŠÖ”
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
 	bool Initialize() override;
 	void Update() override;
 	void Draw();
 	void Finalize();
 
-	//Õ“ËƒR[ƒ‹ƒoƒbƒNŠÖ”
+	//è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision(const CollisionInfo & info) override;
+
 public:
 	Player() = default;
 	~Player() = default;

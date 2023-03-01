@@ -240,9 +240,6 @@
     <ClCompile Include="Engine\Debugger\DebugText.cpp">
       <Filter>ソース ファイル\Engine\Debugger</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Game\Player\Player.cpp">
-      <Filter>ソース ファイル\Application\Game\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Game\Skydome\Skydome.cpp">
       <Filter>ソース ファイル\Application\Game\Skydome</Filter>
     </ClCompile>
@@ -266,6 +263,8 @@
     </ClCompile>
     <ClCompile Include="Application\Game\Stage\Switch.cpp">
       <Filter>ソース ファイル\Application\Game\Stage</Filter>
+    <ClCompile Include="Application\Game\Player\Player.cpp">
+      <Filter>ソース ファイル\Application\Game\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +402,8 @@
     </ClInclude>
     <ClInclude Include="Application\Game\Stage\Switch.h">
       <Filter>ヘッダー ファイル\Application\Game\Stage</Filter>
+    <ClInclude Include="Application\Function\Collider\RaycastHit.h">
+      <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
