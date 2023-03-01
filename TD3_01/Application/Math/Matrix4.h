@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3.h"
+#include "WorldTransform.h"
 
 struct Matrix4 {
 	float m[4][4];
@@ -19,6 +20,8 @@ Matrix4 Matrix4RotationX(float angle);
 Matrix4 Matrix4RotationY(float angle);
 //回転行列Z
 Matrix4 Matrix4RotationZ(float angle);
+//ワールド座標合成行列
+Matrix4 Matrix4WorldTransform(WorldTransform worldTransform);
 
 //平行移動行列
 Matrix4 Matrix4Translation(const Vector3& t);

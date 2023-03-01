@@ -51,7 +51,7 @@ const float Vector3Length(Vector3 v) {
 
 const Vector3& Vector3Normalize(Vector3 v) {
 	float len = Vector3Length(v);
-	if (len != 0) {
+	if (len != 0.0f) {
 		return v /= len;
 	}
 	return v;
@@ -113,7 +113,7 @@ const Vector3 EaseOut(
 	const Vector3& end,
 	const float t) {
 	//ease-out
-	float y = t * (2 - t);
+	float y = t * (2.0f - t);
 	return start * (1.0f - y) + end * y;
 }
 
@@ -122,7 +122,7 @@ const Vector3 EaseInOut(
 	const Vector3& end,
 	const float t) {
 	float a = t * t;
-	float b = 3 - (2 * t);
+	float b = 3.0f - (2.0f * t);
 
 	//ease-in,ease-out
 	float y = a * b;

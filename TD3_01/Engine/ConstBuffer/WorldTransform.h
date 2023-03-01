@@ -21,11 +21,11 @@ public:
 	// マッピング済みアドレス
 	ConstBufferDataWorldTransform* constMap_ = nullptr;
 	// スケール
-	Vector3 scale_ = {1, 1, 1};
+	Vector3 scale_ = {1.0f, 1.0f, 1.0f};
 	// 回転角
-	Vector3 rotation_ = {0, 0, 0};
+	Vector3 rotation_ = {0.0f, 0.0f, 0.0f};
 	// 座標
-	Vector3 position_ = {0, 0, 0};
+	Vector3 position_ = {0.0f, 0.0f, 0.0f};
 	// ワールド変換行列
 	Matrix4 matWorld_ = {};
 	// 親へのポインタ

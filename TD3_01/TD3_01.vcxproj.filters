@@ -136,6 +136,12 @@
     <Filter Include="ソース ファイル\Application\Function\Collider">
       <UniqueIdentifier>{32100932-1a99-4c67-93db-be7d37e99b4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Application\Game\Stage">
+      <UniqueIdentifier>{09d929f4-4999-46a6-96f1-24add934d314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\Game\Stage">
+      <UniqueIdentifier>{b158e791-cbdd-4235-9163-50e5e1beedd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -254,6 +260,12 @@
     </ClCompile>
     <ClCompile Include="Application\Function\Collider\CollisionManager.cpp">
       <Filter>ソース ファイル\Application\Function\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Game\Stage\Stage.cpp">
+      <Filter>ソース ファイル\Application\Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Game\Stage\Switch.cpp">
+      <Filter>ソース ファイル\Application\Game\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +397,12 @@
     </ClInclude>
     <ClInclude Include="Application\Function\Collider\CollisionManager.h">
       <Filter>ヘッダー ファイル\Application\Function\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Game\Stage\Stage.h">
+      <Filter>ヘッダー ファイル\Application\Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Game\Stage\Switch.h">
+      <Filter>ヘッダー ファイル\Application\Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

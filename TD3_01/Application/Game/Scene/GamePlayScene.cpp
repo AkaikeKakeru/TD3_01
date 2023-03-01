@@ -42,7 +42,7 @@ void GamePlayScene::Initialize3d() {
 	player_ = Player::Create(playerModel_);
 	player_->Initialize();
 	player_->SetCamera(camera_);
-	player_->SetScale({ 1, 1, 1 });
+	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
 	player_->SetCamera(camera_);
@@ -53,7 +53,7 @@ void GamePlayScene::Initialize3d() {
 	//ライト生成
 	light_ = new Light();
 	light_ = Light::Create();
-	light_->SetLightColor({ 1,1,1 });
+	light_->SetLightColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(light_);
 }
 
@@ -62,12 +62,12 @@ void GamePlayScene::Initialize2d() {
 	sprite_->Initialize(drawBas_, 1);
 
 	sprite_->SetAnchorPoint({ 0.5f, 0.5f });
-	sprite_->SetSize({ 64,64 });
+	sprite_->SetSize({ 64.0f,64.0f });
 }
 
 void GamePlayScene::Update3d() {
 	{
-		static Vector3 lightDir = { 0,1,5 };
+		static Vector3 lightDir = { 0.0f,1.0f,5.0f };
 
 		//	if (input_->PressKey(DIK_W) ||
 		//		input_->PressKey(DIK_S) ||
