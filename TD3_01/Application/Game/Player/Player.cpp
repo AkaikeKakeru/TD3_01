@@ -49,7 +49,9 @@ void Player::Update() {
 	if (input_->PressKey(DIK_UP) ||
 		input_->PressKey(DIK_DOWN) ||
 		input_->PressKey(DIK_RIGHT) ||
-		input_->PressKey(DIK_LEFT))
+		input_->PressKey(DIK_LEFT) || 
+		input_->PressKey(DIK_Q) ||
+		input_->PressKey(DIK_Z ))
 	{
 		// Œ»Ý‚ÌÀ•W‚ðŽæ“¾
 		Vector3 position = Object3d::GetPosition();
@@ -95,6 +97,14 @@ void Player::Update() {
 
 			rotVector = CreateRotationVector(
 				angleZ, -rotSpeed);
+		}
+
+		if (input_->PressKey(DIK_Q)) {
+			position.z += moveSpeed;
+		}
+
+		else if (input_->PressKey(DIK_Z)) {
+			position.z -= moveSpeed;
 		}
 
 		rot += rotVector;

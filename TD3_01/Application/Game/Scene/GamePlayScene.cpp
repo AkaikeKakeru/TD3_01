@@ -2,6 +2,7 @@
 #include "SafeDelete.h"
 #include "Quaternion.h"
 #include "SphereCollider.h"
+#include "Collision.h"
 #include "CollisionManager.h"
 #include "Player.h"
 
@@ -41,11 +42,25 @@ void GamePlayScene::Initialize3d() {
 
 	player_ = Player::Create(playerModel_);
 	player_->Initialize();
-	player_->SetCamera(camera_);
 	player_->SetScale({ 1, 1, 1 });
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
 	player_->SetCamera(camera_);
+
+	rayModel_ = new Model();
+	rayModel_ = Model::LoadFromOBJ("cube", true);
+
+
+	//レイの初期値
+	ray_.start_ = { 0.0f, 0.0f, 50.0f};
+	ray_.dir_ = { 0,0,-1};
+
+	rayObj_ = Object3d::Create();
+	rayObj_->Initialize();
+	rayObj_->SetModel(rayModel_);
+	rayObj_->SetPosition(ray_.start_);
+	rayObj_->SetScale({ 2, 2, 2 });
+	rayObj_->SetCamera(camera_);
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(camera_);
@@ -92,6 +107,14 @@ void GamePlayScene::Update3d() {
 		else if (input_->PressKey(DIK_A)) { camera_->MoveVector({ -1.0f,0.0f,0.0f }); }
 	}
 
+	RaycastHit raycastHit_;
+
+	//レイキャストをチェック
+	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
+		rayObj_->SetPosition(raycastHit_.inter_);
+		rayObj_->Update();
+	}
+
 	light_->Update();
 	camera_->Update();
 
@@ -116,6 +139,7 @@ void GamePlayScene::Update2d() {
 
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
+	rayObj_->Draw();
 	player_->Draw();
 }
 
@@ -125,11 +149,14 @@ void GamePlayScene::Draw2d() {
 
 void GamePlayScene::Finalize() {
 	player_->Finalize();
-	//SafeDelete(player_);
+	SafeDelete(player_);
 	SafeDelete(playerModel_);
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
+
+	SafeDelete(rayObj_);
+	SafeDelete(rayModel_);
 
 	SafeDelete(sprite_);
 
