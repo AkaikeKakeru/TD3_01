@@ -10,9 +10,9 @@ void ViewProjection::Initialize() {
 	// 射影行列
 	matProjection_ = Matrix4Identity();
 
-	eye_ = { 0, 10, -20.0f };
-	target_ = { 0, 0, 0 };
-	up_ = { 0, 1, 0 };
+	eye_ = { 0.0f, 10.0f, -20.0f };
+	target_ = { 0.0f, 0.0f, 0.0f };
+	up_ = { 0.0f, 1.0f, 0.0f };
 
 	angle_ = ConvertToRadian(45.0f);
 	aspect_ = (float)WinApp::Win_Width/ WinApp::Win_Height;
@@ -68,18 +68,18 @@ void ViewProjection::UpdateMatrix() {
 
 void ViewProjection::UpdateProjectionMatrix() {
 	Vector4 pers = {
-		1 / (static_cast<float>(tan(angle_ / 2))) / aspect_,
-		1 / (static_cast<float>(tan(angle_ / 2))),
-		1 / (farClip_ - nearClip_) * farClip_,
+		1.0f / (static_cast<float>(tanf(angle_ / 2.0f))) / aspect_,
+		1.0f / (static_cast<float>(tanf(angle_ / 2.0f))),
+		1.0f / (farClip_ - nearClip_) * farClip_,
 		-nearClip_ / (farClip_ - nearClip_) * farClip_,
 	};
 
 	matProjection_ = Matrix4Identity();
 	matProjection_ = {
-		pers.x,0,0,0,
-		0,pers.y,0,0,
-		0,0,pers.z,1,
-		0,0,pers.w,0
+		pers.x,0.0f,0.0f,0.0f,
+		0.0f,pers.y,0.0f,0.0f,
+		0.0f,0.0f,pers.z,1.0f,
+		0.0f,0.0f,pers.w,0.0f
 	};
 }
 
@@ -92,10 +92,10 @@ void ViewProjection::UpdateViewMatrix() {
 	Matrix4 matCameraRot;
 	//カメラ座標系→ワールド座標系の変換行列0
 	matCameraRot = {
-		axisX.x,axisX.y,axisX.z,0,
-		axisY.x,axisY.y,axisY.z,0,
-		axisZ.x,axisZ.y,axisZ.z,0,
-		0,0,0,1
+		axisX.x,axisX.y,axisX.z,0.0f,
+		axisY.x,axisY.y,axisY.z,0.0f,
+		axisZ.x,axisZ.y,axisZ.z,0.0f,
+		0.0f,0.0f,0.0f,1.0f
 	};
 
 	//転置により逆行列(逆回転)を計算
@@ -117,10 +117,10 @@ void ViewProjection::UpdateViewMatrix() {
 
 	// ビルボード行列
 	matBillboard_ = {
-		axisX.x,axisX.y,axisX.z,0,
-		axisY.x,axisY.y,axisY.z,0,
-		axisZ.x,axisZ.y,axisZ.z,0,
-		0,0,0,1
+		axisX.x,axisX.y,axisX.z,0.0f,
+		axisY.x,axisY.y,axisY.z,0.0f,
+		axisZ.x,axisZ.y,axisZ.z,0.0f,
+		0.0f,0.0f,0.0f,1.0f
 	};
 
 	// カメラX軸、Y軸、Z軸
@@ -135,10 +135,10 @@ void ViewProjection::UpdateViewMatrix() {
 
 	// Y軸回りビルボード行列
 	matBillboard_ = {
-		ybillCameraAxisX.x,ybillCameraAxisX.y,ybillCameraAxisX.z,0,
-		ybillCameraAxisY.x,ybillCameraAxisY.y,ybillCameraAxisY.z,0,
-		ybillCameraAxisZ.x,ybillCameraAxisZ.y,ybillCameraAxisZ.z,0,
-		0,0,0,1
+		ybillCameraAxisX.x,ybillCameraAxisX.y,ybillCameraAxisX.z,0.0f,
+		ybillCameraAxisY.x,ybillCameraAxisY.y,ybillCameraAxisY.z,0.0f,
+		ybillCameraAxisZ.x,ybillCameraAxisZ.y,ybillCameraAxisZ.z,0.0f,
+		0.0f,0.0f,0.0f,1.0f
 	};
 }
 

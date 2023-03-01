@@ -4,9 +4,9 @@
 
 void WorldTransform::Initialize() {
 	constMap_ = nullptr;
-	scale_ = { 1, 1, 1 };
-	rotation_ = { 0, 0, 0 };
-	position_ = { 0, 0, 0 };
+	scale_ = { 1.0f, 1.0f, 1.0f };
+	rotation_ = { 0.0f, 0.0f, 0.0f };
+	position_ = { 0.0f, 0.0f, 0.0f };
 	matWorld_ = {};
 	parent_ = nullptr;
 

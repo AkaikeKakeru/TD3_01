@@ -75,6 +75,22 @@ Matrix4 Matrix4RotationZ(float angle) {
 	return result;
 }
 
+Matrix4 Matrix4WorldTransform(const Vector3& scale, const Vector3& rotation, const Vector3& position)
+{
+	Matrix4 matWorld = Matrix4Identity();
+
+	Matrix4 matScale = Matrix4Scale(scale);
+
+	Matrix4 matRot = Matrix4Rotation(rotation);
+
+	Matrix4 matTrans = Matrix4Translation(position);
+
+	//合成
+	matWorld *= matScale *= matRot *= matTrans;
+
+	return matWorld;
+}
+
 Matrix4 Matrix4Translation(const Vector3& t) {
 	Matrix4 result{
 		1.0f,0.0f,0.0f,0.0f,
