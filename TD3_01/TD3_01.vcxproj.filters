@@ -234,9 +234,6 @@
     <ClCompile Include="Engine\Debugger\DebugText.cpp">
       <Filter>ソース ファイル\Engine\Debugger</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Game\Player\Player.cpp">
-      <Filter>ソース ファイル\Application\Game\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Game\Skydome\Skydome.cpp">
       <Filter>ソース ファイル\Application\Game\Skydome</Filter>
     </ClCompile>
@@ -254,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="Application\Function\Collider\CollisionManager.cpp">
       <Filter>ソース ファイル\Application\Function\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Game\Player\Player.cpp">
+      <Filter>ソース ファイル\Application\Game\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
