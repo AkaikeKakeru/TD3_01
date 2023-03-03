@@ -278,6 +278,9 @@
     <ClInclude Include="Application\Game\Scene\Manager\SceneManager.h">
       <Filter>Header File\Application\Game\Scene\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3d\Light\DirectionalLight.h">
+      <Filter>Header File\Engine\3d\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\shader\Obj.hlsli">
