@@ -37,7 +37,7 @@ void TitleScene::Initialize(){
 	//ライト生成
 	lightGroup_ = new LightGroup();
 	lightGroup_ = LightGroup::Create();
-	lightGroup_->SetLightColor({ 1.0f,1.0f,1.0f });
+	lightGroup_->SetAmbientColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(lightGroup_);
 
 	//描画基盤
