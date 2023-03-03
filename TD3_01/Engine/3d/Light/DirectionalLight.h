@@ -38,7 +38,7 @@ public://サブクラス
 	inline bool IsActive() { return active_; }
 
 private://メンバ変数
-		//ライト光線方向(単位ベクトル)
+	//ライト光線方向(単位ベクトル)
 	Vector3 lightdir_ = { 1,0,0 };
 	//ライト色
 	Vector3 lightcolor_ = { 1,1,1 };
