@@ -17,7 +17,7 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Update() {
 	input_->Update();
-
+	
 	Update3d();
 	Update2d();
 }
@@ -71,7 +71,7 @@ void GamePlayScene::Initialize3d() {
 	//ライト生成
 	lightGroup_ = new LightGroup();
 	lightGroup_ = LightGroup::Create();
-	lightGroup_->SetLightColor({ 1.0f,1.0f,1.0f });
+	lightGroup_->SetAmbientColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(lightGroup_);
 }
 
@@ -96,7 +96,7 @@ void GamePlayScene::Update3d() {
 		//		if (input_->PressKey(DIK_D)) { lightDir.x += 1.0f; }
 		//		else if (input_->PressKey(DIK_A)) { lightDir.x -= 1.0f; }
 		//	}
-		lightGroup_->SetLightDir(lightDir);
+		lightGroup_->SetDirLightDir(0,lightDir);
 	}
 
 	// カメラ移動
