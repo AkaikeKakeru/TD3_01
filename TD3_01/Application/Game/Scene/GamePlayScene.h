@@ -8,7 +8,7 @@
 #include "Object3d.h"
 
 #include "Camera.h"
-#include "Light.h"
+#include "LightGroup.h"
 
 #include <memory>
 #include <List>
@@ -44,7 +44,7 @@ private:
 	static DrawBasis* drawBas_;
 
 	Camera* camera_ = nullptr;
-	Light* light_ = nullptr;
+	LightGroup* lightGroup_ = nullptr;
 
 	//当たり判定 レイ
 	Ray ray_;

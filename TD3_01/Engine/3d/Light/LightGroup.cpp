@@ -1,48 +1,48 @@
-#include "Light.h"
+#include "LightGroup.h"
 #include <cassert>
 #include "DirectXBasis.h"
 //省略
 template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-ComPtr<ID3D12Device> Light::device_ = nullptr;
+ComPtr<ID3D12Device> LightGroup::device_ = nullptr;
 
-void Light::StaticInitialize(ID3D12Device* device) {
+void LightGroup::StaticInitialize(ID3D12Device* device) {
 	//再初期化チェック
-	assert(!Light::device_);
+	assert(!LightGroup::device_);
 	//nullptrチェック
 	assert(device);
 
 	//静的メンバ変数セット
-	Light::device_ = device;
+	LightGroup::device_ = device;
 }
 
-Light* Light::Create() {
-	Light* light = new Light();
+LightGroup* LightGroup::Create() {
+	LightGroup* lightGroup = new LightGroup();
 
-	light->Initialize();
+	lightGroup->Initialize();
 
-	return light;
+	return lightGroup;
 }
 
-void Light::Initialize() {
+void LightGroup::Initialize() {
 	CreateConstBuffer();
 	TransferConstBuffer();
 }
 
-void Light::Update() {
+void LightGroup::Update() {
 	if (dirty_) {
 		TransferConstBuffer();
 		dirty_ = false;
 	}
 }
 
-void Light::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex) {
+void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex) {
 	cmdList->SetGraphicsRootConstantBufferView(
 		rootParameterIndex, constBuff_->GetGPUVirtualAddress());
 }
 
 
-void Light::CreateConstBuffer() {
+void LightGroup::CreateConstBuffer() {
 	HRESULT result;
 
 	// ヒーププロパティ
@@ -67,7 +67,7 @@ void Light::CreateConstBuffer() {
 	assert(SUCCEEDED(result));
 }
 
-void Light::TransferConstBuffer() {
+void LightGroup::TransferConstBuffer() {
 	HRESULT result;
 
 	ConstBufferDataLight* constMap = nullptr;

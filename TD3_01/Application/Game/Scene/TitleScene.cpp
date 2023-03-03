@@ -35,10 +35,10 @@ void TitleScene::Initialize(){
 	skydomeObj_->SetCamera(camera_);
 
 	//ライト生成
-	light_ = new Light();
-	light_ = Light::Create();
-	light_->SetLightColor({ 1.0f,1.0f,1.0f });
-	Object3d::SetLight(light_);
+	lightGroup_ = new LightGroup();
+	lightGroup_ = LightGroup::Create();
+	lightGroup_->SetLightColor({ 1.0f,1.0f,1.0f });
+	Object3d::SetLight(lightGroup_);
 
 	//描画基盤
 	drawBas_ = DrawBasis::GetInstance();
@@ -54,7 +54,7 @@ void TitleScene::Initialize(){
 void TitleScene::Update(){
 	input_->Update();
 
-	light_->Update();
+	lightGroup_->Update();
 
 	skydomeObj_->Update();
 	planeObj_->Update();
@@ -91,6 +91,6 @@ void TitleScene::Finalize(){
 	SafeDelete(skydomeModel_);
 	SafeDelete(sprite_);
 
-	SafeDelete(light_);
+	SafeDelete(lightGroup_);
 	SafeDelete(camera_);
 }

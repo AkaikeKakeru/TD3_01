@@ -69,10 +69,10 @@ void GamePlayScene::Initialize3d() {
 	skydome_->Initialize(camera_);
 
 	//ライト生成
-	light_ = new Light();
-	light_ = Light::Create();
-	light_->SetLightColor({ 1.0f,1.0f,1.0f });
-	Object3d::SetLight(light_);
+	lightGroup_ = new LightGroup();
+	lightGroup_ = LightGroup::Create();
+	lightGroup_->SetLightColor({ 1.0f,1.0f,1.0f });
+	Object3d::SetLight(lightGroup_);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -96,7 +96,7 @@ void GamePlayScene::Update3d() {
 		//		if (input_->PressKey(DIK_D)) { lightDir.x += 1.0f; }
 		//		else if (input_->PressKey(DIK_A)) { lightDir.x -= 1.0f; }
 		//	}
-		light_->SetLightDir(lightDir);
+		lightGroup_->SetLightDir(lightDir);
 	}
 
 	// カメラ移動
@@ -118,7 +118,7 @@ void GamePlayScene::Update3d() {
 		rayObj_->Update();
 	}
 
-	light_->Update();
+	lightGroup_->Update();
 	camera_->Update();
 
 	skydome_->Update();
@@ -163,6 +163,6 @@ void GamePlayScene::Finalize() {
 
 	SafeDelete(sprite_);
 
-	SafeDelete(light_);
+	SafeDelete(lightGroup_);
 	SafeDelete(camera_);
 }
