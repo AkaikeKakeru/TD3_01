@@ -5,10 +5,12 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "imgui.h"
 
 DirectXBasis* GamePlayScene::dxBas_ = DirectXBasis::GetInstance();
 Input* GamePlayScene::input_ = Input::GetInstance();
 DrawBasis* GamePlayScene::drawBas_ = DrawBasis::GetInstance();
+ImGuiManager* GamePlayScene::imGuiManager_ = ImGuiManager::GetInstance();
 
 void GamePlayScene::Initialize() {
 	Initialize2d();
@@ -17,9 +19,28 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Update() {
 	input_->Update();
+	imGuiManager_->Begin();
 
 	Update3d();
 	Update2d();
+
+#ifdef _DEBUG
+	{
+		float lightDir[Vector3Count_] = {
+			lightDir_.x,
+			lightDir_.y,
+			lightDir_.z
+		};
+
+		ImGui::Begin("Light");
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::SetWindowSize(ImVec2(500, 100));
+		ImGui::InputFloat3("lightDir", lightDir);
+		ImGui::End();
+	}
+#endif
+
+	imGuiManager_->End();
 }
 
 void GamePlayScene::Draw() {
@@ -38,7 +59,7 @@ void GamePlayScene::Initialize3d() {
 	camera_ = new Camera();
 
 	playerModel_ = new Model();
-	playerModel_ = Model::LoadFromOBJ("plane", true);
+	playerModel_ = Model::LoadFromOBJ("plane", false);
 
 	player_ = Player::Create(playerModel_);
 	player_->Initialize();
@@ -69,10 +90,10 @@ void GamePlayScene::Initialize3d() {
 	skydome_->Initialize(camera_);
 
 	//ライト生成
-	light_ = new Light();
-	light_ = Light::Create();
-	light_->SetLightColor({ 1.0f,1.0f,1.0f });
-	Object3d::SetLight(light_);
+	lightGroup_ = new LightGroup();
+	lightGroup_ = LightGroup::Create();
+	lightGroup_->SetAmbientColor({ 1.0f,1.0f,1.0f });
+	Object3d::SetLight(lightGroup_);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -85,18 +106,8 @@ void GamePlayScene::Initialize2d() {
 
 void GamePlayScene::Update3d() {
 	{
-		static Vector3 lightDir = { 0.0f,1.0f,5.0f };
-
-		//	if (input_->PressKey(DIK_W) ||
-		//		input_->PressKey(DIK_S) ||
-		//		input_->PressKey(DIK_D) ||
-		//		input_->PressKey(DIK_A)) {
-		//		if (input_->PressKey(DIK_W)) { lightDir.y += 1.0f; }
-		//		else if (input_->PressKey(DIK_S)) { lightDir.y -= 1.0f; }
-		//		if (input_->PressKey(DIK_D)) { lightDir.x += 1.0f; }
-		//		else if (input_->PressKey(DIK_A)) { lightDir.x -= 1.0f; }
-		//	}
-		light_->SetLightDir(lightDir);
+		//imGuiからのライトパラメータを反映
+		lightGroup_->SetDirLightDir(0,lightDir_);
 	}
 
 	// カメラ移動
@@ -112,17 +123,17 @@ void GamePlayScene::Update3d() {
 
 	RaycastHit raycastHit_;
 
+	lightGroup_->Update();
+	camera_->Update();
+
+	skydome_->Update();
+	player_->Update();
+
 	//レイキャストをチェック
 	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
 	}
-
-	light_->Update();
-	camera_->Update();
-
-	skydome_->Update();
-	player_->Update();
 
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
@@ -163,6 +174,6 @@ void GamePlayScene::Finalize() {
 
 	SafeDelete(sprite_);
 
-	SafeDelete(light_);
+	SafeDelete(lightGroup_);
 	SafeDelete(camera_);
 }

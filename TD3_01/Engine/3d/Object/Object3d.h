@@ -13,7 +13,7 @@
 #include "WorldTransform.h"
 
 #include "Camera.h"
-#include "Light.h"
+#include "LightGroup.h"
 
 #include "CollisionInfo.h"
 
@@ -52,8 +52,8 @@ public: // 静的メンバ関数
 	// 3Dオブジェクト生成
 	static Object3d* Create();
 
-	static void SetLight(Light* light) {
-		Object3d::light_ = light;
+	static void SetLight(LightGroup* lightGroup) {
+		Object3d::lightGroup_ = lightGroup;
 	}
 
 private: // 静的メンバ変数
@@ -67,7 +67,7 @@ private: // 静的メンバ変数
 	static PipelineSet pipelineSet_;
 
 	//ライト
-	static Light* light_;
+	static LightGroup* lightGroup_;
 
 private:// 静的メンバ関数
 		// グラフィックパイプライン生成

@@ -8,7 +8,9 @@
 #include "Object3d.h"
 
 #include "Camera.h"
-#include "Light.h"
+#include "LightGroup.h"
+
+#include "ImGuiManager.h"
 
 #include <memory>
 #include <List>
@@ -37,14 +39,27 @@ private:
 	void Draw3d();
 	void Draw2d();
 
+public://定数
+	static const int Vector3Count_ = 3;
+
 private:
 	//基盤
 	static DirectXBasis* dxBas_;
+	//入力
 	static Input* input_;
+	//スプライト基盤
 	static DrawBasis* drawBas_;
-
+	//ImGuiマネージャー
+	static ImGuiManager* imGuiManager_;
+	
+	//カメラ
 	Camera* camera_ = nullptr;
-	Light* light_ = nullptr;
+	//ライトグループ
+	LightGroup* lightGroup_ = nullptr;
+
+	//平行光源の方向初期値
+	Vector3 lightDir_ = { 0.0f,-1.0f,1.0f };
+
 
 	//当たり判定 レイ
 	Ray ray_;
