@@ -7,12 +7,12 @@ void Skydome::Initialize(Camera* camera) {
 	camera_ = camera;
 
 	model_ = new Model();
-	model_ = Model::LoadFromOBJ("skydome", false);
+	model_ = Model::LoadFromOBJ("skydome", true);
 
 	object_ = new Object3d();
 	object_ = Object3d::Create();
 	object_->SetModel(model_);
-	object_->SetScale({ 30.0f, 30.0f, 30.0f });
+	object_->SetScale({ 512.0f, 512.0f, 512.0f });
 	object_->SetCamera(camera_);
 }
 
@@ -32,7 +32,7 @@ void Skydome::Update() {
 			{ 0.0f,1.0f,0.0f }, ConvertToRadian(1.0f));
 
 		//1F“–‚½‚è‚Ì‰ñ“]Šp“x‚ðŽw’è
-		Vector3 pointY = { 0.0f,ConvertToRadian(1.0f),0.0f };
+		Vector3 pointY = { 0.0f,ConvertToRadian(0.1f),0.0f };
 
 		rot += RotateVector(pointY, rotation);
 
