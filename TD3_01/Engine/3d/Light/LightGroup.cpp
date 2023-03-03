@@ -17,19 +17,24 @@ void LightGroup::StaticInitialize(ID3D12Device* device) {
 }
 
 LightGroup* LightGroup::Create() {
-	LightGroup* lightGroup = new LightGroup();
+	LightGroup* light = new LightGroup();
 
-	lightGroup->Initialize();
+	light->Initialize();
 
-	return lightGroup;
+	return light;
 }
 
 void LightGroup::Initialize() {
+	//標準のライトの設定
+	DefaultSetting();
+	//定数バッファ生成
 	CreateConstBuffer();
+	//定数バッファへ転送
 	TransferConstBuffer();
 }
 
 void LightGroup::Update() {
+	//値の変更があったら定数バッファへ転送
 	if (dirty_) {
 		TransferConstBuffer();
 		dirty_ = false;
@@ -52,7 +57,7 @@ void LightGroup::CreateConstBuffer() {
 	// リソース設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resourceDesc.Width = (sizeof(ConstBufferDataLight) + 0xff) & ~0xff;
+	resourceDesc.Width = (sizeof(ConstBufferData) + 0xff) & ~0xff;
 	resourceDesc.Height = 1;
 	resourceDesc.DepthOrArraySize = 1;
 	resourceDesc.MipLevels = 1;
@@ -70,11 +75,53 @@ void LightGroup::CreateConstBuffer() {
 void LightGroup::TransferConstBuffer() {
 	HRESULT result;
 
-	ConstBufferDataLight* constMap = nullptr;
+	ConstBufferData* constMap = nullptr;
 	result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
-		constMap->lightv_ = -lightdir_;
-		constMap->lightcolor_ = lightcolor_;
-		constBuff_->Unmap(0, nullptr);
+		constMap->ambientColor_ = ambientColor_;
+
+		for (int i = 0; i < DirLightNum; i++) {
+			//ライトが有効なら設定を転送
+			if (dirLights_[i].IsActive()) {
+				constMap->dirLights[i].active_ = 1;
+				constMap->dirLights[i].lightv_ = -dirLights_[i].GetLightDir();
+				constMap->dirLights[i].lightcolor_ = dirLights_[i].GetLightColor();
+			}
+			//ライトが無効なら転送しない
+			else {
+				constMap->dirLights[i].active_ = 0;
+			}
+		}
 	}
+}
+
+void LightGroup::DefaultSetting() {
+	dirLights_[0].SetActive(true);
+	dirLights_[0].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[0].SetLightDir({ 0.0f,-1.0f,0.0f });
+
+	dirLights_[1].SetActive(true);
+	dirLights_[1].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[1].SetLightDir({ +0.5f,+0.1f,+0.2f });
+
+	dirLights_[2].SetActive(true);
+	dirLights_[2].SetLightColor({ 1.0f, 1.0f, 1.0f });
+	dirLights_[2].SetLightDir({ -0.5f,+0.1f,-0.2f });
+}
+
+void LightGroup::SetDirLightActive(int index, bool active) {
+	assert(0 <= index && index < DirLightNum);
+	dirLights_[index].SetActive(active);
+}
+
+void LightGroup::SetDirLightDir(int index, const Vector3& lightdir) {
+	assert(0 <= index && index < DirLightNum);
+	dirLights_[index].SetLightDir(lightdir);
+	dirty_ = true;
+}
+
+void LightGroup::SetDirLightColor(int index, const Vector3& lightcolor) {
+	assert(0 <= index && index < DirLightNum);
+	dirLights_[index].SetLightColor(lightcolor);
+	dirty_ = true;
 }
