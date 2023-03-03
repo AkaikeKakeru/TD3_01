@@ -16,6 +16,7 @@ void TitleScene::Initialize(){
 
 	//カメラ生成
 	camera_ = new Camera();
+	camera_->SetEye({ 0,10,-20 });
 
 	planeModel_ = new Model();
 	planeModel_ = Model::LoadFromOBJ("plane", false);
@@ -54,6 +55,7 @@ void TitleScene::Initialize(){
 void TitleScene::Update(){
 	input_->Update();
 
+	camera_->Update();
 	lightGroup_->Update();
 
 	skydomeObj_->Update();
