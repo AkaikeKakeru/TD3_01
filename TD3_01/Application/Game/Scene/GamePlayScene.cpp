@@ -41,8 +41,6 @@ void GamePlayScene::Draw() {
 	drawBas_->PreDraw();
 	Draw2d();
 	drawBas_->PostDraw();
-
-	imGuiManager_->Draw();
 }
 
 void GamePlayScene::Initialize3d() {
