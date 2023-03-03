@@ -54,6 +54,9 @@ private:
 	//ライトグループ
 	LightGroup* lightGroup_ = nullptr;
 
+	//平行光源の方向初期値
+	Vector3 lightDir_ = { 0.0f,-1.0f,1.0f };
+
 
 	//当たり判定 レイ
 	Ray ray_;
