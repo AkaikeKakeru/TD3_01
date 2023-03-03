@@ -5,10 +5,12 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "imgui.h"
 
 DirectXBasis* GamePlayScene::dxBas_ = DirectXBasis::GetInstance();
 Input* GamePlayScene::input_ = Input::GetInstance();
 DrawBasis* GamePlayScene::drawBas_ = DrawBasis::GetInstance();
+ImGuiManager* GamePlayScene::imGuiManager_ = ImGuiManager::GetInstance();
 
 void GamePlayScene::Initialize() {
 	Initialize2d();
@@ -17,9 +19,18 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Update() {
 	input_->Update();
-	
+	imGuiManager_->Begin();
+#ifdef _DEBUG
+	ImGui::Text("Hello, world");
+
+	//デモを表示
+	ImGui::ShowDemoWindow();
+#endif
+
 	Update3d();
 	Update2d();
+
+	imGuiManager_->End();
 }
 
 void GamePlayScene::Draw() {
@@ -30,6 +41,8 @@ void GamePlayScene::Draw() {
 	drawBas_->PreDraw();
 	Draw2d();
 	drawBas_->PostDraw();
+
+	imGuiManager_->Draw();
 }
 
 void GamePlayScene::Initialize3d() {

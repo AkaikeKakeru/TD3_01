@@ -10,6 +10,8 @@
 #include "Camera.h"
 #include "LightGroup.h"
 
+#include "ImGuiManager.h"
+
 #include <memory>
 #include <List>
 
@@ -40,11 +42,18 @@ private:
 private:
 	//基盤
 	static DirectXBasis* dxBas_;
+	//入力
 	static Input* input_;
+	//スプライト基盤
 	static DrawBasis* drawBas_;
-
+	//ImGuiマネージャー
+	static ImGuiManager* imGuiManager_;
+	
+	//カメラ
 	Camera* camera_ = nullptr;
+	//ライトグループ
 	LightGroup* lightGroup_ = nullptr;
+
 
 	//当たり判定 レイ
 	Ray ray_;
