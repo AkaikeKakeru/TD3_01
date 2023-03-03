@@ -20,15 +20,25 @@ void GamePlayScene::Initialize() {
 void GamePlayScene::Update() {
 	input_->Update();
 	imGuiManager_->Begin();
-#ifdef _DEBUG
-	ImGui::Text("Hello, world");
-
-	//デモを表示
-	ImGui::ShowDemoWindow();
-#endif
 
 	Update3d();
 	Update2d();
+
+#ifdef _DEBUG
+	{
+		float lightDir[Vector3Count_] = {
+			lightDir_.x,
+			lightDir_.y,
+			lightDir_.z
+		};
+
+		ImGui::Begin("Light");
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::SetWindowSize(ImVec2(500, 100));
+		ImGui::InputFloat3("lightDir", lightDir);
+		ImGui::End();
+	}
+#endif
 
 	imGuiManager_->End();
 }
@@ -49,7 +59,7 @@ void GamePlayScene::Initialize3d() {
 	camera_ = new Camera();
 
 	playerModel_ = new Model();
-	playerModel_ = Model::LoadFromOBJ("plane", true);
+	playerModel_ = Model::LoadFromOBJ("plane", false);
 
 	player_ = Player::Create(playerModel_);
 	player_->Initialize();
@@ -96,18 +106,8 @@ void GamePlayScene::Initialize2d() {
 
 void GamePlayScene::Update3d() {
 	{
-		static Vector3 lightDir = { 0.0f,1.0f,5.0f };
-
-		//	if (input_->PressKey(DIK_W) ||
-		//		input_->PressKey(DIK_S) ||
-		//		input_->PressKey(DIK_D) ||
-		//		input_->PressKey(DIK_A)) {
-		//		if (input_->PressKey(DIK_W)) { lightDir.y += 1.0f; }
-		//		else if (input_->PressKey(DIK_S)) { lightDir.y -= 1.0f; }
-		//		if (input_->PressKey(DIK_D)) { lightDir.x += 1.0f; }
-		//		else if (input_->PressKey(DIK_A)) { lightDir.x -= 1.0f; }
-		//	}
-		lightGroup_->SetDirLightDir(0,lightDir);
+		//imGuiからのライトパラメータを反映
+		lightGroup_->SetDirLightDir(0,lightDir_);
 	}
 
 	// カメラ移動
@@ -123,17 +123,17 @@ void GamePlayScene::Update3d() {
 
 	RaycastHit raycastHit_;
 
-	//レイキャストをチェック
-	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
-		rayObj_->SetPosition(raycastHit_.inter_);
-		rayObj_->Update();
-	}
-
 	lightGroup_->Update();
 	camera_->Update();
 
 	skydome_->Update();
 	player_->Update();
+
+	//レイキャストをチェック
+	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
+		rayObj_->SetPosition(raycastHit_.inter_);
+		rayObj_->Update();
+	}
 
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();

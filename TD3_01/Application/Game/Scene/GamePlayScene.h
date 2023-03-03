@@ -39,6 +39,9 @@ private:
 	void Draw3d();
 	void Draw2d();
 
+public://定数
+	static const int Vector3Count_ = 3;
+
 private:
 	//基盤
 	static DirectXBasis* dxBas_;
