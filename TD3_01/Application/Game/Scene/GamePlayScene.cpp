@@ -57,6 +57,7 @@ void GamePlayScene::Initialize3d() {
 	collisionManager_ = CollisionManager::GetInstance();
 
 	camera_ = new Camera();
+	camera_->SetEye({ 0.0f, 10.0f, -50.0f });
 
 	playerModel_ = new Model();
 	playerModel_ = Model::LoadFromOBJ("plane", false);
@@ -131,6 +132,8 @@ void GamePlayScene::Update3d() {
 
 	//レイキャストをチェック
 	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
+		//if(raycastHit_.collider_ == )
+
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
 	}
