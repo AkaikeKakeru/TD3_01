@@ -46,75 +46,61 @@ void Player::Update() {
 	Input* input_ = Input::GetInstance();
 
 	// オブジェクト移動
-	if (input_->PressKey(DIK_UP) ||
-		input_->PressKey(DIK_DOWN) ||
-		input_->PressKey(DIK_RIGHT) ||
-		input_->PressKey(DIK_LEFT) || 
-		input_->PressKey(DIK_Q) ||
-		input_->PressKey(DIK_Z ))
-	{
+
 		// 現在の座標を取得
 		Vector3 position = Object3d::GetPosition();
 		// 現在の座標を取得
 		Vector3 rot = Object3d::GetRotation();
 
-		//回転ベクトル
-		Vector3 rotVector = {};
 
 		//移動スピード
-		float moveSpeed = 0.5f;
+		float moveSpeed = 0.2f;
 		//回転スピード
-		float rotSpeed = ConvertToRadian(1.0f);
+		float rotSpeed = ConvertToRadian(90.0f);
 
 		Vector3 angleX = { 1.0f,0.0f,0.0f };
+		Vector3 angleY = { 0.0f,1.0f,0.0f };
 		Vector3 angleZ = { 0.0f,0.0f,1.0f };
 
-		//移動後の座標を計算
-		if (input_->PressKey(DIK_UP)) {
-			// 移動後の座標を計算
-			position.y += moveSpeed;
+		//移動ベクトル
+		Vector3 moveVector = { 0,0,0 };
+		//回転ベクトル
+		Vector3 rotVector = { 0,0,0 };
 
+		//移動後の座標を計算
+		if (input_->TriggerKey(DIK_UP)) {
 			rotVector = CreateRotationVector(
 				angleX, rotSpeed);
 		}
 
-		else if (input_->PressKey(DIK_DOWN)) {
-			position.y -= moveSpeed;
-
+		else if (input_->TriggerKey(DIK_DOWN)) {
 			rotVector = CreateRotationVector(
 				angleX, -rotSpeed);
 		}
 
-		if (input_->PressKey(DIK_RIGHT)) {
-			position.x += moveSpeed;
-
+		if (input_->TriggerKey(DIK_RIGHT)) {
 			rotVector = CreateRotationVector(
-				angleZ, rotSpeed);
+				angleY, rotSpeed);
 		}
 
-		else if (input_->PressKey(DIK_LEFT)) {
-			position.x -= moveSpeed;
-
+		else if (input_->TriggerKey(DIK_LEFT)) {
 			rotVector = CreateRotationVector(
-				angleZ, -rotSpeed);
+				angleY, -rotSpeed);
 		}
 
-		if (input_->PressKey(DIK_Q)) {
-			position.z += moveSpeed;
-		}
-
-		else if (input_->PressKey(DIK_Z)) {
-			position.z -= moveSpeed;
-		}
+		moveVector.z = -moveSpeed;
 
 		rot += rotVector;
+
+		moveVector = Vector3Transform(moveVector, worldTransform_.matWorld_);
+
+		position = moveVector;
 
 		// 座標の変更を反映
 		Object3d::SetRotation(rot);
 
 		// 座標の変更を反映
 		Object3d::SetPosition(position);
-	}
 
 	camera_->Update();
 	Object3d::Update();
