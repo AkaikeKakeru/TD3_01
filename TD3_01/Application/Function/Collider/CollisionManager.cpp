@@ -42,6 +42,10 @@ void CollisionManager::CheckSphere2Sphere(BaseCollider* colA, BaseCollider* colB
 
 bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo,
 	float maxDistance) {
+	return Raycast(ray,0xffff,hitInfo,maxDistance);
+}
+
+bool CollisionManager::Raycast(const Ray& ray, unsigned short attribute, RaycastHit* hitInfo, float maxDistance) {
 	bool result = false;
 
 	//走査用イテレータ
@@ -57,6 +61,11 @@ bool CollisionManager::Raycast(const Ray& ray, RaycastHit* hitInfo,
 	it = colliders_.begin();
 	for (; it != colliders_.end(); ++it) {
 		BaseCollider* colA = *it;
+
+		//属性が合わなければスキップ
+		if (!(colA->attribute_ & attribute)) {
+			continue;
+		}
 
 		//球の場合
 		if (colA->GetShapeType() == COLLISIONSHAPE_SPHERE) {
