@@ -283,6 +283,7 @@
       <Filter>Header File\Engine\3d\Light</Filter>
     </ClInclude>
     <ClInclude Include="Application\Game\Fan\Fan.h" />
+    <ClInclude Include="Application\Function\Collider\CollisionAttribute.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\shader\Obj.hlsli">

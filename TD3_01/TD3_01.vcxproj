@@ -201,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Function\Collider\BaseCollider.h" />
+    <ClInclude Include="Application\Function\Collider\CollisionAttribute.h" />
     <ClInclude Include="Application\Function\Collider\CollisionInfo.h" />
     <ClInclude Include="Application\Function\Collider\CollisionManager.h" />
     <ClInclude Include="Application\Function\Collider\CollisionPrimitive.h" />
