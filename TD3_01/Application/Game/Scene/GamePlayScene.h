@@ -21,6 +21,7 @@
 
 class CollisionManager;
 class Player;
+class Fan;
 
 class GamePlayScene : public BaseScene {
 public:
@@ -77,6 +78,9 @@ private:
 
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
+
+	Fan* fan_ = nullptr;
+	Model* fanModel_ = nullptr;
 
 	Skydome* skydome_ = nullptr;
 
