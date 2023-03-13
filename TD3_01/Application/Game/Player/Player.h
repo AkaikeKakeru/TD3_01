@@ -3,6 +3,9 @@
 #include "Object3d.h"
 #include "Camera.h"
 
+class CollisionManager;
+class Fan;
+
 class Player 
 	: public Object3d {
 public: //静的メンバ関数
@@ -17,6 +20,16 @@ public://メンバ関数
 
 	//衝突時コールバック関数
 	void OnCollision(const CollisionInfo & info) override;
+public://アクセッサ
+	void SetFan(Fan*fan) {
+		fan_ = fan;
+	}
+
+private:
+	//衝突マネージャー
+	static CollisionManager* collisionManager_;
+
+	Fan* fan_ = nullptr;
 
 public:
 	Player() = default;
