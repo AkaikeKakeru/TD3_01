@@ -3,7 +3,15 @@
 #include "SafeDelete.h"
 #include "Input.h"
 #include "SphereCollider.h"
+
+#include "CollisionManager.h"
+#include "CollisionAttribute.h"
+#include "Fan.h"
+
 #include <cassert>
+#include "CollisionAttribute.h"
+
+CollisionManager* Player::collisionManager_ = CollisionManager::GetInstance();
 
 Player* Player::Create(Model* model) {
 	//オブジェクトのインスタンスを生成
@@ -38,6 +46,8 @@ bool Player::Initialize() {
 		Vector3{ 0.0f,radius,0.0f },
 		radius)
 	);
+
+	collider_->SetAttribute(COLLISION_ATTR_PLAYER);
 
 	return true;
 }
@@ -104,6 +114,16 @@ void Player::Update() {
 
 	camera_->Update();
 	Object3d::Update();
+
+	RaycastHit raycastHit;
+
+	//レイキャストをチェック
+	//if (collisionManager_->Raycast(fan_->GetRay(),COLLISION_ATTR_PLAYER, &raycastHit)) {
+	//worldTransform_.position_.y += 0.1f;
+	//	worldTransform_.UpdateMatrix();
+
+	//	Object3d::Update();
+	//}
 }
 
 void Player::Draw() {
