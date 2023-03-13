@@ -105,7 +105,7 @@ void GamePlayScene::Initialize3d() {
 	//ファンの初期化
 	fan_ = Fan::Create(fanModel_);
 	fan_->Initialize();
-	//fan_->SetRay(ray_);
+	fan_->SetRay(&ray_);
 	fan_->SetScale({1.0f,1.0f,1.0f});
 	fan_->SetCamera(camera_);
 
@@ -162,7 +162,7 @@ void GamePlayScene::Update3d() {
 	player_->Update();
 
 	//レイキャストをチェック
-	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
+	if (collisionManager_->Raycast(*fan_->GetRay(), &raycastHit_)) {
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
 	}
