@@ -17,12 +17,16 @@ public: //メンバ関数
 	void OnCollision(const CollisionInfo & info) override;
 
 public://アクセッサ
-	Ray GetRay() {
+	Ray* GetRay() {
 		return ray_;
 	}
 
+	void SetRay(Ray* ray) {
+		ray_ = ray;
+	}
+
 private://メンバ変数
-	Ray ray_;
+	Ray* ray_;
 	//回転ベクトル
 	Vector3 rotVector_ = { 0,0,0 };
 };

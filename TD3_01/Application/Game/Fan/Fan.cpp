@@ -34,10 +34,10 @@ bool Fan::Initialize() {
 		return false;
 	}
 
-	//レイの初期設定
-	//レイの初期値
-	ray_.start_ = {0,0,0};
-	ray_.dir_ = { 0,0,1};
+	////レイの初期設定
+	////レイの初期値
+	//ray_.start_ = {0,0,0};
+	//ray_.dir_ = { 0,0,1};
 
 	//コライダ－追加
 	//float radius = 0.6f;
@@ -96,7 +96,7 @@ void Fan::Update() {
 	// 回転の変更を反映
 	Object3d::SetRotation(rot);
 
-	ray_.start_ = Object3d::GetPosition();
+	//ray_->start_ = Object3d::GetPosition();
 	//ray_.dir_ = Object3d::GetRotation();
 
 	camera_->Update();
