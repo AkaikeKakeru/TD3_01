@@ -66,7 +66,7 @@ private:
 	Ray ray_;
 
 	//衝突マネージャー
-	static CollisionManager* collisionManager_;
+	CollisionManager* collisionManager_ = nullptr;
 
 	/// <summary>
 	/// オブジェクト
@@ -78,7 +78,7 @@ private:
 
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
-
+	
 	Fan* fan_ = nullptr;
 	Model* fanModel_ = nullptr;
 

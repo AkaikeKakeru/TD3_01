@@ -38,19 +38,6 @@ void GamePlayScene::Update() {
 			player_->GetRotation().y,
 			player_->GetRotation().z 
 		};
-
-		float fanDir[Vector3Count_] = {
-			fan_->GetRotation().x,
-			fan_->GetRotation().y,
-			fan_->GetRotation().z 
-		};
-
-		float rayDir[Vector3Count_] = {
-			fan_->GetRay().dir_.x,
-			fan_->GetRay().dir_.y,
-			fan_->GetRay().dir_.z 
-		};
-
 		float blockPos[Vector3Count_] = {
 			rayObj_->GetPosition().x,
 			rayObj_->GetPosition().y,
@@ -62,13 +49,6 @@ void GamePlayScene::Update() {
 		ImGui::SetWindowSize(ImVec2(500, 100));
 		ImGui::InputFloat3("PlayerPos",playerPos );
 		ImGui::InputFloat3("PlayerDir",playerDir );
-		ImGui::End();
-
-		ImGui::Begin("Fan");
-		ImGui::SetWindowPos(ImVec2(0, 0));
-		ImGui::SetWindowSize(ImVec2(500, 100));
-		ImGui::InputFloat3("FanDir",fanDir );
-		ImGui::InputFloat3("RayDir",rayDir );
 		ImGui::End();
 
 		ImGui::Begin("Block");
@@ -119,18 +99,13 @@ void GamePlayScene::Initialize3d() {
 
 
 	//レイの初期値
-
-	//ファンの初期化
-	fan_ = Fan::Create(fanModel_);
-	fan_->Initialize();
-	//fan_->SetRay(ray_);
-	fan_->SetScale({1.0f,1.0f,1.0f});
-	fan_->SetCamera(camera_);
+	ray_.start_ = { 0.0f, 0.0f, 50.0f};
+	ray_.dir_ = { 0,0,-1 };
 
 	rayObj_ = Object3d::Create();
 	rayObj_->Initialize();
 	rayObj_->SetModel(rayModel_);
-	rayObj_->SetPosition(fan_->GetRay().start_);
+	rayObj_->SetPosition(ray_.start_);
 	rayObj_->SetScale({ 2, 2, 2 });
 	rayObj_->SetCamera(camera_);
 
@@ -175,13 +150,10 @@ void GamePlayScene::Update3d() {
 	camera_->Update();
 
 	skydome_->Update();
-	fan_->Update();
 	player_->Update();
 
 	//レイキャストをチェック
-	if (collisionManager_->Raycast(fan_->GetRay(), &raycastHit_)) {
-		//if(raycastHit_.collider_ == )
-
+	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
 	}
@@ -205,7 +177,6 @@ void GamePlayScene::Update2d() {
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
 	rayObj_->Draw();
-	fan_->Draw();
 	player_->Draw();
 }
 
@@ -217,10 +188,6 @@ void GamePlayScene::Finalize() {
 	player_->Finalize();
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
-
-	fan_->Finalize();
-	SafeDelete(fan_);
-	SafeDelete(fanModel_);
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
