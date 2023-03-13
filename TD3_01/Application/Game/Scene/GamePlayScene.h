@@ -66,7 +66,7 @@ private:
 	Ray ray_;
 
 	//衝突マネージャー
-	CollisionManager* collisionManager_ = nullptr;
+	static CollisionManager* collisionManager_;
 
 	/// <summary>
 	/// オブジェクト
