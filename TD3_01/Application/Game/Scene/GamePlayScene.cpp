@@ -30,31 +30,31 @@ void GamePlayScene::Update() {
 		float playerPos[Vector3Count_] = {
 			player_->GetPosition().x,
 			player_->GetPosition().y,
-			player_->GetPosition().z 
+			player_->GetPosition().z
 		};
 
 		float playerDir[Vector3Count_] = {
 			player_->GetRotation().x,
 			player_->GetRotation().y,
-			player_->GetRotation().z 
+			player_->GetRotation().z
 		};
 		float blockPos[Vector3Count_] = {
 			rayObj_->GetPosition().x,
 			rayObj_->GetPosition().y,
-			rayObj_->GetPosition().z 
+			rayObj_->GetPosition().z
 		};
 
 		ImGui::Begin("Player");
 		ImGui::SetWindowPos(ImVec2(700, 0));
 		ImGui::SetWindowSize(ImVec2(500, 100));
-		ImGui::InputFloat3("PlayerPos",playerPos );
-		ImGui::InputFloat3("PlayerDir",playerDir );
+		ImGui::InputFloat3("PlayerPos", playerPos);
+		ImGui::InputFloat3("PlayerDir", playerDir);
 		ImGui::End();
 
 		ImGui::Begin("Block");
 		ImGui::SetWindowPos(ImVec2(0, 400));
 		ImGui::SetWindowSize(ImVec2(500, 100));
-		ImGui::InputFloat3("BlockPos",blockPos );
+		ImGui::InputFloat3("BlockPos", blockPos);
 		ImGui::End();
 	}
 #endif
@@ -99,14 +99,14 @@ void GamePlayScene::Initialize3d() {
 
 
 	//レイの初期値
-	ray_.start_ = { 0.0f, 0.0f, 50.0f};
+	ray_.start_ = { 0.0f, 0.0f, 50.0f };
 	ray_.dir_ = { 0,0,-1 };
-	
+
 	//ファンの初期化
 	fan_ = Fan::Create(fanModel_);
 	fan_->Initialize();
 	fan_->SetRay(&ray_);
-	fan_->SetScale({1.0f,1.0f,1.0f});
+	fan_->SetScale({ 1.0f,1.0f,1.0f });
 	fan_->SetCamera(camera_);
 
 	//レイ接触確認オブジェクトの初期化
@@ -138,7 +138,7 @@ void GamePlayScene::Initialize2d() {
 void GamePlayScene::Update3d() {
 	{
 		//imGuiからのライトパラメータを反映
-		lightGroup_->SetDirLightDir(0,lightDir_);
+		lightGroup_->SetDirLightDir(0, lightDir_);
 	}
 
 	//// カメラ移動
