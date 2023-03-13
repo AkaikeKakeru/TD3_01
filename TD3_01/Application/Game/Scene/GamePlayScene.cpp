@@ -101,7 +101,15 @@ void GamePlayScene::Initialize3d() {
 	//レイの初期値
 	ray_.start_ = { 0.0f, 0.0f, 50.0f};
 	ray_.dir_ = { 0,0,-1 };
+	
+	//ファンの初期化
+	fan_ = Fan::Create(fanModel_);
+	fan_->Initialize();
+	//fan_->SetRay(ray_);
+	fan_->SetScale({1.0f,1.0f,1.0f});
+	fan_->SetCamera(camera_);
 
+	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
 	rayObj_->Initialize();
 	rayObj_->SetModel(rayModel_);
@@ -150,6 +158,7 @@ void GamePlayScene::Update3d() {
 	camera_->Update();
 
 	skydome_->Update();
+	fan_->Update();
 	player_->Update();
 
 	//レイキャストをチェック
@@ -177,6 +186,7 @@ void GamePlayScene::Update2d() {
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
 	rayObj_->Draw();
+	fan_->Draw();
 	player_->Draw();
 }
 
@@ -188,6 +198,10 @@ void GamePlayScene::Finalize() {
 	player_->Finalize();
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
+
+	fan_->Finalize();
+	SafeDelete(fan_);
+	SafeDelete(fanModel_);
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
