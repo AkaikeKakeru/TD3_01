@@ -7,8 +7,8 @@
 
 class Stage {
 private: // 定数
-	static const int STAGE_WIDTH = 20;
-	static const int STAGE_HEIGHT = 20;
+	static const int STAGE_WIDTH = 10;
+	static const int STAGE_HEIGHT = 10;
 
 public:
 	// 列挙
@@ -38,7 +38,7 @@ public:
 	~Stage();
 
 	// 初期化
-	void Initialize(Model* model, Object3d* obj);
+	void Initialize(Model* model, Object3d* obj, Camera* camera);
 
 	// ステージ初期化
 	void StageInitialize(const std::string stageNum);
@@ -47,7 +47,7 @@ public:
 	void Update();
 
 	// 描画
-	void Draw(ViewProjection viewProjection);
+	void Draw();
 
 	// 足元のブロックを判別する
 	void CheckBlock(int line, int row);

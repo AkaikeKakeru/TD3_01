@@ -24,7 +24,9 @@ Stage::~Stage() {
 
 }
 
-void Stage::Initialize(Model* model, Object3d* obj) {
+void Stage::Initialize(Model* model, Object3d* obj,Camera* camera) {
+	
+	cameraStage_ = camera;
 	//インスタンス生成
 	model_ = model;
 	modelFloor_ = new Model();
@@ -142,7 +144,7 @@ void Stage::Update() {
 	isGoal_ = false;
 }
 
-void Stage::Draw(ViewProjection viewProjection) {
+void Stage::Draw() {
 	// ステージ描画
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		if (block->type_ == BLOCK) {
@@ -180,7 +182,7 @@ void Stage::LoadStageData(const std::string stageNum) {
 	// パスを取得
 	const std::string name = "stage";
 	const std::string filename = name + stageNum + ".csv";
-	const std::string directoryPath = "Resources/" + name + "/";
+	const std::string directoryPath = "Resource/" + name + "/";
 	// ファイルを開く
 	file.open(directoryPath + filename);
 	assert(file.is_open());

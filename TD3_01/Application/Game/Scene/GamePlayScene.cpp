@@ -36,6 +36,7 @@ void GamePlayScene::Initialize3d() {
 	collisionManager_ = CollisionManager::GetInstance();
 
 	camera_ = new Camera();
+	
 
 	playerModel_ = new Model();
 	playerModel_ = Model::LoadFromOBJ("plane", true);
@@ -73,6 +74,11 @@ void GamePlayScene::Initialize3d() {
 	light_ = Light::Create();
 	light_->SetLightColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(light_);
+
+	//ステージ生成
+	stage_ = new Stage();
+	stage_->Initialize(rayModel_, rayObj_, camera_);
+	stage_->StageInitialize("0");
 }
 
 void GamePlayScene::Initialize2d() {
@@ -117,13 +123,12 @@ void GamePlayScene::Update3d() {
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
 	}
-
+	
 	light_->Update();
 	camera_->Update();
-
 	skydome_->Update();
 	player_->Update();
-
+	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
 }
@@ -144,6 +149,7 @@ void GamePlayScene::Draw3d() {
 	skydome_->Draw();
 	rayObj_->Draw();
 	player_->Draw();
+	stage_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -156,6 +162,7 @@ void GamePlayScene::Finalize() {
 	SafeDelete(playerModel_);
 
 	skydome_->Finalize();
+	SafeDelete(stage_);
 	SafeDelete(skydome_);
 
 	SafeDelete(rayObj_);
