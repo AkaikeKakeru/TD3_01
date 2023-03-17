@@ -44,5 +44,6 @@ public: // アクセッサ
 		worldTransform_.matWorld_ = Matrix4Identity();
 		worldTransform_.matWorld_ *= Matrix4WorldTransform(worldTransform_.scale_,worldTransform_.rotation_,worldTransform_.position_);
 		worldTransform_.UpdateMatrix();
+		obj_->SetWorldTransform(worldTransform_);
 	}
 };

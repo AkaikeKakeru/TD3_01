@@ -77,8 +77,8 @@ void GamePlayScene::Initialize3d() {
 
 	//ステージ生成
 	stage_ = new Stage();
-	stage_->Initialize(rayModel_, rayObj_, camera_);
-	stage_->StageInitialize("0");
+	stage_->Initialize(camera_);
+	stage_->StageInitialize(filename_[1]);
 }
 
 void GamePlayScene::Initialize2d() {

@@ -57,6 +57,14 @@ private:
 	/// オブジェクト
 	/// </summary>
 	Stage* stage_ = nullptr;
+	const std::string filename_[7] = {
+	  "0",
+	  "1",
+	  "2",
+	  "3",
+	  "4",
+	  "5",
+	  "6" };
 
 	Object3d* rayObj_ = nullptr;
 	Model* rayModel_ = nullptr;

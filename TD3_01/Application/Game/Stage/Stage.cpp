@@ -4,6 +4,7 @@
 #include "SafeDelete.h"
 
 Stage::~Stage() {
+	SafeDelete(model_);
 	SafeDelete(modelFloor_);
 	SafeDelete(modelGoal_);
 	SafeDelete(modelSwitchR_);
@@ -11,6 +12,7 @@ Stage::~Stage() {
 	SafeDelete(modelWallR_);
 	SafeDelete(modelWallB_);
 
+	SafeDelete(obj_);
 	SafeDelete(objFloor_);
 	SafeDelete(objGoal_);
 	SafeDelete(objSwitchR_);
@@ -24,11 +26,11 @@ Stage::~Stage() {
 
 }
 
-void Stage::Initialize(Model* model, Object3d* obj,Camera* camera) {
-	
+void Stage::Initialize(Camera* camera) {
+
 	cameraStage_ = camera;
 	//インスタンス生成
-	model_ = model;
+	model_ = new Model();
 	modelFloor_ = new Model();
 	modelSwitchR_ = new Model();
 	modelSwitchB_ = new Model();
@@ -36,7 +38,7 @@ void Stage::Initialize(Model* model, Object3d* obj,Camera* camera) {
 	modelWallB_ = new Model();
 	modelGoal_ = new Model();
 
-	obj_ = obj;
+	obj_ = new Object3d();
 	objFloor_ = new Object3d();
 	objSwitchR_ = new Object3d();
 	objSwitchB_ = new Object3d();
@@ -45,6 +47,7 @@ void Stage::Initialize(Model* model, Object3d* obj,Camera* camera) {
 	objGoal_ = new Object3d();
 
 	// モデル読み込み
+	model_ = Model::LoadFromOBJ("cube", true);
 	modelFloor_ = Model::LoadFromOBJ("floor", true);
 	modelSwitchR_ = Model::LoadFromOBJ("rswitch", true);
 	modelSwitchB_ = Model::LoadFromOBJ("bswitch", true);
@@ -53,6 +56,10 @@ void Stage::Initialize(Model* model, Object3d* obj,Camera* camera) {
 	modelGoal_ = Model::LoadFromOBJ("goal", true);
 
 	//3Dオブジェクトとカメラのセット
+	obj_ = Object3d::Create();
+	obj_->SetModel(model_);
+	obj_->SetCamera(cameraStage_);
+
 	objFloor_ = Object3d::Create();
 	objFloor_->SetModel(modelFloor_);
 	objFloor_->SetCamera(cameraStage_);
@@ -82,6 +89,7 @@ void Stage::Initialize(Model* model, Object3d* obj,Camera* camera) {
 	switchB_ = new Switch();
 	switchR_->Initialize(modelSwitchR_, objSwitchR_);
 	switchB_->Initialize(modelSwitchB_, objSwitchB_);
+
 
 	// ステージの床を初期化
 	LoadFloorBlock();
@@ -219,43 +227,43 @@ void Stage::LoadStageCommands() {
 			// コマンド読み込み
 			if (word.find("NONE") == 0 || word.find("0") == 0 || word.find("7") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, NONE, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, obj_, NONE, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, BLOCK, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objFloor_, BLOCK, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("2") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, SWITCHR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchR_, SWITCHR, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("3") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, WALLR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallR_, WALLR, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("4") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, SWITCHB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchB_, SWITCHB, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("5") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, WALLB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallB_, WALLB, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("GOAL") == 0 || word.find("6") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, GOAL, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objGoal_, GOAL, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
@@ -274,12 +282,12 @@ void Stage::LoadFloorBlock() {
 	for (int i = 0; i < STAGE_HEIGHT; i++) {
 		for (int j = 0; j < STAGE_WIDTH; j++) {
 			// ステージのブロックを追加
-			PushStageBlockList(floorBlocks_, BLOCK, j, i, -14.0f);
+			PushStageBlockList(floorBlocks_, objFloor_, BLOCK, j, i, -14.0f);
 		}
 	}
 }
 
-void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3 pos, int line, int row) {
+void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* obj, Vector3 pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
 	block->worldTransform_.Initialize();
 
@@ -295,13 +303,17 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3 pos,
 
 	block->line_ = line;
 	block->row_ = row;
+
+	obj->SetWorldTransform(block->worldTransform_);
+	obj->Update();
 }
 
-void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, int type, int line, int row, float depth) {
+void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth) {
 	// リストに入れるために新しく宣言
 	std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
 	// ブロックの種類
 	newBlock->type_ = type;
+	newBlock->obj = obj;
 	// 座標
 	Vector3 pos;
 	pos.x = 2.0f + (4.0f * line);
@@ -309,7 +321,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, i
 	pos.z = 78.0f - (4.0f * row);
 
 	// 初期化する
-	InitializeStageBlock(newBlock, pos, line, row);
+	InitializeStageBlock(newBlock, obj, pos, line, row);
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
 
