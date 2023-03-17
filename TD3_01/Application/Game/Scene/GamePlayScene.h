@@ -21,6 +21,7 @@
 
 class CollisionManager;
 class Player;
+class Fan;
 
 class GamePlayScene : public BaseScene {
 public:
@@ -62,10 +63,14 @@ private:
 
 
 	//当たり判定 レイ
-	Ray ray_;
+	Ray* ray_;
 
 	//衝突マネージャー
 	CollisionManager* collisionManager_ = nullptr;
+
+	bool colRay_ = false;
+
+	Vector3 interRay_ = {};
 
 	/// <summary>
 	/// オブジェクト
@@ -75,8 +80,13 @@ private:
 	Object3d* rayObj_ = nullptr;
 	Model* rayModel_ = nullptr;
 
+	Object3d* rayObj_2 = nullptr;
+
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
+	
+	Fan* fan_ = nullptr;
+	Model* fanModel_ = nullptr;
 
 	Skydome* skydome_ = nullptr;
 

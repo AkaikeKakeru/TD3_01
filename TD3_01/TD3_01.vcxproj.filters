@@ -138,6 +138,7 @@
     <ClCompile Include="Application\Game\Stage\Switch.cpp">
       <Filter>Source File\Application\Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Game\Fan\Fan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\DrawBasis.h">
@@ -281,6 +282,8 @@
     <ClInclude Include="Engine\3d\Light\DirectionalLight.h">
       <Filter>Header File\Engine\3d\Light</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Game\Fan\Fan.h" />
+    <ClInclude Include="Application\Function\Collider\CollisionAttribute.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\shader\Obj.hlsli">
@@ -428,6 +431,12 @@
     </Filter>
     <Filter Include="Header File\Application\Game\Scene\Manager">
       <UniqueIdentifier>{845dac30-b5e4-42de-b78f-6d53ded74367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Application\Game\Fan">
+      <UniqueIdentifier>{2a7233ec-11c0-43a8-a0b7-492a95b67dcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\Application\Game\Fan">
+      <UniqueIdentifier>{16d40388-5aba-4984-92d8-e36814de3e29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

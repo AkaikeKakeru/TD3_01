@@ -17,8 +17,26 @@ public: //メンバ関数
 	//更新
 	void Update() override;
 
+
+public://アクセッサ
+	//半径取得
+	inline float GetRadius() {
+		return radius_;
+	}
+
+	//オフセット取得
+	inline const Vector3& GetOffset() {
+		return offset_; 
+	}
+
+	//半径セット
 	inline void SetRadius(float radius) {
 		radius_ = radius;
+	}
+
+	//オフセットセット
+	inline void SetOffset(const Vector3& offset) {
+		offset_ = offset;
 	}
 
 private: //メンバ変数

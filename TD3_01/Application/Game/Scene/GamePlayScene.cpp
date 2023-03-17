@@ -5,7 +5,9 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "Fan.h"
 #include "imgui.h"
+#include "CollisionAttribute.h"
 
 DirectXBasis* GamePlayScene::dxBas_ = DirectXBasis::GetInstance();
 Input* GamePlayScene::input_ = Input::GetInstance();
@@ -26,17 +28,84 @@ void GamePlayScene::Update() {
 
 #ifdef _DEBUG
 	{
-		float lightDir[Vector3Count_] = {
-			lightDir_.x,
-			lightDir_.y,
-			lightDir_.z
+		float playerPos[Vector3Count_] = {
+			player_->GetPosition().x,
+			player_->GetPosition().y,
+			player_->GetPosition().z
 		};
 
-		ImGui::Begin("Light");
-		ImGui::SetWindowPos(ImVec2(0, 0));
+		float playerDir[Vector3Count_] = {
+			player_->GetRotation().x,
+			player_->GetRotation().y,
+			player_->GetRotation().z
+		};
+		float blockPos[Vector3Count_] = {
+			rayObj_->GetPosition().x,
+			rayObj_->GetPosition().y,
+			rayObj_->GetPosition().z
+		};
+		float block2Pos[Vector3Count_] = {
+			rayObj_2->GetPosition().x,
+			rayObj_2->GetPosition().y,
+			rayObj_2->GetPosition().z
+		};
+
+		float rayDir[Vector3Count_] = {
+			fan_->GetRay()->dir_.x,
+			fan_->GetRay()->dir_.y,
+			fan_->GetRay()->dir_.z
+		};
+		float rayPos[Vector3Count_] = {
+			fan_->GetRay()->start_.x,
+			fan_->GetRay()->start_.y,
+			fan_->GetRay()->start_.z
+		};
+		float rayInter[Vector3Count_] = {
+			interRay_.x,
+			interRay_.y,
+			interRay_.z
+		};
+
+		float fanDir[Vector3Count_] = {
+			fan_->GetRotation().x,
+			fan_->GetRotation().y,
+			fan_->GetRotation().z
+		};
+		float fanPos[Vector3Count_] = {
+			fan_->GetPosition().x,
+			fan_->GetPosition().y,
+			fan_->GetPosition().z
+		};
+
+		float rayCol[1] = {
+			colRay_
+		};
+
+		ImGui::Begin("Player");
+		ImGui::SetWindowPos(ImVec2(700, 0));
 		ImGui::SetWindowSize(ImVec2(500, 100));
-		ImGui::InputFloat3("lightDir", lightDir);
+		ImGui::InputFloat3("PlayerPos", playerPos);
+		ImGui::InputFloat3("PlayerDir", playerDir);
 		ImGui::End();
+
+		ImGui::Begin("Block");
+		ImGui::SetWindowPos(ImVec2(0, 400));
+		ImGui::SetWindowSize(ImVec2(500, 100));
+		ImGui::InputFloat3("BlockPos", blockPos);
+		ImGui::InputFloat3("Block2Pos", block2Pos);
+		ImGui::InputFloat3("RayInter", rayInter);
+		ImGui::End();
+
+		ImGui::Begin("Fan");
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		ImGui::InputFloat3("FanPos", fanPos);
+		ImGui::InputFloat3("FanDir", fanDir);
+		ImGui::InputFloat3("RayPos", rayPos);
+		ImGui::InputFloat3("RayDir", rayDir);
+		ImGui::InputFloat("RayCol", rayCol);
+		ImGui::End();
+
 	}
 #endif
 
@@ -55,12 +124,19 @@ void GamePlayScene::Draw() {
 
 void GamePlayScene::Initialize3d() {
 	collisionManager_ = CollisionManager::GetInstance();
-
+	//カメラの初期化
 	camera_ = new Camera();
+	camera_->SetEye({ 0.0f, 40.0f, -100.0f });
 
+	//各種モデル
 	playerModel_ = new Model();
 	playerModel_ = Model::LoadFromOBJ("plane", false);
+	rayModel_ = new Model();
+	rayModel_ = Model::LoadFromOBJ("cube", true);
+	fanModel_ = new Model();
+	fanModel_ = Model::LoadFromOBJ("planeEnemy", false);
 
+	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
 	player_->Initialize();
 
@@ -69,22 +145,37 @@ void GamePlayScene::Initialize3d() {
 
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
+
 	player_->SetCamera(camera_);
-
-	rayModel_ = new Model();
-	rayModel_ = Model::LoadFromOBJ("cube", true);
-
+	player_->Update();
 
 	//レイの初期値
-	ray_.start_ = { 0.0f, 0.0f, 50.0f};
-	ray_.dir_ = { 0,0,-1};
+	ray_ = new Ray();
 
+	ray_->start_ = { 0.0f, 0.0f, 0.0f };
+	ray_->dir_ = { 0,0,-1 };
+
+	//ファンの初期化
+	fan_ = Fan::Create(fanModel_);
+	fan_->Initialize();
+	fan_->SetRay(ray_);
+	fan_->SetScale({ 1.0f,1.0f,1.0f });
+	fan_->SetCamera(camera_);
+
+	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
 	rayObj_->Initialize();
 	rayObj_->SetModel(rayModel_);
-	rayObj_->SetPosition(ray_.start_);
+	rayObj_->SetPosition(ray_->start_);
 	rayObj_->SetScale({ 2, 2, 2 });
 	rayObj_->SetCamera(camera_);
+
+	rayObj_2 = Object3d::Create();
+	rayObj_2->Initialize();
+	rayObj_2->SetModel(rayModel_);
+	rayObj_2->SetPosition(ray_->start_ + (50 * ray_->dir_));
+	rayObj_2->SetScale({ 2, 2, 2 });
+	rayObj_2->SetCamera(camera_);
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(camera_);
@@ -105,34 +196,49 @@ void GamePlayScene::Initialize2d() {
 }
 
 void GamePlayScene::Update3d() {
+	colRay_ = false;
+
 	{
 		//imGuiからのライトパラメータを反映
-		lightGroup_->SetDirLightDir(0,lightDir_);
+		lightGroup_->SetDirLightDir(0, lightDir_);
 	}
 
-	// カメラ移動
-	if (input_->PressKey(DIK_W) ||
-		input_->PressKey(DIK_S) ||
-		input_->PressKey(DIK_D) ||
-		input_->PressKey(DIK_A)) {
-		if (input_->PressKey(DIK_W)) { camera_->MoveVector({ 0.0f,+1.0f,0.0f }); }
-		else if (input_->PressKey(DIK_S)) { camera_->MoveVector({ 0.0f,-1.0f,0.0f }); }
-		if (input_->PressKey(DIK_D)) { camera_->MoveVector({ +1.0f,0.0f,0.0f }); }
-		else if (input_->PressKey(DIK_A)) { camera_->MoveVector({ -1.0f,0.0f,0.0f }); }
-	}
+	//// カメラ移動
+	//if (input_->PressKey(DIK_W) ||
+	//	input_->PressKey(DIK_S) ||
+	//	input_->PressKey(DIK_D) ||
+	//	input_->PressKey(DIK_A)) {
+	//	if (input_->PressKey(DIK_W)) { camera_->MoveVector({ 0.0f,+1.0f,0.0f }); }
+	//	else if (input_->PressKey(DIK_S)) { camera_->MoveVector({ 0.0f,-1.0f,0.0f }); }
+	//	if (input_->PressKey(DIK_D)) { camera_->MoveVector({ +1.0f,0.0f,0.0f }); }
+	//	else if (input_->PressKey(DIK_A)) { camera_->MoveVector({ -1.0f,0.0f,0.0f }); }
+	//}
 
 	RaycastHit raycastHit_;
 
 	lightGroup_->Update();
 	camera_->Update();
 
+	rayObj_->Update();
+
+	rayObj_2->SetPosition(fan_->GetRay()->start_ + (50 * fan_->GetRay()->dir_));
+	rayObj_2->Update();
+
 	skydome_->Update();
+	fan_->Update();
 	player_->Update();
 
 	//レイキャストをチェック
-	if (collisionManager_->Raycast(ray_, &raycastHit_)) {
+	if (collisionManager_->Raycast(/**ray_ */*fan_->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
+
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
+
+		player_->SetRotation(fan_->GetRotation());
+		player_->Update();
+
+		colRay_ = true;
+		interRay_ = raycastHit_.inter_;
 	}
 
 	//全ての衝突をチェック
@@ -154,6 +260,8 @@ void GamePlayScene::Update2d() {
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
 	rayObj_->Draw();
+	rayObj_2->Draw();
+	fan_->Draw();
 	player_->Draw();
 }
 
@@ -166,10 +274,17 @@ void GamePlayScene::Finalize() {
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
 
+	SafeDelete(ray_);
+
+	fan_->Finalize();
+	SafeDelete(fan_);
+	SafeDelete(fanModel_);
+
 	skydome_->Finalize();
 	SafeDelete(skydome_);
 
 	SafeDelete(rayObj_);
+	SafeDelete(rayObj_2);
 	SafeDelete(rayModel_);
 
 	SafeDelete(sprite_);
