@@ -70,6 +70,7 @@ private:
 
 	bool colRay_ = false;
 
+	Vector3 interRay_ = {};
 
 	/// <summary>
 	/// オブジェクト
