@@ -34,6 +34,10 @@ bool Fan::Initialize() {
 		return false;
 	}
 
+	ray_ = new Ray();
+	ray_->start_ = Object3d::GetPosition();
+	ray_->dir_ = Object3d::GetRotation();
+
 	//コライダ－追加
 	float radius = 0.6f;
 	//半径分だけ足元から浮いた座標を球の中心にする
@@ -116,6 +120,7 @@ void Fan::Draw() {
 }
 
 void Fan::Finalize() {
+	delete ray_;
 }
 
 void Fan::OnCollision(const CollisionInfo& info) {
