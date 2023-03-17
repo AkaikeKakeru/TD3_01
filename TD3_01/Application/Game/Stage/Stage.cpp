@@ -295,15 +295,10 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* ob
 	block->worldTransform_.Initialize();
 
 	// スケール設定
-	block->worldTransform_.scale_ = obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
-	obj->SetScale(block->worldTransform_.scale_);
 	// 座標設定
-	block->worldTransform_.position_= obj->GetPosition();
 	block->worldTransform_.position_ = pos;
-	obj->SetPosition(block->worldTransform_.position_);
 
-	obj->SetWorldTransform(block->worldTransform_);
 	// 行列更新
 	block->worldTransform_.UpdateMatrix();
 
@@ -311,6 +306,7 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* ob
 	block->row_ = row;
 
 
+	obj->SetWorldTransform(block->worldTransform_);
 	obj->Update();
 }
 
