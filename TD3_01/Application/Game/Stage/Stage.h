@@ -7,8 +7,8 @@
 
 class Stage {
 private: // ’è”
-	static const int STAGE_WIDTH = 10;
-	static const int STAGE_HEIGHT = 10;
+	static const int STAGE_WIDTH = 20;
+	static const int STAGE_HEIGHT = 20;
 
 public:
 	// —ñ‹“

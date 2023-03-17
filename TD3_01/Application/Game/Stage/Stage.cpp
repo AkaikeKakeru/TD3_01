@@ -150,6 +150,8 @@ void Stage::Update() {
 	switchB_->Update();
 
 	isGoal_ = false;
+
+	cameraStage_->Update();
 }
 
 void Stage::Draw() {
@@ -269,6 +271,7 @@ void Stage::LoadStageCommands() {
 			}
 			// 次の内容へ
 			getline(line_stream, word, ',');
+			
 		}
 		// マップチップLineが20を超えたらリセットしてRowをインクリメント
 		if (mapLine == STAGE_WIDTH) {
@@ -292,19 +295,22 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* ob
 	block->worldTransform_.Initialize();
 
 	// スケール設定
+	block->worldTransform_.scale_ = obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
+	obj->SetScale(block->worldTransform_.scale_);
 	// 座標設定
+	block->worldTransform_.position_= obj->GetPosition();
 	block->worldTransform_.position_ = pos;
+	obj->SetPosition(block->worldTransform_.position_);
 
+	obj->SetWorldTransform(block->worldTransform_);
 	// 行列更新
-	block->worldTransform_.matWorld_ = Matrix4Identity();
-	block->worldTransform_.matWorld_ *= Matrix4WorldTransform(block->worldTransform_.scale_, block->worldTransform_.rotation_, block->worldTransform_.position_);
 	block->worldTransform_.UpdateMatrix();
 
 	block->line_ = line;
 	block->row_ = row;
 
-	obj->SetWorldTransform(block->worldTransform_);
+
 	obj->Update();
 }
 
@@ -321,7 +327,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	pos.z = 78.0f - (4.0f * row);
 
 	// 初期化する
-	InitializeStageBlock(newBlock, obj, pos, line, row);
+	InitializeStageBlock(newBlock, newBlock->obj, pos, line, row);
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
 
