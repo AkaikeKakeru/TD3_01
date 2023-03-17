@@ -60,6 +60,11 @@ void GamePlayScene::Update() {
 			fan_->GetRay()->start_.y,
 			fan_->GetRay()->start_.z
 		};
+		float rayInter[Vector3Count_] = {
+			interRay_.x,
+			interRay_.y,
+			interRay_.z
+		};
 
 		float fanDir[Vector3Count_] = {
 			fan_->GetRotation().x,
@@ -88,6 +93,7 @@ void GamePlayScene::Update() {
 		ImGui::SetWindowSize(ImVec2(500, 100));
 		ImGui::InputFloat3("BlockPos", blockPos);
 		ImGui::InputFloat3("Block2Pos", block2Pos);
+		ImGui::InputFloat3("RayInter", rayInter);
 		ImGui::End();
 
 		ImGui::Begin("Fan");
@@ -120,7 +126,7 @@ void GamePlayScene::Initialize3d() {
 	collisionManager_ = CollisionManager::GetInstance();
 	//カメラの初期化
 	camera_ = new Camera();
-	camera_->SetEye({ 0.0f, 10.0f, -50.0f });
+	camera_->SetEye({ 0.0f, 40.0f, -100.0f });
 
 	//各種モデル
 	playerModel_ = new Model();
@@ -213,21 +219,27 @@ void GamePlayScene::Update3d() {
 	lightGroup_->Update();
 	camera_->Update();
 
+	rayObj_->Update();
+
+	rayObj_2->SetPosition(fan_->GetRay()->start_ + (50 * fan_->GetRay()->dir_));
+	rayObj_2->Update();
+
 	skydome_->Update();
 	fan_->Update();
 	player_->Update();
 
 	//レイキャストをチェック
-	if (collisionManager_->Raycast(/**ray_ */*fan_->GetRay(),COLLISION_ATTR_PLAYER, &raycastHit_)) {
+	if (collisionManager_->Raycast(/**ray_ */*fan_->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
-		//player_->SetRotation(fan_->GetRotation());
+
+		player_->SetRotation(fan_->GetRotation());
+		player_->Update();
 
 		colRay_ = true;
+		interRay_ = raycastHit_.inter_;
 	}
-	rayObj_2->Update();
-	rayObj_->Update();
 
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
