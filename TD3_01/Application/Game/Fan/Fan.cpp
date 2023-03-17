@@ -34,20 +34,15 @@ bool Fan::Initialize() {
 		return false;
 	}
 
-	////ƒŒƒC‚Ì‰ŠúÝ’è
-	////ƒŒƒC‚Ì‰Šú’l
-	//ray_.start_ = {0,0,0};
-	//ray_.dir_ = { 0,0,1};
-
 	//ƒRƒ‰ƒCƒ_|’Ç‰Á
-	//float radius = 0.6f;
-	////”¼Œa•ª‚¾‚¯‘«Œ³‚©‚ç•‚‚¢‚½À•W‚ð‹…‚Ì’†S‚É‚·‚é
-	//SetCollider(new SphereCollider(
-	//	Vector3{ 0.0f,radius,0.0f },
-	//	radius)
-	//);
+	float radius = 0.6f;
+	//”¼Œa•ª‚¾‚¯‘«Œ³‚©‚ç•‚‚¢‚½À•W‚ð‹…‚Ì’†S‚É‚·‚é
+	SetCollider(new SphereCollider(
+		Vector3{ 0.0f,radius,0.0f },
+		radius)
+	);
 
-	//collider_->SetAttribute(COLLISION_ATTR_RAY);
+	collider_->SetAttribute(COLLISION_ATTR_RAY);
 
 	return true;
 }
@@ -69,35 +64,48 @@ void Fan::Update() {
 	Vector3 angleY = { 0.0f,1.0f,0.0f };
 	Vector3 angleZ = { 0.0f,0.0f,1.0f };
 
+	Quaternion rotQua = { 0,0,0 };
+
 	//ˆÚ“®Œã‚ÌÀ•W‚ðŒvŽZ
 	if (input_->TriggerKey(DIK_W)) {
-		rotVector_ = { verticalAngle,0,0 };
-		//CreateRotationVector(angleX, rotSpeed);
+		//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
+		//rotQua = DirectionToDirection(rot, angleY * (verticalAngle * 2));
+		rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
+
+		//rot = RotateVector( angleY ,rotQua );
+
+		ray_->dir_ = angleZ;
 	}
 
 	else if (input_->TriggerKey(DIK_S)) {
-		rotVector_ = { -verticalAngle ,0,0};
-		//CreateRotationVector(angleX, -rotSpeed);
+		rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
+		//rot = RotateVector( angleY ,rotQua );
+		rotVector_ = CreateRotationVector(angleY, 0);
+
+		ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
 	}
 
 	if (input_->TriggerKey(DIK_A)) {
-		rotVector_ = { 0,0,verticalAngle };
-		//CreateRotationVector(angleY, rotSpeed);
+		//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
+		//rot = RotateVector( angleY ,rotQua );
+		rotVector_ = CreateRotationVector(angleY, verticalAngle);
+		ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
 	}
 
 	else if (input_->TriggerKey(DIK_D)) {
-		rotVector_ = { 0,-verticalAngle,0 };
-		//CreateRotationVector(angleY, -rotSpeed);
+		rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
+		//rot = RotateVector( angleY ,rotQua );
+		rotVector_ = CreateRotationVector(angleY, -verticalAngle);
+
+		ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 	}
 
 	rot = rotVector_;
 
-
 	// ‰ñ“]‚Ì•ÏX‚ð”½‰f
 	Object3d::SetRotation(rot);
 
-	//ray_->start_ = Object3d::GetPosition();
-	//ray_.dir_ = Object3d::GetRotation();
+	ray_->start_ = Object3d::GetPosition();
 
 	camera_->Update();
 	Object3d::Update();
