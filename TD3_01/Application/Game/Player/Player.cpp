@@ -62,9 +62,8 @@ void Player::Update() {
 		// 現在の座標を取得
 		Vector3 rot = Object3d::GetRotation();
 
-
 		//移動スピード
-		float moveSpeed = 0.2f;
+		float moveSpeed = 0.4f;
 		//回転スピード
 		float rotSpeed = ConvertToRadian(90.0f);
 
