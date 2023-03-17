@@ -70,33 +70,33 @@ void Fan::Update() {
 	if (input_->TriggerKey(DIK_W)) {
 		//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
 		//rotQua = DirectionToDirection(rot, angleY * (verticalAngle * 2));
+		//rotVector_ = RotateVector( angleY ,rotQua );
+
 		rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
-
-		//rot = RotateVector( angleY ,rotQua );
-
 		ray_->dir_ = angleZ;
 	}
 
 	else if (input_->TriggerKey(DIK_S)) {
-		rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
+		//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
 		//rot = RotateVector( angleY ,rotQua );
-		rotVector_ = CreateRotationVector(angleY, 0);
 
+		rotVector_ = CreateRotationVector(angleY, 0);
 		ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
 	}
 
 	if (input_->TriggerKey(DIK_A)) {
 		//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
 		//rot = RotateVector( angleY ,rotQua );
+
 		rotVector_ = CreateRotationVector(angleY, verticalAngle);
 		ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
 	}
 
 	else if (input_->TriggerKey(DIK_D)) {
-		rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
+		//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
 		//rot = RotateVector( angleY ,rotQua );
-		rotVector_ = CreateRotationVector(angleY, -verticalAngle);
 
+		rotVector_ = CreateRotationVector(angleY, -verticalAngle);
 		ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 	}
 
