@@ -150,15 +150,15 @@ void GamePlayScene::Initialize3d() {
 	player_->Update();
 
 	//レイの初期値
-	ray_ = new Ray();
+	//ray_ = new Ray();
 
-	ray_->start_ = { 0.0f, 0.0f, 0.0f };
-	ray_->dir_ = { 0,0,-1 };
+	//ray_->start_ = { 0.0f, 0.0f, 0.0f };
+	//ray_->dir_ = { 0,0,-1 };
 
 	//ファンの初期化
 	fan_ = Fan::Create(fanModel_);
 	fan_->Initialize();
-	fan_->SetRay(ray_);
+	//fan_->SetRay(ray_);
 	fan_->SetScale({ 1.0f,1.0f,1.0f });
 	fan_->SetCamera(camera_);
 
@@ -166,14 +166,14 @@ void GamePlayScene::Initialize3d() {
 	rayObj_ = Object3d::Create();
 	rayObj_->Initialize();
 	rayObj_->SetModel(rayModel_);
-	rayObj_->SetPosition(ray_->start_);
+	rayObj_->SetPosition(fan_->GetRay()->start_);
 	rayObj_->SetScale({ 2, 2, 2 });
 	rayObj_->SetCamera(camera_);
 
 	rayObj_2 = Object3d::Create();
 	rayObj_2->Initialize();
 	rayObj_2->SetModel(rayModel_);
-	rayObj_2->SetPosition(ray_->start_ + (50 * ray_->dir_));
+	rayObj_2->SetPosition(fan_->GetRay()->start_ + (50 * fan_->GetRay()->dir_));
 	rayObj_2->SetScale({ 2, 2, 2 });
 	rayObj_2->SetCamera(camera_);
 
@@ -229,7 +229,7 @@ void GamePlayScene::Update3d() {
 	player_->Update();
 
 	//レイキャストをチェック
-	if (collisionManager_->Raycast(/**ray_ */*fan_->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
+	if (collisionManager_->Raycast(*fan_->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
 		rayObj_->SetPosition(raycastHit_.inter_);
 		rayObj_->Update();
@@ -274,7 +274,7 @@ void GamePlayScene::Finalize() {
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
 
-	SafeDelete(ray_);
+	//SafeDelete(ray_);
 
 	fan_->Finalize();
 	SafeDelete(fan_);
