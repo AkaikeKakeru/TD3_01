@@ -78,15 +78,15 @@ void Player::Update() {
 		Vector3 rotVector = { 0,0,0 };
 
 		//移動後の座標を計算
-		if (input_->TriggerKey(DIK_UP)) {
-			rotVector = CreateRotationVector(
-				angleX, rotSpeed);
-		}
+		//if (input_->TriggerKey(DIK_UP)) {
+		//	rotVector = CreateRotationVector(
+		//		angleX, rotSpeed);
+		//}
 
-		else if (input_->TriggerKey(DIK_DOWN)) {
-			rotVector = CreateRotationVector(
-				angleX, -rotSpeed);
-		}
+		//else if (input_->TriggerKey(DIK_DOWN)) {
+		//	rotVector = CreateRotationVector(
+		//		angleX, -rotSpeed);
+		//}
 
 		if (input_->TriggerKey(DIK_RIGHT)) {
 			rotVector = CreateRotationVector(
@@ -115,7 +115,7 @@ void Player::Update() {
 	camera_->Update();
 	Object3d::Update();
 
-	RaycastHit raycastHit;
+	//RaycastHit raycastHit;
 
 	//レイキャストをチェック
 	//if (collisionManager_->Raycast(fan_->GetRay(),COLLISION_ATTR_PLAYER, &raycastHit)) {
