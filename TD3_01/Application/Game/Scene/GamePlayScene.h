@@ -63,7 +63,7 @@ private:
 
 
 	//当たり判定 レイ
-	Ray* ray_;
+	//Ray* ray_;
 
 	//衝突マネージャー
 	CollisionManager* collisionManager_ = nullptr;
