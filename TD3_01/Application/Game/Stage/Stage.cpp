@@ -3,6 +3,8 @@
 #include <fstream>
 #include "SafeDelete.h"
 
+using namespace std;
+
 Stage::~Stage() {
 	SafeDelete(model_);
 	SafeDelete(modelFloor_);
@@ -290,24 +292,27 @@ void Stage::LoadFloorBlock() {
 	}
 }
 
-void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* obj, Vector3 pos, int line, int row) {
+void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
 	block->worldTransform_.Initialize();
 
 	// スケール設定
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
+	block->obj->SetScale(block->worldTransform_.scale_);
 	// 座標設定
 	block->worldTransform_.position_ = pos;
+	block->obj->SetPosition(block->worldTransform_.position_);
 
 	// 行列更新
 	block->worldTransform_.UpdateMatrix();
+block->obj->SetWorldTransform(block->worldTransform_);
 
 	block->line_ = line;
 	block->row_ = row;
 
 
-	obj->SetWorldTransform(block->worldTransform_);
-	obj->Update();
+	
+	block->obj->Update();
 }
 
 void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth) {
@@ -323,7 +328,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	pos.z = 78.0f - (4.0f * row);
 
 	// 初期化する
-	InitializeStageBlock(newBlock, newBlock->obj, pos, line, row);
+	InitializeStageBlock(newBlock, pos, line, row);
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
 
