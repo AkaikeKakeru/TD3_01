@@ -3,7 +3,10 @@
 #include <fstream>
 #include "SafeDelete.h"
 
+using namespace std;
+
 Stage::~Stage() {
+	SafeDelete(model_);
 	SafeDelete(modelFloor_);
 	SafeDelete(modelGoal_);
 	SafeDelete(modelSwitchR_);
@@ -11,6 +14,7 @@ Stage::~Stage() {
 	SafeDelete(modelWallR_);
 	SafeDelete(modelWallB_);
 
+	SafeDelete(obj_);
 	SafeDelete(objFloor_);
 	SafeDelete(objGoal_);
 	SafeDelete(objSwitchR_);
@@ -24,9 +28,11 @@ Stage::~Stage() {
 
 }
 
-void Stage::Initialize(Model* model, Object3d* obj) {
+void Stage::Initialize(Camera* camera) {
+
+	cameraStage_ = camera;
 	//インスタンス生成
-	model_ = model;
+	model_ = new Model();
 	modelFloor_ = new Model();
 	modelSwitchR_ = new Model();
 	modelSwitchB_ = new Model();
@@ -34,7 +40,7 @@ void Stage::Initialize(Model* model, Object3d* obj) {
 	modelWallB_ = new Model();
 	modelGoal_ = new Model();
 
-	obj_ = obj;
+	obj_ = new Object3d();
 	objFloor_ = new Object3d();
 	objSwitchR_ = new Object3d();
 	objSwitchB_ = new Object3d();
@@ -43,6 +49,7 @@ void Stage::Initialize(Model* model, Object3d* obj) {
 	objGoal_ = new Object3d();
 
 	// モデル読み込み
+	model_ = Model::LoadFromOBJ("cube", true);
 	modelFloor_ = Model::LoadFromOBJ("floor", true);
 	modelSwitchR_ = Model::LoadFromOBJ("rswitch", true);
 	modelSwitchB_ = Model::LoadFromOBJ("bswitch", true);
@@ -51,6 +58,10 @@ void Stage::Initialize(Model* model, Object3d* obj) {
 	modelGoal_ = Model::LoadFromOBJ("goal", true);
 
 	//3Dオブジェクトとカメラのセット
+	obj_ = Object3d::Create();
+	obj_->SetModel(model_);
+	obj_->SetCamera(cameraStage_);
+
 	objFloor_ = Object3d::Create();
 	objFloor_->SetModel(modelFloor_);
 	objFloor_->SetCamera(cameraStage_);
@@ -80,6 +91,7 @@ void Stage::Initialize(Model* model, Object3d* obj) {
 	switchB_ = new Switch();
 	switchR_->Initialize(modelSwitchR_, objSwitchR_);
 	switchB_->Initialize(modelSwitchB_, objSwitchB_);
+
 
 	// ステージの床を初期化
 	LoadFloorBlock();
@@ -140,9 +152,11 @@ void Stage::Update() {
 	switchB_->Update();
 
 	isGoal_ = false;
+
+	cameraStage_->Update();
 }
 
-void Stage::Draw(ViewProjection viewProjection) {
+void Stage::Draw() {
 	// ステージ描画
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		if (block->type_ == BLOCK) {
@@ -180,7 +194,7 @@ void Stage::LoadStageData(const std::string stageNum) {
 	// パスを取得
 	const std::string name = "stage";
 	const std::string filename = name + stageNum + ".csv";
-	const std::string directoryPath = "Resources/" + name + "/";
+	const std::string directoryPath = "Resource/" + name + "/";
 	// ファイルを開く
 	file.open(directoryPath + filename);
 	assert(file.is_open());
@@ -217,48 +231,49 @@ void Stage::LoadStageCommands() {
 			// コマンド読み込み
 			if (word.find("NONE") == 0 || word.find("0") == 0 || word.find("7") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, NONE, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, obj_, NONE, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, BLOCK, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objFloor_, BLOCK, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("2") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, SWITCHR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchR_, SWITCHR, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("3") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, WALLR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallR_, WALLR, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("4") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, SWITCHB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchB_, SWITCHB, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("5") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, WALLB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallB_, WALLB, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("GOAL") == 0 || word.find("6") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, GOAL, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objGoal_, GOAL, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			// 次の内容へ
 			getline(line_stream, word, ',');
+			
 		}
 		// マップチップLineが20を超えたらリセットしてRowをインクリメント
 		if (mapLine == STAGE_WIDTH) {
@@ -272,34 +287,40 @@ void Stage::LoadFloorBlock() {
 	for (int i = 0; i < STAGE_HEIGHT; i++) {
 		for (int j = 0; j < STAGE_WIDTH; j++) {
 			// ステージのブロックを追加
-			PushStageBlockList(floorBlocks_, BLOCK, j, i, -14.0f);
+			PushStageBlockList(floorBlocks_, objFloor_, BLOCK, j, i, -14.0f);
 		}
 	}
 }
 
-void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3 pos, int line, int row) {
+void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
 	block->worldTransform_.Initialize();
 
 	// スケール設定
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
+	block->obj->SetScale(block->worldTransform_.scale_);
 	// 座標設定
 	block->worldTransform_.position_ = pos;
+	block->obj->SetPosition(block->worldTransform_.position_);
 
 	// 行列更新
-	block->worldTransform_.matWorld_ = Matrix4Identity();
-	block->worldTransform_.matWorld_ *= Matrix4WorldTransform(block->worldTransform_.scale_, block->worldTransform_.rotation_, block->worldTransform_.position_);
 	block->worldTransform_.UpdateMatrix();
+block->obj->SetWorldTransform(block->worldTransform_);
 
 	block->line_ = line;
 	block->row_ = row;
+
+
+	
+	block->obj->Update();
 }
 
-void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, int type, int line, int row, float depth) {
+void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth) {
 	// リストに入れるために新しく宣言
 	std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
 	// ブロックの種類
 	newBlock->type_ = type;
+	newBlock->obj = obj;
 	// 座標
 	Vector3 pos;
 	pos.x = 2.0f + (4.0f * line);

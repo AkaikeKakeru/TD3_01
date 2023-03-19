@@ -109,7 +109,7 @@ public: // メンバ関数
 	void SetRotation(const Vector3& rotation) { 
 		worldTransform_.rotation_ = rotation; }
 	//ワールド変換の設定
-	void SetWorldTransform(const WorldTransform worldTransform) {
+	void SetWorldTransform(const WorldTransform& worldTransform) {
 		worldTransform_ = worldTransform; }
 	//モデルセッタ
 	void SetModel(Model* model) {

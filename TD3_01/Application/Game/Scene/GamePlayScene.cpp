@@ -127,7 +127,9 @@ void GamePlayScene::Initialize3d() {
 	collisionManager_ = CollisionManager::GetInstance();
 	//カメラの初期化
 	camera_ = new Camera();
+
 	camera_->SetEye({ 0.0f, 40.0f, -100.0f });
+
 
 	//各種モデル
 	playerModel_ = new Model();
@@ -193,6 +195,11 @@ void GamePlayScene::Initialize3d() {
 	lightGroup_ = LightGroup::Create();
 	lightGroup_->SetAmbientColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(lightGroup_);
+
+	//ステージ生成
+	stage_ = new Stage();
+	stage_->Initialize(camera_);
+	stage_->StageInitialize(filename_[1]);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -237,7 +244,6 @@ void GamePlayScene::Update3d() {
 		fan_[i]->Update();
 	}
 	player_->Update();
-
 	//レイキャストをチェック
 	for (int i = 0; i < FanCount_; i++) {
 		if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
@@ -252,6 +258,7 @@ void GamePlayScene::Update3d() {
 			interRay_ = raycastHit_.inter_;
 		}
 	}
+	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
 }
@@ -276,6 +283,7 @@ void GamePlayScene::Draw3d() {
 		fan_[i]->Draw();
 	}
 	player_->Draw();
+	stage_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -295,6 +303,7 @@ void GamePlayScene::Finalize() {
 	SafeDelete(fanModel_);
 
 	skydome_->Finalize();
+	SafeDelete(stage_);
 	SafeDelete(skydome_);
 
 	SafeDelete(rayObj_);

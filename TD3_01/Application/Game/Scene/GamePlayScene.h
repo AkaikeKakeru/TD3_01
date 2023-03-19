@@ -5,6 +5,7 @@
 #include "DrawBasis.h"
 #include "Model.h"
 #include "Sprite.h"
+#include "Stage.h"
 #include "Object3d.h"
 
 #include "Camera.h"
@@ -77,7 +78,15 @@ private:
 	/// <summary>
 	/// オブジェクト
 	/// </summary>
-	
+	Stage* stage_ = nullptr;
+	const std::string filename_[7] = {
+	  "0",
+	  "1",
+	  "2",
+	  "3",
+	  "4",
+	  "5",
+	  "6" };
 
 	Object3d* rayObj_ = nullptr;
 	Model* rayModel_ = nullptr;

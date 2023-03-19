@@ -28,6 +28,7 @@ public:
 	// 構造体
 	struct StageData {
 		WorldTransform worldTransform_;	// 座標
+		Object3d* obj;
 		int type_;	// ブロックの種類
 		int line_;
 		int row_;
@@ -38,7 +39,7 @@ public:
 	~Stage();
 
 	// 初期化
-	void Initialize(Model* model, Object3d* obj);
+	void Initialize(Camera* camera);
 
 	// ステージ初期化
 	void StageInitialize(const std::string stageNum);
@@ -47,7 +48,7 @@ public:
 	void Update();
 
 	// 描画
-	void Draw(ViewProjection viewProjection);
+	void Draw();
 
 	// 足元のブロックを判別する
 	void CheckBlock(int line, int row);
@@ -69,10 +70,10 @@ private:
 	void LoadStageCommands();
 
 	// ブロック初期化
-	void InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3 pos, int line, int row);
+	void InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos, int line, int row);
 
 	// リストにブロックを追加
-	void PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, int type, int line, int row, float depth);
+	void PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth);
 
 private:
 	// モデル
