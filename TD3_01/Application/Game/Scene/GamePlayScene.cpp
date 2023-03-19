@@ -39,6 +39,7 @@ void GamePlayScene::Update() {
 			player_->GetRotation().y,
 			player_->GetRotation().z
 		};
+
 		float blockPos[Vector3Count_] = {
 			rayObj_->GetPosition().x,
 			rayObj_->GetPosition().y,
@@ -51,14 +52,14 @@ void GamePlayScene::Update() {
 		};
 
 		float rayDir[Vector3Count_] = {
-			fan_->GetRay()->dir_.x,
-			fan_->GetRay()->dir_.y,
-			fan_->GetRay()->dir_.z
+			fan_[0]->GetRay()->dir_.x,
+			fan_[0]->GetRay()->dir_.y,
+			fan_[0]->GetRay()->dir_.z
 		};
 		float rayPos[Vector3Count_] = {
-			fan_->GetRay()->start_.x,
-			fan_->GetRay()->start_.y,
-			fan_->GetRay()->start_.z
+			fan_[0]->GetRay()->start_.x,
+			fan_[0]->GetRay()->start_.y,
+			fan_[0]->GetRay()->start_.z
 		};
 		float rayInter[Vector3Count_] = {
 			interRay_.x,
@@ -67,14 +68,14 @@ void GamePlayScene::Update() {
 		};
 
 		float fanDir[Vector3Count_] = {
-			fan_->GetRotation().x,
-			fan_->GetRotation().y,
-			fan_->GetRotation().z
+			fan_[0]->GetRotation().x,
+			fan_[0]->GetRotation().y,
+			fan_[0]->GetRotation().z
 		};
 		float fanPos[Vector3Count_] = {
-			fan_->GetPosition().x,
-			fan_->GetPosition().y,
-			fan_->GetPosition().z
+			fan_[0]->GetPosition().x,
+			fan_[0]->GetPosition().y,
+			fan_[0]->GetPosition().z
 		};
 
 		float rayCol[1] = {
@@ -150,30 +151,37 @@ void GamePlayScene::Initialize3d() {
 	player_->Update();
 
 	//レイの初期値
-	ray_ = new Ray();
+	//ray_ = new Ray();
 
-	ray_->start_ = { 0.0f, 0.0f, 0.0f };
-	ray_->dir_ = { 0,0,-1 };
+	//ray_->start_ = { 0.0f, 0.0f, 0.0f };
+	//ray_->dir_ = { 0,0,-1 };
 
-	//ファンの初期化
-	fan_ = Fan::Create(fanModel_);
-	fan_->Initialize();
-	fan_->SetRay(ray_);
-	fan_->SetScale({ 1.0f,1.0f,1.0f });
-	fan_->SetCamera(camera_);
+	for (int i = 0; i < FanCount_; i++) {
+		//ファンの初期化
+		fan_[i] = Fan::Create(fanModel_);
+		fan_[i]->Initialize();
+		//fan_->SetRay(ray_);
+		fan_[i]->SetScale({ 1.0f,1.0f,1.0f });
+		fan_[i]->SetCamera(camera_);
+	}
+
+	fan_[0]->SetPosition({ 0,0,0 });
+
+	fan_[1]->SetPosition({ -50,0,30 });
+	fan_[2]->SetPosition({ 50,0,-30 });
 
 	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
 	rayObj_->Initialize();
 	rayObj_->SetModel(rayModel_);
-	rayObj_->SetPosition(ray_->start_);
+	rayObj_->SetPosition(fan_[0]->GetRay()->start_);
 	rayObj_->SetScale({ 2, 2, 2 });
 	rayObj_->SetCamera(camera_);
 
 	rayObj_2 = Object3d::Create();
 	rayObj_2->Initialize();
 	rayObj_2->SetModel(rayModel_);
-	rayObj_2->SetPosition(ray_->start_ + (50 * ray_->dir_));
+	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50 * fan_[0]->GetRay()->dir_));
 	rayObj_2->SetScale({ 2, 2, 2 });
 	rayObj_2->SetCamera(camera_);
 
@@ -221,26 +229,29 @@ void GamePlayScene::Update3d() {
 
 	rayObj_->Update();
 
-	rayObj_2->SetPosition(fan_->GetRay()->start_ + (50 * fan_->GetRay()->dir_));
+	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50 * fan_[0]->GetRay()->dir_));
 	rayObj_2->Update();
 
 	skydome_->Update();
-	fan_->Update();
+	for (int i = 0; i < FanCount_; i++) {
+		fan_[i]->Update();
+	}
 	player_->Update();
 
 	//レイキャストをチェック
-	if (collisionManager_->Raycast(/**ray_ */*fan_->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
+	for (int i = 0; i < FanCount_; i++) {
+		if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
-		rayObj_->SetPosition(raycastHit_.inter_);
-		rayObj_->Update();
+			rayObj_->SetPosition(raycastHit_.inter_);
+			rayObj_->Update();
 
-		player_->SetRotation(fan_->GetRotation());
-		player_->Update();
+			player_->SetRotation(fan_[i]->GetRotation());
+			player_->Update();
 
-		colRay_ = true;
-		interRay_ = raycastHit_.inter_;
+			colRay_ = true;
+			interRay_ = raycastHit_.inter_;
+		}
 	}
-
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
 }
@@ -261,7 +272,9 @@ void GamePlayScene::Draw3d() {
 	skydome_->Draw();
 	rayObj_->Draw();
 	rayObj_2->Draw();
-	fan_->Draw();
+	for (int i = 0; i < FanCount_; i++) {
+		fan_[i]->Draw();
+	}
 	player_->Draw();
 }
 
@@ -274,10 +287,11 @@ void GamePlayScene::Finalize() {
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
 
-	SafeDelete(ray_);
-
-	fan_->Finalize();
-	SafeDelete(fan_);
+	//SafeDelete(ray_);
+	for (int i = 0; i < FanCount_; i++) {
+		fan_[i]->Finalize();
+		SafeDelete(fan_[i]);
+	}
 	SafeDelete(fanModel_);
 
 	skydome_->Finalize();

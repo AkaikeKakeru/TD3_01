@@ -34,6 +34,10 @@ bool Fan::Initialize() {
 		return false;
 	}
 
+	ray_ = new Ray();
+	ray_->start_ = Object3d::GetPosition();
+	ray_->dir_ = Object3d::GetRotation();
+
 	//コライダ－追加
 	float radius = 0.6f;
 	//半径分だけ足元から浮いた座標を球の中心にする
@@ -53,11 +57,16 @@ void Fan::Update() {
 	Input* input_ = Input::GetInstance();
 
 	// オブジェクト移動
+	// 現在の座標を取得
+	Vector3 move = Object3d::GetPosition();
+
+	//移動スピード
+	float moveSpeed = 0.4f;
 
 	// 現在の回転を取得
 	Vector3 rot = Object3d::GetRotation();
 
-	//回転スピード
+	//回転スピード(垂直)
 	float verticalAngle = ConvertToRadian(90.0f);
 
 	Vector3 angleX = { 1.0f,0.0f,0.0f };
@@ -73,6 +82,9 @@ void Fan::Update() {
 		//rotVector_ = RotateVector( angleY ,rotQua );
 
 		rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
+
+		rot = angleY * verticalAngle * 2;
+
 		ray_->dir_ = angleZ;
 	}
 
@@ -81,6 +93,9 @@ void Fan::Update() {
 		//rot = RotateVector( angleY ,rotQua );
 
 		rotVector_ = CreateRotationVector(angleY, 0);
+
+		rot = angleY * verticalAngle * 0;
+
 		ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
 	}
 
@@ -89,6 +104,9 @@ void Fan::Update() {
 		//rot = RotateVector( angleY ,rotQua );
 
 		rotVector_ = CreateRotationVector(angleY, verticalAngle);
+
+		rot = angleY * verticalAngle;
+
 		ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
 	}
 
@@ -97,10 +115,32 @@ void Fan::Update() {
 		//rot = RotateVector( angleY ,rotQua );
 
 		rotVector_ = CreateRotationVector(angleY, -verticalAngle);
+
+		rot = angleY * -verticalAngle;
+
 		ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 	}
 
-	rot = rotVector_;
+	if (input_->PressKey(DIK_UP)) {
+		move.z += moveSpeed;
+	}
+
+	else if (input_->PressKey(DIK_DOWN)) {
+		move.z -= moveSpeed;
+	}
+
+	if (input_->PressKey(DIK_RIGHT)) {
+		move.x += moveSpeed;
+	}
+
+	else if (input_->PressKey(DIK_LEFT)) {
+		move.x -= moveSpeed;
+	}
+
+	//rot = rotVector_;
+
+	// 移動の変更を反映
+	Object3d::SetPosition(move);
 
 	// 回転の変更を反映
 	Object3d::SetRotation(rot);
@@ -116,6 +156,7 @@ void Fan::Draw() {
 }
 
 void Fan::Finalize() {
+	delete ray_;
 }
 
 void Fan::OnCollision(const CollisionInfo& info) {

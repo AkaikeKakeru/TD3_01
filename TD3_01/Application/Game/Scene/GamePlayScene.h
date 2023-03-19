@@ -43,6 +43,8 @@ private:
 public://定数
 	static const int Vector3Count_ = 3;
 
+	static const int FanCount_ = 3;
+
 private:
 	//基盤
 	static DirectXBasis* dxBas_;
@@ -63,7 +65,7 @@ private:
 
 
 	//当たり判定 レイ
-	Ray* ray_;
+	//Ray* ray_;
 
 	//衝突マネージャー
 	CollisionManager* collisionManager_ = nullptr;
@@ -85,7 +87,9 @@ private:
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
 	
-	Fan* fan_ = nullptr;
+	Fan* fan_[FanCount_] = { nullptr };
+	//std::list<Fan> fans_;
+
 	Model* fanModel_ = nullptr;
 
 	Skydome* skydome_ = nullptr;
