@@ -27,7 +27,7 @@ ID3D12GraphicsCommandList* Object3d::cmdList_ = nullptr;
 ComPtr<ID3D12RootSignature> Object3d::rootsignature_;
 Object3d::PipelineSet Object3d::pipelineSet_;
 
-Light* Object3d::light_ = nullptr;
+LightGroup* Object3d::lightGroup_ = nullptr;
 
 void Object3d::StaticInitialize(ID3D12Device* device) {
 	// nullptrチェック
@@ -315,7 +315,7 @@ void Object3d::Draw() {
 	cmdList_->SetGraphicsRootConstantBufferView(0, worldTransform_.constBuff_->GetGPUVirtualAddress());
 
 	//ライト描画
-	light_->Draw(cmdList_, 3);
+	lightGroup_->Draw(cmdList_, 3);
 
 	model_->Draw(cmdList_);
 }

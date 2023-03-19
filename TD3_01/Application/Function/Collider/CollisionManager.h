@@ -30,6 +30,10 @@ public: //メンバ関数
 	//レイキャスト
 	bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr,
 		float maxDistance = D3D12_FLOAT32_MAX);
+	//レイキャスト(衝突属性あり)
+	bool Raycast(const Ray& ray,unsigned short attribute,
+		RaycastHit* hitInfo = nullptr,
+		float maxDistance = D3D12_FLOAT32_MAX);
 
 private: //メンバ変数
 	CollisionManager() = default;

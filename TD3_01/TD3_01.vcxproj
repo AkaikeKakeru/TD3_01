@@ -123,6 +123,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(ProjectDir)Application\Base;$(ProjectDir)Application\Function;$(ProjectDir)Application\Game;$(ProjectDir)Application\Game\Scene;$(ProjectDir)Application\Game\Scene\Manager;$(ProjectDir)Application\Math;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\ConstBuffer;$(ProjectDir)Engine\Debugger;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d\Camera;$(ProjectDir)Engine\3d\Light;$(ProjectDir)Engine\3d\Object;$(ProjectDir)Application\Game\Player;$(ProjectDir)Application\Game\Skydome;$(ProjectDir)Application\Function\Collider;%(AdditionalIncludeDirectories);$(proectDir)Application\Game\Fan</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(ProjectDir)Application\Base;$(ProjectDir)Application\Function;$(ProjectDir)Application\Game;$(ProjectDir)Application\Game\Scene;$(ProjectDir)Application\Game\Scene\Manager;$(ProjectDir)Application\Math;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\ConstBuffer;$(ProjectDir)Engine\Debugger;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d\Camera;$(ProjectDir)Engine\3d\Light;$(ProjectDir)Engine\3d\Object;$(ProjectDir)Application\Game\Player;$(ProjectDir)Application\Game\Skydome;$(ProjectDir)Application\Function\Collider;%(AdditionalIncludeDirectories);$(ProjectDir)Application\Game\Stage</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -143,6 +144,7 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir)Application\Base;$(ProjectDir)Application\Function;$(ProjectDir)Application\Game;$(ProjectDir)Application\Game\Scene;$(ProjectDir)Application\Game\Scene\Manager;$(ProjectDir)Application\Math;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\ConstBuffer;$(ProjectDir)Engine\Debugger;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d\Camera;$(ProjectDir)Engine\3d\Light;$(ProjectDir)Engine\3d\Object;$(ProjectDir)Application\Game\Player;$(ProjectDir)Application\Game\Skydome;$(ProjectDir)Application\Function\Collider;$(ProjectDir)Application\Game\Stage;%(AdditionalIncludeDirectories);$(proectDir)Application\Game\Fan</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(ProjectDir)Application\Base;$(ProjectDir)Application\Function;$(ProjectDir)Application\Game;$(ProjectDir)Application\Game\Scene;$(ProjectDir)Application\Game\Scene\Manager;$(ProjectDir)Application\Math;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\ConstBuffer;$(ProjectDir)Engine\Debugger;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d\Camera;$(ProjectDir)Engine\3d\Light;$(ProjectDir)Engine\3d\Object;$(ProjectDir)Application\Game\Player;$(ProjectDir)Application\Game\Skydome;$(ProjectDir)Application\Function\Collider;$(ProjectDir)Application\Game\Stage;%(AdditionalIncludeDirectories);$(ProjectDir)Application\Game\Stage</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -159,6 +161,7 @@
     <ClCompile Include="Application\Function\Collider\CollisionManager.cpp" />
     <ClCompile Include="Application\Function\Collider\CollisionPrimitive.cpp" />
     <ClCompile Include="Application\Function\Collider\SphereCollider.cpp" />
+    <ClCompile Include="Application\Game\Fan\Fan.cpp" />
     <ClCompile Include="Application\Game\Scene\GamePlayScene.cpp" />
     <ClCompile Include="Application\Game\Scene\Manager\BaseScene.cpp" />
     <ClCompile Include="Application\Game\Skydome\Skydome.cpp" />
@@ -176,7 +179,7 @@
     <ClCompile Include="Application\Base\Framework.cpp" />
     <ClCompile Include="Application\Game\GameMain.cpp" />
     <ClCompile Include="Application\Base\Input.cpp" />
-    <ClCompile Include="Engine\3d\Light\Light.cpp" />
+    <ClCompile Include="Engine\3d\Light\LightGroup.cpp" />
     <ClCompile Include="Engine\Debugger\DebugText.cpp" />
     <ClCompile Include="Engine\Debugger\ImGuiManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -200,12 +203,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Function\Collider\BaseCollider.h" />
+    <ClInclude Include="Application\Function\Collider\CollisionAttribute.h" />
     <ClInclude Include="Application\Function\Collider\CollisionInfo.h" />
     <ClInclude Include="Application\Function\Collider\CollisionManager.h" />
     <ClInclude Include="Application\Function\Collider\CollisionPrimitive.h" />
     <ClInclude Include="Application\Function\Collider\CollisionTypes.h" />
     <ClInclude Include="Application\Function\Collider\RaycastHit.h" />
     <ClInclude Include="Application\Function\Collider\SphereCollider.h" />
+    <ClInclude Include="Application\Game\Fan\Fan.h" />
     <ClInclude Include="Application\Game\GameMain.h" />
     <ClInclude Include="Application\Game\Scene\Manager\AbstractSceneFactory.h" />
     <ClInclude Include="Application\Game\Scene\Manager\BaseScene.h" />
@@ -214,6 +219,7 @@
     <ClInclude Include="Application\Game\Stage\Switch.h" />
     <ClInclude Include="Application\Math\MyMath.h" />
     <ClInclude Include="Application\Math\Quaternion.h" />
+    <ClInclude Include="Engine\3d\Light\DirectionalLight.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\3d\Camera\Camera.h" />
     <ClInclude Include="Application\Function\Collider\Collision.h" />
@@ -225,7 +231,7 @@
     <ClInclude Include="Application\Base\Framework.h" />
     <ClInclude Include="Application\Game\Scene\GamePlayScene.h" />
     <ClInclude Include="Application\Base\Input.h" />
-    <ClInclude Include="Engine\3d\Light\Light.h" />
+    <ClInclude Include="Engine\3d\Light\LightGroup.h" />
     <ClInclude Include="Engine\3d\Object\Material.h" />
     <ClInclude Include="Application\Math\Matrix4.h" />
     <ClInclude Include="Engine\3d\Object\Mesh.h" />

@@ -208,8 +208,11 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& triangle, floa
 
 bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* distance, Vector3* inter) {
 	Vector3 m = ray.start_ - sphere.center_;
+	float a = Vector3Dot(ray.dir_,ray.dir_);
 	float b = Vector3Dot(m, ray.dir_);
-	float c = Vector3Dot(m, m) - sphere.radius_ * sphere.radius_;
+	float c = Vector3Dot(m, m) - (sphere.radius_ * sphere.radius_);
+
+	if (a == 0.0f) return false;//レイの長さが0
 
 	//rayの始点がsphereの外側にあり(c > 0)、rayがsphereから離れていく方向を指している場合(b > 0)、当たらない
 	if (c > 0.0f && b > 0.0f) { return false; }
@@ -221,6 +224,8 @@ bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* dis
 	//レイは球と交差している
 	//交差する最小の値を計算
 	float t = -b - SquareRoot(discr);
+
+	if (t < 0.0f) return false;//衝突していない
 
 	//tが負である場合、レイが球の内側から開始しているので、tをゼロにクランプ
 	if (t < 0.0f)t = 0.0f;

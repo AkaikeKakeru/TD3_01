@@ -9,7 +9,9 @@
 #include "Object3d.h"
 
 #include "Camera.h"
-#include "Light.h"
+#include "LightGroup.h"
+
+#include "ImGuiManager.h"
 
 #include <memory>
 #include <List>
@@ -20,6 +22,7 @@
 
 class CollisionManager;
 class Player;
+class Fan;
 
 class GamePlayScene : public BaseScene {
 public:
@@ -38,20 +41,39 @@ private:
 	void Draw3d();
 	void Draw2d();
 
+public://定数
+	static const int Vector3Count_ = 3;
+
+	static const int FanCount_ = 3;
+
 private:
 	//基盤
 	static DirectXBasis* dxBas_;
+	//入力
 	static Input* input_;
+	//スプライト基盤
 	static DrawBasis* drawBas_;
-
+	//ImGuiマネージャー
+	static ImGuiManager* imGuiManager_;
+	
+	//カメラ
 	Camera* camera_ = nullptr;
-	Light* light_ = nullptr;
+	//ライトグループ
+	LightGroup* lightGroup_ = nullptr;
+
+	//平行光源の方向初期値
+	Vector3 lightDir_ = { 0.0f,-1.0f,1.0f };
+
 
 	//当たり判定 レイ
-	Ray ray_;
+	//Ray* ray_;
 
 	//衝突マネージャー
 	CollisionManager* collisionManager_ = nullptr;
+
+	bool colRay_ = false;
+
+	Vector3 interRay_ = {};
 
 	/// <summary>
 	/// オブジェクト
@@ -69,8 +91,15 @@ private:
 	Object3d* rayObj_ = nullptr;
 	Model* rayModel_ = nullptr;
 
+	Object3d* rayObj_2 = nullptr;
+
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
+	
+	Fan* fan_[FanCount_] = { nullptr };
+	//std::list<Fan> fans_;
+
+	Model* fanModel_ = nullptr;
 
 	Skydome* skydome_ = nullptr;
 
