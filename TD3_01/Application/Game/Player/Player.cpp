@@ -63,7 +63,7 @@ void Player::Update() {
 		Vector3 rot = Object3d::GetRotation();
 
 		//移動スピード
-		float moveSpeed = 0.4f;
+		float moveSpeed = 0.1f;
 		//回転スピード
 		float rotSpeed = ConvertToRadian(90.0f);
 
@@ -87,15 +87,15 @@ void Player::Update() {
 		//		angleX, -rotSpeed);
 		//}
 
-		if (input_->TriggerKey(DIK_RIGHT)) {
-			rotVector = CreateRotationVector(
-				angleY, rotSpeed);
-		}
+		//if (input_->TriggerKey(DIK_RIGHT)) {
+		//	rotVector = CreateRotationVector(
+		//		angleY, rotSpeed);
+		//}
 
-		else if (input_->TriggerKey(DIK_LEFT)) {
-			rotVector = CreateRotationVector(
-				angleY, -rotSpeed);
-		}
+		//else if (input_->TriggerKey(DIK_LEFT)) {
+		//	rotVector = CreateRotationVector(
+		//		angleY, -rotSpeed);
+		//}
 
 		moveVector.z = -moveSpeed;
 
