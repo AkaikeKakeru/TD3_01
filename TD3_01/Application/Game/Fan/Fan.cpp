@@ -6,7 +6,6 @@
 #include "CollisionManager.h"
 #include "CollisionAttribute.h"
 #include <cassert>
-#include <Quaternion.h>
 
 Fan* Fan::Create(Model* model) {
 	//オブジェクトのインスタンスを生成
@@ -48,6 +47,8 @@ bool Fan::Initialize() {
 
 	collider_->SetAttribute(COLLISION_ATTR_RAY);
 
+	isControl_ = false;
+
 	return true;
 }
 
@@ -66,77 +67,78 @@ void Fan::Update() {
 	// 現在の回転を取得
 	Vector3 rot = Object3d::GetRotation();
 
-	//回転スピード(垂直)
-	float verticalAngle = ConvertToRadian(90.0f);
+	if (isControl_) {
+		//回転スピード(垂直)
+		float verticalAngle = ConvertToRadian(90.0f);
 
-	Vector3 angleX = { 1.0f,0.0f,0.0f };
-	Vector3 angleY = { 0.0f,1.0f,0.0f };
-	Vector3 angleZ = { 0.0f,0.0f,1.0f };
+		Vector3 angleX = { 1.0f,0.0f,0.0f };
+		Vector3 angleY = { 0.0f,1.0f,0.0f };
+		Vector3 angleZ = { 0.0f,0.0f,1.0f };
 
-	Quaternion rotQua = { 0,0,0 };
+		Quaternion rotQua = { 0,0,0 };
 
-	//移動後の座標を計算
-	if (input_->TriggerKey(DIK_W)) {
-		//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
-		//rotQua = DirectionToDirection(rot, angleY * (verticalAngle * 2));
-		//rotVector_ = RotateVector( angleY ,rotQua );
+		//移動後の座標を計算
+		if (input_->TriggerKey(DIK_W)) {
+			//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
+			//rotQua = DirectionToDirection(rot, angleY * (verticalAngle * 2));
+			//rotVector_ = RotateVector( angleY ,rotQua );
 
-		rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
+			rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
 
-		rot = angleY * verticalAngle * 2;
+			rot = angleY * verticalAngle * 2;
 
-		ray_->dir_ = angleZ;
+			ray_->dir_ = angleZ;
+		}
+
+		else if (input_->TriggerKey(DIK_S)) {
+			//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
+			//rot = RotateVector( angleY ,rotQua );
+
+			rotVector_ = CreateRotationVector(angleY, 0);
+
+			rot = angleY * verticalAngle * 0;
+
+			ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
+		}
+
+		if (input_->TriggerKey(DIK_A)) {
+			//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
+			//rot = RotateVector( angleY ,rotQua );
+
+			rotVector_ = CreateRotationVector(angleY, verticalAngle);
+
+			rot = angleY * verticalAngle;
+
+			ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
+		}
+
+		else if (input_->TriggerKey(DIK_D)) {
+			//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
+			//rot = RotateVector( angleY ,rotQua );
+
+			rotVector_ = CreateRotationVector(angleY, -verticalAngle);
+
+			rot = angleY * -verticalAngle;
+
+			ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
+		}
+
+		if (input_->PressKey(DIK_UP)) {
+			move.z += moveSpeed;
+		}
+
+		else if (input_->PressKey(DIK_DOWN)) {
+			move.z -= moveSpeed;
+		}
+
+		if (input_->PressKey(DIK_RIGHT)) {
+			move.x += moveSpeed;
+		}
+
+		else if (input_->PressKey(DIK_LEFT)) {
+			move.x -= moveSpeed;
+		}
 	}
-
-	else if (input_->TriggerKey(DIK_S)) {
-		//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
-		//rot = RotateVector( angleY ,rotQua );
-
-		rotVector_ = CreateRotationVector(angleY, 0);
-
-		rot = angleY * verticalAngle * 0;
-
-		ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
-	}
-
-	if (input_->TriggerKey(DIK_A)) {
-		//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
-		//rot = RotateVector( angleY ,rotQua );
-
-		rotVector_ = CreateRotationVector(angleY, verticalAngle);
-
-		rot = angleY * verticalAngle;
-
-		ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
-	}
-
-	else if (input_->TriggerKey(DIK_D)) {
-		//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
-		//rot = RotateVector( angleY ,rotQua );
-
-		rotVector_ = CreateRotationVector(angleY, -verticalAngle);
-
-		rot = angleY * -verticalAngle;
-
-		ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
-	}
-
-	if (input_->PressKey(DIK_UP)) {
-		move.z += moveSpeed;
-	}
-
-	else if (input_->PressKey(DIK_DOWN)) {
-		move.z -= moveSpeed;
-	}
-
-	if (input_->PressKey(DIK_RIGHT)) {
-		move.x += moveSpeed;
-	}
-
-	else if (input_->PressKey(DIK_LEFT)) {
-		move.x -= moveSpeed;
-	}
-
 	//rot = rotVector_;
 
 	// 移動の変更を反映

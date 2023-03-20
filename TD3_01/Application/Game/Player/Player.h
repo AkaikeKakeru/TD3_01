@@ -31,6 +31,9 @@ private:
 
 	Fan* fan_ = nullptr;
 
+	//前進フラグ
+	bool IsRun_ = false;
+
 public:
 	Player() = default;
 	~Player() = default;

@@ -68,11 +68,18 @@ void Framework::Update(){
 	}
 
 	imGuiManager_->Begin();
-#ifdef _DEBUG
-	ImGui::Text("Hello, world");
+	ImGui::Begin("How to Play");
+	ImGui::SetWindowPos(ImVec2(10, 10));
+	ImGui::SetWindowSize(ImVec2(500, 200));
+	ImGui::SetWindowFontScale(2.0f);
+	ImGui::Text("Arrow : Move of Fan Positon");
+	ImGui::Text("WASD : Rota of Fan Direction");
+	ImGui::Text("Hold Space : Plane Move Forward");
+	ImGui::Text("");
+	ImGui::Text("Press ENTER to Start");
+	ImGui::End();
 
-	//デモを表示
-	ImGui::ShowDemoWindow();
+#ifdef _DEBUG
 #endif
 	imGuiManager_->End();
 	sceneManager_->Update();
