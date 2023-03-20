@@ -25,6 +25,11 @@ public://アクセッサ
 		fan_ = fan;
 	}
 
+	//前進フラグ取得
+	bool GetIsRun() {
+		return IsRun_;
+	}
+
 private:
 	//衝突マネージャー
 	static CollisionManager* collisionManager_;
