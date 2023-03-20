@@ -49,6 +49,8 @@ bool Player::Initialize() {
 
 	collider_->SetAttribute(COLLISION_ATTR_PLAYER);
 
+	IsRun_ = false;
+
 	return true;
 }
 
@@ -57,12 +59,16 @@ void Player::Update() {
 
 	// オブジェクト移動
 
+	if (input_->PressKey(DIK_SPACE)) {
+		IsRun_ = true;
+	}
+
 		// 現在の座標を取得
 	Vector3 position = Object3d::GetPosition();
 	// 現在の座標を取得
 	Vector3 rot = Object3d::GetRotation();
 
-	if (input_->PressKey(DIK_SPACE)) {
+	if (IsRun_) {
 	//移動スピード
 	float moveSpeed = 0.4f;
 	//回転スピード
