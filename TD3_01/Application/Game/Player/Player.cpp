@@ -57,16 +57,27 @@ bool Player::Initialize() {
 void Player::Update() {
 	Input* input_ = Input::GetInstance();
 
+	// 現在の座標を取得
+	Vector3 position = Object3d::GetPosition();
+	// 現在の座標を取得
+	Vector3 rot = Object3d::GetRotation();
+
+	float courseOut = 90.0f;
+
 	// オブジェクト移動
+	if (position.x > courseOut ||
+		position.x < -courseOut ||
+		position.z > courseOut ||
+		position.z < -courseOut ) {
+		IsRun_ = false;
+		position = { 10,0,0 };
+		rot = CreateRotationVector(
+			{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
+	}
 
 	if (input_->PressKey(DIK_SPACE)) {
 		IsRun_ = true;
 	}
-
-		// 現在の座標を取得
-	Vector3 position = Object3d::GetPosition();
-	// 現在の座標を取得
-	Vector3 rot = Object3d::GetRotation();
 
 	if (IsRun_) {
 	//移動スピード
