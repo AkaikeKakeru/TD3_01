@@ -7,8 +7,8 @@
 
 class Stage {
 private: // 定数
-	static const int STAGE_WIDTH = 20;
-	static const int STAGE_HEIGHT = 20;
+	static const int STAGE_WIDTH = 10;
+	static const int STAGE_HEIGHT = 10;
 
 public:
 	// 列挙
@@ -70,7 +70,7 @@ private:
 	void LoadStageCommands();
 
 	// ブロック初期化
-	void InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos, int line, int row);
+	void InitializeStageBlock(std::unique_ptr<StageData>& block,Object3d* obj, Vector3 pos, int line, int row);
 
 	// リストにブロックを追加
 	void PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth);

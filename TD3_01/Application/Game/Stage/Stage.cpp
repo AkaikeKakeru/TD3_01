@@ -30,7 +30,7 @@ Stage::~Stage() {
 
 void Stage::Initialize(Camera* camera) {
 
-	cameraStage_ = camera;
+	this->cameraStage_ = camera;
 	//インスタンス生成
 	model_ = new Model();
 	modelFloor_ = new Model();
@@ -293,24 +293,29 @@ void Stage::LoadFloorBlock() {
 	}
 }
 
-void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos, int line, int row) {
+void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* obj, Vector3 pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
 	block->worldTransform_.Initialize();
+	block->obj = obj;
 
+	block->worldTransform_.matWorld_ = block->obj->GetMatWorld();
 	// スケール設定
+	block->worldTransform_.scale_ = block->obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
 	block->obj->SetScale(block->worldTransform_.scale_);
+	
 	// 座標設定
+	block->worldTransform_.position_ = block->obj->GetPosition();
 	block->worldTransform_.position_ = pos;
 	block->obj->SetPosition(block->worldTransform_.position_);
-
-	// 行列更新
-	block->worldTransform_.UpdateMatrix();
-	block->obj->SetWorldTransform(block->worldTransform_);
-
+	
 	block->line_ = line;
 	block->row_ = row;
 	
+	block->worldTransform_.UpdateMatrix();
+
+	block->obj->SetWorldTransform(block->worldTransform_);
+
 	block->obj->Update();
 }
 
@@ -319,7 +324,6 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
 	// ブロックの種類
 	newBlock->type_ = type;
-	newBlock->obj = obj;
 	// 座標
 	Vector3 pos;
 	pos.x = 2.0f + (4.0f * line);
@@ -327,7 +331,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	pos.z = 78.0f - (4.0f * row);
 
 	// 初期化する
-	InitializeStageBlock(newBlock, pos, line, row);
+	InitializeStageBlock(newBlock, obj, pos, line, row);
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
 
