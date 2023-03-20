@@ -29,8 +29,14 @@ void GamePlayScene::Update() {
 	Update2d();
 
 	if (goal_->GetIsGoal()) {
-		//シーンの切り替えを依頼
-		SceneManager::GetInstance()->ChangeScene("TITLE");
+		////シーンの切り替えを依頼
+		//SceneManager::GetInstance()->ChangeScene("TITLE");
+		ImGui::Begin("Touch to Goal");
+		ImGui::SetWindowPos(ImVec2(10, 10));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		ImGui::SetWindowFontScale(2.0f);
+		ImGui::Text("Thank you Play");
+		ImGui::End();
 	}
 
 #ifdef _DEBUG
