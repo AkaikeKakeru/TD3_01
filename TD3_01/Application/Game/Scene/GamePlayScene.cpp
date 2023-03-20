@@ -219,7 +219,6 @@ void GamePlayScene::Initialize3d() {
 
 	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
-	player_->Initialize();
 
 	player_->SetCamera(camera_);
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
@@ -247,13 +246,14 @@ void GamePlayScene::Initialize3d() {
 	for (int i = 0; i < FanCount_; i++) {
 		//ファンの初期化
 		fan_[i] = Fan::Create(fanModel_);
-		fan_[i]->Initialize();
-		//fan_->SetRay(ray_);
 		fan_[i]->SetScale({ 1.0f,1.0f,1.0f });
 		fan_[i]->SetCamera(camera_);
 	}
 
-	fan_[0]->SetPosition({ 0,0,0 });
+	fan_[0]->SetPosition({ 0,0,10 });
+	//ファン下向き時の数値設定
+	fan_[0]->SetFanDirection(angleY, verticalAngle * 0, -angleZ);
+
 	fan_[0]->SetIsControl(true);
 
 	fan_[1]->SetPosition({ 20,0,20 });
@@ -266,14 +266,12 @@ void GamePlayScene::Initialize3d() {
 
 	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
-	rayObj_->Initialize();
 	rayObj_->SetModel(rayModel_);
 	rayObj_->SetPosition(fan_[0]->GetRay()->start_);
 	rayObj_->SetScale({ 2, 2, 2 });
 	rayObj_->SetCamera(camera_);
 
 	rayObj_2 = Object3d::Create();
-	rayObj_2->Initialize();
 	rayObj_2->SetModel(rayModel_);
 	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50 * fan_[0]->GetRay()->dir_));
 	rayObj_2->SetScale({ 2, 2, 2 });
