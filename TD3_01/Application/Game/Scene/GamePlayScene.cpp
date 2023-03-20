@@ -9,6 +9,8 @@
 #include "imgui.h"
 #include "CollisionAttribute.h"
 
+#include "SceneManager.h"
+
 DirectXBasis* GamePlayScene::dxBas_ = DirectXBasis::GetInstance();
 Input* GamePlayScene::input_ = Input::GetInstance();
 DrawBasis* GamePlayScene::drawBas_ = DrawBasis::GetInstance();
@@ -25,6 +27,11 @@ void GamePlayScene::Update() {
 
 	Update3d();
 	Update2d();
+
+	if (goal_->GetIsGoal()) {
+		//シーンの切り替えを依頼
+		SceneManager::GetInstance()->ChangeScene("TITLE");
+	}
 
 #ifdef _DEBUG
 	{
@@ -51,15 +58,37 @@ void GamePlayScene::Update() {
 			rayObj_2->GetPosition().z
 		};
 
-		float rayDir[Vector3Count_] = {
+		float rayDir0[Vector3Count_] = {
 			fan_[0]->GetRay()->dir_.x,
 			fan_[0]->GetRay()->dir_.y,
 			fan_[0]->GetRay()->dir_.z
 		};
-		float rayPos[Vector3Count_] = {
+		float rayPos0[Vector3Count_] = {
 			fan_[0]->GetRay()->start_.x,
 			fan_[0]->GetRay()->start_.y,
 			fan_[0]->GetRay()->start_.z
+		};
+
+		float rayDir1[Vector3Count_] = {
+			fan_[1]->GetRay()->dir_.x,
+			fan_[1]->GetRay()->dir_.y,
+			fan_[1]->GetRay()->dir_.z
+		};
+		float rayPos1[Vector3Count_] = {
+			fan_[1]->GetRay()->start_.x,
+			fan_[1]->GetRay()->start_.y,
+			fan_[1]->GetRay()->start_.z
+		};
+
+		float rayDir2[Vector3Count_] = {
+			fan_[2]->GetRay()->dir_.x,
+			fan_[2]->GetRay()->dir_.y,
+			fan_[2]->GetRay()->dir_.z
+		};
+		float rayPos2[Vector3Count_] = {
+			fan_[2]->GetRay()->start_.x,
+			fan_[2]->GetRay()->start_.y,
+			fan_[2]->GetRay()->start_.z
 		};
 		float rayInter[Vector3Count_] = {
 			interRay_.x,
@@ -67,15 +96,37 @@ void GamePlayScene::Update() {
 			interRay_.z
 		};
 
-		float fanDir[Vector3Count_] = {
+		float fanDir0[Vector3Count_] = {
 			fan_[0]->GetRotation().x,
 			fan_[0]->GetRotation().y,
 			fan_[0]->GetRotation().z
 		};
-		float fanPos[Vector3Count_] = {
+		float fanPos0[Vector3Count_] = {
 			fan_[0]->GetPosition().x,
 			fan_[0]->GetPosition().y,
 			fan_[0]->GetPosition().z
+		};
+
+		float fanDir1[Vector3Count_] = {
+			fan_[1]->GetRotation().x,
+			fan_[1]->GetRotation().y,
+			fan_[1]->GetRotation().z
+		};
+		float fanPos1[Vector3Count_] = {
+			fan_[1]->GetPosition().x,
+			fan_[1]->GetPosition().y,
+			fan_[1]->GetPosition().z
+		};
+
+		float fanDir2[Vector3Count_] = {
+			fan_[2]->GetRotation().x,
+			fan_[2]->GetRotation().y,
+			fan_[2]->GetRotation().z
+		};
+		float fanPos2[Vector3Count_] = {
+			fan_[2]->GetPosition().x,
+			fan_[2]->GetPosition().y,
+			fan_[2]->GetPosition().z
 		};
 
 		float rayCol[1] = {
@@ -100,14 +151,27 @@ void GamePlayScene::Update() {
 		ImGui::Begin("Fan");
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::SetWindowSize(ImVec2(500, 200));
-		ImGui::InputFloat3("FanPos", fanPos);
-		ImGui::InputFloat3("FanDir", fanDir);
-		ImGui::InputFloat3("RayPos", rayPos);
-		ImGui::InputFloat3("RayDir", rayDir);
-		ImGui::InputFloat("RayCol", rayCol);
+		ImGui::InputFloat3("FanPos", fanPos0);
+		ImGui::InputFloat3("FanDir", fanDir0);
+		ImGui::InputFloat3("FanPos", fanPos1);
+		ImGui::InputFloat3("FanDir", fanDir1);
+		ImGui::InputFloat3("FanPos", fanPos2);
+		ImGui::InputFloat3("FanDir", fanDir2);
 		ImGui::End();
 
-	}
+		ImGui::Begin("Ray");
+		ImGui::SetWindowPos(ImVec2(0, 500));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		ImGui::InputFloat3("RayPos", rayPos0);
+		ImGui::InputFloat3("RayDir", rayDir0);
+		ImGui::InputFloat3("RayPos", rayPos1);
+		ImGui::InputFloat3("RayDir", rayDir1);
+		ImGui::InputFloat3("RayPos", rayPos2);
+		ImGui::InputFloat3("RayDir", rayDir2);
+		ImGui::InputFloat("RayCol", rayCol);
+		ImGui::End();
+	
+}
 #endif
 
 	imGuiManager_->End();
@@ -124,12 +188,18 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Initialize3d() {
+	//回転スピード(垂直)
+	float verticalAngle = ConvertToRadian(90.0f);
+
+	Vector3 angleX = { 1.0f,0.0f,0.0f };
+	Vector3 angleY = { 0.0f,1.0f,0.0f };
+	Vector3 angleZ = { 0.0f,0.0f,1.0f };
+
 	collisionManager_ = CollisionManager::GetInstance();
 	//カメラの初期化
 	camera_ = new Camera();
 
-	camera_->SetEye({ 0.0f, 40.0f, -100.0f });
-
+	camera_->SetEye({ 0.0f, 30.0f, -80.0f });
 
 	//各種モデル
 	playerModel_ = new Model();
@@ -138,6 +208,8 @@ void GamePlayScene::Initialize3d() {
 	rayModel_ = Model::LoadFromOBJ("cube", true);
 	fanModel_ = new Model();
 	fanModel_ = Model::LoadFromOBJ("planeEnemy", false);
+	goalModel_ = new Model();
+	goalModel_ = Model::LoadFromOBJ("goal", true);
 
 	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
@@ -146,6 +218,7 @@ void GamePlayScene::Initialize3d() {
 	player_->SetCamera(camera_);
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 
+	player_->SetPosition({ 10,0,0 });
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
 
@@ -158,6 +231,13 @@ void GamePlayScene::Initialize3d() {
 	//ray_->start_ = { 0.0f, 0.0f, 0.0f };
 	//ray_->dir_ = { 0,0,-1 };
 
+	goal_ = new Goal();
+	goal_->Initialize();
+	goal_->SetModel(goalModel_);
+	goal_->SetPosition({ 30,0,-30 });
+	goal_->SetScale({ 2, 2, 2 });
+	goal_->SetCamera(camera_);
+
 	for (int i = 0; i < FanCount_; i++) {
 		//ファンの初期化
 		fan_[i] = Fan::Create(fanModel_);
@@ -168,9 +248,15 @@ void GamePlayScene::Initialize3d() {
 	}
 
 	fan_[0]->SetPosition({ 0,0,0 });
+	fan_[0]->SetIsControl(true);
 
-	fan_[1]->SetPosition({ -50,0,30 });
-	fan_[2]->SetPosition({ 50,0,-30 });
+	fan_[1]->SetPosition({ 20,0,20 });
+	//ファン左向き時の数値設定
+	fan_[1]->SetFanDirection(angleY, verticalAngle, -angleX);
+
+	fan_[2]->SetPosition({ -10,0,-30 });
+	//ファン右向き時の数値設定
+	fan_[2]->SetFanDirection(angleY, -verticalAngle, angleX);
 
 	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
@@ -197,9 +283,9 @@ void GamePlayScene::Initialize3d() {
 	Object3d::SetLight(lightGroup_);
 
 	//ステージ生成
-	stage_ = new Stage();
-	stage_->Initialize(camera_);
-	stage_->StageInitialize(filename_[1]);
+	//stage_ = new Stage();
+	//stage_->Initialize(camera_);
+	//stage_->StageInitialize(filename_[1]);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -244,21 +330,27 @@ void GamePlayScene::Update3d() {
 		fan_[i]->Update();
 	}
 	player_->Update();
+
 	//レイキャストをチェック
 	for (int i = 0; i < FanCount_; i++) {
 		if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
-			rayObj_->SetPosition(raycastHit_.inter_);
-			rayObj_->Update();
+			if (raycastHit_.distance_ <= 20) {
 
-			player_->SetRotation(fan_[i]->GetRotation());
-			player_->Update();
+				rayObj_->SetPosition(raycastHit_.inter_);
+				rayObj_->Update();
 
-			colRay_ = true;
-			interRay_ = raycastHit_.inter_;
+				raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
+				raycastHit_.object_->Update();
+
+				colRay_ = true;
+				interRay_ = raycastHit_.inter_;
+			}
 		}
 	}
-	stage_->Update();
+
+	goal_->Update();
+	//stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
 }
@@ -277,13 +369,15 @@ void GamePlayScene::Update2d() {
 
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
+	goal_->Draw();
+
 	rayObj_->Draw();
 	rayObj_2->Draw();
 	for (int i = 0; i < FanCount_; i++) {
 		fan_[i]->Draw();
 	}
 	player_->Draw();
-	stage_->Draw();
+	//stage_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -302,8 +396,12 @@ void GamePlayScene::Finalize() {
 	}
 	SafeDelete(fanModel_);
 
+	//SafeDelete(stage_);
+	goal_->Finalize();
+	SafeDelete(goal_);
+	SafeDelete(goalModel_);
+
 	skydome_->Finalize();
-	SafeDelete(stage_);
 	SafeDelete(skydome_);
 
 	SafeDelete(rayObj_);
