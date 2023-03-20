@@ -171,7 +171,8 @@ void Stage::Draw() {
 			// Â•Ç•`‰æ
 			objWallB_->Draw();
 		}
-		else if (block->type_ == GOAL) {
+		else 
+			if (block->type_ == GOAL) {
 			// ƒS[ƒ‹•`‰æ
 			block->worldTransform_.position_.y = -15.5f;
 			objGoal_->Draw();
@@ -305,12 +306,10 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos
 
 	// s—ñXV
 	block->worldTransform_.UpdateMatrix();
-block->obj->SetWorldTransform(block->worldTransform_);
+	block->obj->SetWorldTransform(block->worldTransform_);
 
 	block->line_ = line;
 	block->row_ = row;
-
-
 	
 	block->obj->Update();
 }
