@@ -162,6 +162,7 @@
     <ClCompile Include="Application\Function\Collider\CollisionPrimitive.cpp" />
     <ClCompile Include="Application\Function\Collider\SphereCollider.cpp" />
     <ClCompile Include="Application\Game\Fan\Fan.cpp" />
+    <ClCompile Include="Application\Game\Goal.cpp" />
     <ClCompile Include="Application\Game\Scene\GamePlayScene.cpp" />
     <ClCompile Include="Application\Game\Scene\Manager\BaseScene.cpp" />
     <ClCompile Include="Application\Game\Skydome\Skydome.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Application\Function\Collider\SphereCollider.h" />
     <ClInclude Include="Application\Game\Fan\Fan.h" />
     <ClInclude Include="Application\Game\GameMain.h" />
+    <ClInclude Include="Application\Game\Goal.h" />
     <ClInclude Include="Application\Game\Scene\Manager\AbstractSceneFactory.h" />
     <ClInclude Include="Application\Game\Scene\Manager\BaseScene.h" />
     <ClInclude Include="Application\Game\Skydome\Skydome.h" />
