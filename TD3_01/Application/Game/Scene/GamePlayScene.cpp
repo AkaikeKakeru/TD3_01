@@ -170,8 +170,8 @@ void GamePlayScene::Update() {
 		ImGui::InputFloat3("RayDir", rayDir2);
 		ImGui::InputFloat("RayCol", rayCol);
 		ImGui::End();
-	
-}
+
+	}
 #endif
 
 	imGuiManager_->End();
@@ -299,9 +299,7 @@ void GamePlayScene::Initialize2d() {
 void GamePlayScene::Update3d() {
 	colRay_ = false;
 
-	if (input_->PressKey(DIK_SPACE)) {
-		fan_[0]->SetIsControl(false);
-	}
+	fan_[0]->SetIsControl(!player_->GetIsRun());
 
 	{
 		//imGuiからのライトパラメータを反映
