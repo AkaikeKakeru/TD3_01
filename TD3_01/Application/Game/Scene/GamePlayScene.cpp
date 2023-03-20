@@ -299,6 +299,10 @@ void GamePlayScene::Initialize2d() {
 void GamePlayScene::Update3d() {
 	colRay_ = false;
 
+	if (input_->PressKey(DIK_SPACE)) {
+		fan_[0]->SetIsControl(false);
+	}
+
 	{
 		//imGuiからのライトパラメータを反映
 		lightGroup_->SetDirLightDir(0, lightDir_);
