@@ -7,8 +7,8 @@
 
 class Stage {
 private: // 定数
-	static const int STAGE_WIDTH = 10;
-	static const int STAGE_HEIGHT = 10;
+	static const int STAGE_WIDTH = 20;
+	static const int STAGE_HEIGHT = 20;
 
 public:
 	// 列挙
@@ -109,7 +109,7 @@ private:
 	Camera* cameraStage_ = nullptr;
 
 	// ブロックの倍率(Scale)
-	float magnification_ = 5.0f;
+	float magnification_ = 2.0f;
 	// ブロックの半径半径
 	float radius_ = 2.0f;
 	// ゴールフラグ

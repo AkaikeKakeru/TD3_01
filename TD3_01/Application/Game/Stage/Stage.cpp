@@ -31,8 +31,7 @@ Stage::~Stage() {
 void Stage::Initialize(Camera* camera) {
 
 	this->cameraStage_ = camera;
-	stageBlocks_.begin()->get()->worldTransform_.Initialize();
-	floorBlocks_.begin()->get()->worldTransform_.Initialize();
+
 	//インスタンス生成
 	model_ = new Model();
 	modelFloor_ = new Model();
@@ -51,7 +50,7 @@ void Stage::Initialize(Camera* camera) {
 	objGoal_ = new Object3d();
 
 	// モデル読み込み
-	model_ = Model::LoadFromOBJ("cubeB", true);
+	model_ = Model::LoadFromOBJ("cube", true);
 	modelFloor_ = Model::LoadFromOBJ("floor", true);
 	modelSwitchR_ = Model::LoadFromOBJ("rswitch", true);
 	modelSwitchB_ = Model::LoadFromOBJ("bswitch", true);
@@ -163,27 +162,29 @@ void Stage::Draw() {
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		if (block->type_ == BLOCK) {
 			// 壁描画
-			obj_->Draw();
+			obj_->Draw(block->worldTransform_);
 		}
 		else if (block->type_ == WALLR) {
 			// 赤壁描画
-			objWallR_->Draw();
+			objWallR_->Draw(block->worldTransform_);
 		}
 		else if (block->type_ == WALLB) {
 			// 青壁描画
-			objWallB_->Draw();
+			objWallB_->Draw(block->worldTransform_);
 		}
 		else 
 			if (block->type_ == GOAL) {
 			// ゴール描画
 			block->worldTransform_.position_.y = -15.5f;
-			objGoal_->Draw();
+			objGoal_->Draw(block->worldTransform_);
 		}
+		
+	
 	}
 
 	// 床描画
 	for (std::unique_ptr<StageData>& block : floorBlocks_) {
-		objFloor_->Draw();
+		objFloor_->Draw(block->worldTransform_);
 	}
 
 	// スイッチ描画
@@ -297,7 +298,7 @@ void Stage::LoadFloorBlock() {
 
 void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* obj, Vector3& pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
-	//block->worldTransform_.Initialize();
+	block->worldTransform_.Initialize();
 	block->obj = obj;
 
 	// スケール設定
