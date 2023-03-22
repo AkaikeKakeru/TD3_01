@@ -79,6 +79,7 @@ public: // メンバ関数
 	virtual void Update();
 	// 描画
 	virtual void Draw();
+	virtual void Draw(const WorldTransform& worldTransform);
 
 	//転送
 	void TransferMatrixWorld();

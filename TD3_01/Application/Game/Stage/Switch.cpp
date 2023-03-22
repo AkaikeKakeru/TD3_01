@@ -15,7 +15,7 @@ void Switch::Update() {
 }
 
 void Switch::Draw() {
-	obj_->Draw();
+	obj_->Draw(worldTransform_);
 }
 
 void Switch::OnCollisionSwitch() {

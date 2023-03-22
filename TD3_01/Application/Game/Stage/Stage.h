@@ -42,7 +42,7 @@ public:
 	void Initialize(Camera* camera);
 
 	// ステージ初期化
-	void StageInitialize(const std::string stageNum);
+	void StageInitialize(const std::string& stageNum);
 
 	// 更新
 	void Update();
@@ -64,13 +64,13 @@ private:
 	void LoadFloorBlock();
 
 	// ステージファイル読み込み
-	void LoadStageData(const std::string stageNum);
+	void LoadStageData(const std::string& stageNum);
 
 	// ステージ読み込み
 	void LoadStageCommands();
 
 	// ブロック初期化
-	void InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos, int line, int row);
+	void InitializeStageBlock(std::unique_ptr<StageData>& block,Object3d* obj, Vector3& pos, int line, int row);
 
 	// リストにブロックを追加
 	void PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth);
@@ -109,9 +109,12 @@ private:
 	Camera* cameraStage_ = nullptr;
 
 	// ブロックの倍率(Scale)
-	float magnification_ = 2.0f;
+	float magnification_ = 4.0f;
 	// ブロックの半径半径
-	float radius_ = 2.0f;
+	float radius_ = 4.0f;
+	// ブロックY座標(深度)
+	float stageDepth_ = -20.0f;
+	float floorDepth_ = -28.0f;
 	// ゴールフラグ
 	bool isGoal_ = false;
 	bool isSwitchDrawR_ = false;

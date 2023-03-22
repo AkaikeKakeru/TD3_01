@@ -3,7 +3,7 @@
 #include <fstream>
 #include "SafeDelete.h"
 
-using namespace std;
+//using namespace std;
 
 Stage::~Stage() {
 	SafeDelete(model_);
@@ -30,7 +30,8 @@ Stage::~Stage() {
 
 void Stage::Initialize(Camera* camera) {
 
-	cameraStage_ = camera;
+	this->cameraStage_ = camera;
+
 	//インスタンス生成
 	model_ = new Model();
 	modelFloor_ = new Model();
@@ -97,7 +98,7 @@ void Stage::Initialize(Camera* camera) {
 	LoadFloorBlock();
 }
 
-void Stage::StageInitialize(const std::string stageNum) {
+void Stage::StageInitialize(const std::string& stageNum) {
 	// 最初に残っている要素を削除
 	stageBlocks_.clear();
 
@@ -152,8 +153,6 @@ void Stage::Update() {
 	switchB_->Update();
 
 	isGoal_ = false;
-
-	cameraStage_->Update();
 }
 
 void Stage::Draw() {
@@ -161,26 +160,29 @@ void Stage::Draw() {
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		if (block->type_ == BLOCK) {
 			// 壁描画
-			obj_->Draw();
+			obj_->Draw(block->worldTransform_);
 		}
 		else if (block->type_ == WALLR) {
 			// 赤壁描画
-			objWallR_->Draw();
+			objWallR_->Draw(block->worldTransform_);
 		}
 		else if (block->type_ == WALLB) {
 			// 青壁描画
-			objWallB_->Draw();
+			objWallB_->Draw(block->worldTransform_);
 		}
-		else if (block->type_ == GOAL) {
+		else 
+			if (block->type_ == GOAL) {
 			// ゴール描画
 			block->worldTransform_.position_.y = -15.5f;
-			objGoal_->Draw();
+			objGoal_->Draw(block->worldTransform_);
 		}
+		
+	
 	}
 
 	// 床描画
 	for (std::unique_ptr<StageData>& block : floorBlocks_) {
-		objFloor_->Draw();
+		objFloor_->Draw(block->worldTransform_);
 	}
 
 	// スイッチ描画
@@ -188,7 +190,7 @@ void Stage::Draw() {
 	if (isSwitchDrawB_) switchB_->Draw();
 }
 
-void Stage::LoadStageData(const std::string stageNum) {
+void Stage::LoadStageData(const std::string& stageNum) {
 	// ファイル
 	std::ifstream file;
 	// パスを取得
@@ -231,43 +233,43 @@ void Stage::LoadStageCommands() {
 			// コマンド読み込み
 			if (word.find("NONE") == 0 || word.find("0") == 0 || word.find("7") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, obj_, NONE, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, obj_, NONE, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objFloor_, BLOCK, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objFloor_, BLOCK, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("2") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objSwitchR_, SWITCHR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchR_, SWITCHR, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("3") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objWallR_, WALLR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallR_, WALLR, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("4") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objSwitchB_, SWITCHB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchB_, SWITCHB, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("5") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objWallB_, WALLB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallB_, WALLB, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("GOAL") == 0 || word.find("6") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objGoal_, GOAL, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objGoal_, GOAL, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
@@ -287,32 +289,31 @@ void Stage::LoadFloorBlock() {
 	for (int i = 0; i < STAGE_HEIGHT; i++) {
 		for (int j = 0; j < STAGE_WIDTH; j++) {
 			// ステージのブロックを追加
-			PushStageBlockList(floorBlocks_, objFloor_, BLOCK, j, i, -14.0f);
+			PushStageBlockList(floorBlocks_, objFloor_, BLOCK, j, i, floorDepth_);
 		}
 	}
 }
 
-void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3& pos, int line, int row) {
+void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* obj, Vector3& pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
 	block->worldTransform_.Initialize();
+	block->obj = obj;
 
 	// スケール設定
+	block->worldTransform_.scale_ = block->obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
 	block->obj->SetScale(block->worldTransform_.scale_);
+	
 	// 座標設定
+	block->worldTransform_.position_ = block->obj->GetPosition();
 	block->worldTransform_.position_ = pos;
 	block->obj->SetPosition(block->worldTransform_.position_);
-
-	// 行列更新
-	block->worldTransform_.UpdateMatrix();
-block->obj->SetWorldTransform(block->worldTransform_);
-
+	
 	block->line_ = line;
 	block->row_ = row;
 
+	block->obj->SetWorldTransform(block->worldTransform_);
 
-	
-	block->obj->Update();
 }
 
 void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth) {
@@ -320,29 +321,34 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
 	// ブロックの種類
 	newBlock->type_ = type;
-	newBlock->obj = obj;
 	// 座標
 	Vector3 pos;
-	pos.x = 2.0f + (4.0f * line);
+	
+	//中央揃えとなる様に座標を計算
+	pos.x = -74.0f + (8.0f * line);
 	pos.y = depth;
-	pos.z = 78.0f - (4.0f * row);
+	pos.z = 156.0f - (8.0f * row);
 
 	// 初期化する
-	InitializeStageBlock(newBlock, pos, line, row);
+	InitializeStageBlock(newBlock, obj, pos, line, row);
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
 
 	if (type == SWITCHR) {
-		pos.x -= 2.0f;
-		pos.z += 2.0f;
-		switchR_->SetPosition(pos);
+		pos.x -= 4.0f;
+		pos.z += 4.0f;
+		switchR_->Seting(pos, magnification_);
 		isSwitchDrawR_ = true;
 	}
 	if (type == SWITCHB) {
-		pos.x -= 2.0f;
-		pos.z += 2.0f;
-		switchB_->SetPosition(pos);
+		pos.x -= 4.0f;
+		pos.z += 4.0f;
+		switchB_->Seting(pos, magnification_);
 		isSwitchDrawB_ = true;
+	}
+	for (std::unique_ptr<StageData>& stage : blocks_)
+	{
+		stage->obj->Update();
 	}
 }
 

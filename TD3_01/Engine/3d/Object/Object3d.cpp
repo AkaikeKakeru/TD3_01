@@ -320,6 +320,28 @@ void Object3d::Draw() {
 	model_->Draw(cmdList_);
 }
 
+void Object3d::Draw(const WorldTransform& worldTransform)
+{
+	worldTransform_ = worldTransform;
+	// nullptrチェック
+	assert(device_);
+	assert(Object3d::cmdList_);
+
+	if (model_ == nullptr) return;
+
+	// パイプラインステートの設定
+	cmdList_->SetPipelineState(pipelineSet_.pipelinestate_.Get());
+	// ルートシグネチャの設定
+	cmdList_->SetGraphicsRootSignature(pipelineSet_.rootsignature_.Get());
+	// 定数バッファビューをセット
+	cmdList_->SetGraphicsRootConstantBufferView(0, worldTransform_.constBuff_->GetGPUVirtualAddress());
+
+	//ライト描画
+	lightGroup_->Draw(cmdList_, 3);
+
+	model_->Draw(cmdList_);
+}
+
 void Object3d::TransferMatrixWorld() {
 	const Matrix4& matViewProjection = camera_->GetViewProjectionMatrix();
 	const Vector3& cameraPos = camera_->GetEye();
