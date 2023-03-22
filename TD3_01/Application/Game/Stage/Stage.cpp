@@ -3,7 +3,7 @@
 #include <fstream>
 #include "SafeDelete.h"
 
-using namespace std;
+//using namespace std;
 
 Stage::~Stage() {
 	SafeDelete(model_);
@@ -31,6 +31,8 @@ Stage::~Stage() {
 void Stage::Initialize(Camera* camera) {
 
 	this->cameraStage_ = camera;
+	stageBlocks_.begin()->get()->worldTransform_.Initialize();
+	floorBlocks_.begin()->get()->worldTransform_.Initialize();
 	//インスタンス生成
 	model_ = new Model();
 	modelFloor_ = new Model();
@@ -49,7 +51,7 @@ void Stage::Initialize(Camera* camera) {
 	objGoal_ = new Object3d();
 
 	// モデル読み込み
-	model_ = Model::LoadFromOBJ("cube", true);
+	model_ = Model::LoadFromOBJ("cubeB", true);
 	modelFloor_ = Model::LoadFromOBJ("floor", true);
 	modelSwitchR_ = Model::LoadFromOBJ("rswitch", true);
 	modelSwitchB_ = Model::LoadFromOBJ("bswitch", true);
@@ -97,7 +99,7 @@ void Stage::Initialize(Camera* camera) {
 	LoadFloorBlock();
 }
 
-void Stage::StageInitialize(const std::string stageNum) {
+void Stage::StageInitialize(const std::string& stageNum) {
 	// 最初に残っている要素を削除
 	stageBlocks_.clear();
 
@@ -189,7 +191,7 @@ void Stage::Draw() {
 	if (isSwitchDrawB_) switchB_->Draw();
 }
 
-void Stage::LoadStageData(const std::string stageNum) {
+void Stage::LoadStageData(const std::string& stageNum) {
 	// ファイル
 	std::ifstream file;
 	// パスを取得
@@ -293,12 +295,11 @@ void Stage::LoadFloorBlock() {
 	}
 }
 
-void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* obj, Vector3 pos, int line, int row) {
+void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* obj, Vector3& pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
-	block->worldTransform_.Initialize();
+	//block->worldTransform_.Initialize();
 	block->obj = obj;
 
-	block->worldTransform_.matWorld_ = block->obj->GetMatWorld();
 	// スケール設定
 	block->worldTransform_.scale_ = block->obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
@@ -311,12 +312,9 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* ob
 	
 	block->line_ = line;
 	block->row_ = row;
-	
-	block->worldTransform_.UpdateMatrix();
 
 	block->obj->SetWorldTransform(block->worldTransform_);
 
-	block->obj->Update();
 }
 
 void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, Object3d* obj, int type, int line, int row, float depth) {
@@ -326,6 +324,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	newBlock->type_ = type;
 	// 座標
 	Vector3 pos;
+	
 	pos.x = 2.0f + (4.0f * line);
 	pos.y = depth;
 	pos.z = 78.0f - (4.0f * row);
@@ -338,14 +337,18 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	if (type == SWITCHR) {
 		pos.x -= 2.0f;
 		pos.z += 2.0f;
-		switchR_->SetPosition(pos);
+		switchR_->Seting(pos, magnification_);
 		isSwitchDrawR_ = true;
 	}
 	if (type == SWITCHB) {
 		pos.x -= 2.0f;
 		pos.z += 2.0f;
-		switchB_->SetPosition(pos);
+		switchB_->Seting(pos, magnification_);
 		isSwitchDrawB_ = true;
+	}
+	for (std::unique_ptr<StageData>& stage : blocks_)
+	{
+		stage->obj->Update();
 	}
 }
 

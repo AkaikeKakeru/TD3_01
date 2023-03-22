@@ -33,11 +33,11 @@ private:
 
 public: // アクセッサ
 	bool GetFlag() { return isFlag_; }
-	void SetPosition(Vector3 pos) {
+	void Seting(const Vector3& pos,const float scale) {
 		// 初期化
 		worldTransform_.Initialize();
 		// スケール設定
-		worldTransform_.scale_ = { 2.0f, 2.0f, 2.0f };
+		worldTransform_.scale_ = { scale, scale, scale };
 		// 座標設定
 		worldTransform_.position_ = pos;
 		// 行列更新
