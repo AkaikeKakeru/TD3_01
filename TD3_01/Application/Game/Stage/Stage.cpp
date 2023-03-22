@@ -153,8 +153,6 @@ void Stage::Update() {
 	switchB_->Update();
 
 	isGoal_ = false;
-
-	cameraStage_->Update();
 }
 
 void Stage::Draw() {
@@ -235,43 +233,43 @@ void Stage::LoadStageCommands() {
 			// コマンド読み込み
 			if (word.find("NONE") == 0 || word.find("0") == 0 || word.find("7") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, obj_, NONE, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, obj_, NONE, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objFloor_, BLOCK, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objFloor_, BLOCK, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("2") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objSwitchR_, SWITCHR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchR_, SWITCHR, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("3") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objWallR_, WALLR, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallR_, WALLR, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("4") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objSwitchB_, SWITCHB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objSwitchB_, SWITCHB, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("5") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objWallB_, WALLB, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objWallB_, WALLB, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("GOAL") == 0 || word.find("6") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objGoal_, GOAL, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_,objGoal_, GOAL, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
@@ -291,7 +289,7 @@ void Stage::LoadFloorBlock() {
 	for (int i = 0; i < STAGE_HEIGHT; i++) {
 		for (int j = 0; j < STAGE_WIDTH; j++) {
 			// ステージのブロックを追加
-			PushStageBlockList(floorBlocks_, objFloor_, BLOCK, j, i, -14.0f);
+			PushStageBlockList(floorBlocks_, objFloor_, BLOCK, j, i, floorDepth_);
 		}
 	}
 }
@@ -326,9 +324,10 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	// 座標
 	Vector3 pos;
 	
-	pos.x = -37.0f + (4.0f * line);
+	//中央揃えとなる様に座標を計算
+	pos.x = -74.0f + (8.0f * line);
 	pos.y = depth;
-	pos.z = 78.0f - (4.0f * row);
+	pos.z = 156.0f - (8.0f * row);
 
 	// 初期化する
 	InitializeStageBlock(newBlock, obj, pos, line, row);
@@ -336,14 +335,14 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	blocks_.push_back(std::move(newBlock));
 
 	if (type == SWITCHR) {
-		pos.x -= 2.0f;
-		pos.z += 2.0f;
+		pos.x -= 4.0f;
+		pos.z += 4.0f;
 		switchR_->Seting(pos, magnification_);
 		isSwitchDrawR_ = true;
 	}
 	if (type == SWITCHB) {
-		pos.x -= 2.0f;
-		pos.z += 2.0f;
+		pos.x -= 4.0f;
+		pos.z += 4.0f;
 		switchB_->Seting(pos, magnification_);
 		isSwitchDrawB_ = true;
 	}

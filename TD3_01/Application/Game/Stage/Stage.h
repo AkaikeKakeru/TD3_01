@@ -109,9 +109,12 @@ private:
 	Camera* cameraStage_ = nullptr;
 
 	// ブロックの倍率(Scale)
-	float magnification_ = 2.0f;
+	float magnification_ = 4.0f;
 	// ブロックの半径半径
-	float radius_ = 2.0f;
+	float radius_ = 4.0f;
+	// ブロックY座標(深度)
+	float stageDepth_ = -20.0f;
+	float floorDepth_ = -28.0f;
 	// ゴールフラグ
 	bool isGoal_ = false;
 	bool isSwitchDrawR_ = false;
