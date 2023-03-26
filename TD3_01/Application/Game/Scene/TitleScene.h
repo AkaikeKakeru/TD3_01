@@ -12,6 +12,8 @@
 
 #include "SceneManager.h"
 
+#include "ParticleManager.h"
+
 class TitleScene : public BaseScene{
 public://構造体
 
@@ -39,4 +41,8 @@ private:
 	/// スプライト
 	/// </summary>
 	Sprite* sprite_ = new Sprite();
+
+	//パーティクルマネージャー
+	ParticleManager* particleMan_ = nullptr;
+	int particleNum_ = 0;
 };
