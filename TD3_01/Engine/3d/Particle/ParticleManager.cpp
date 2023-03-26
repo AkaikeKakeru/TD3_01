@@ -36,7 +36,7 @@ ParticleManager::VertexPos ParticleManager::vertices_[vertexCount_];
 Matrix4 ParticleManager::matBillboard_ = Matrix4Identity();
 Matrix4 ParticleManager::matBillboardY_ = Matrix4Identity();
 
-void ParticleManager::StaticInitialize(ID3D12Device* device, int window_width, int window_height) {
+void ParticleManager::StaticInitialize(ID3D12Device* device) {
 	// nullptrチェック
 	assert(device);
 
@@ -46,7 +46,7 @@ void ParticleManager::StaticInitialize(ID3D12Device* device, int window_width, i
 	InitializeDescriptorHeap();
 
 	// カメラ初期化
-	InitializeCamera(window_width, window_height);
+	InitializeCamera();
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -153,7 +153,7 @@ void ParticleManager::InitializeDescriptorHeap() {
 
 }
 
-void ParticleManager::InitializeCamera(int window_width, int window_height) {
+void ParticleManager::InitializeCamera() {
 
 	//ビュー行列の計算
 	UpdateViewMatrix();
