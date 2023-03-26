@@ -142,6 +142,7 @@
     </ClCompile>
     <ClCompile Include="Application\Game\Fan\Fan.cpp" />
     <ClCompile Include="Application\Game\Goal.cpp" />
+    <ClCompile Include="Engine\3d\Particle\ParticleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\DrawBasis.h">
@@ -288,6 +289,7 @@
     <ClInclude Include="Application\Game\Fan\Fan.h" />
     <ClInclude Include="Application\Function\Collider\CollisionAttribute.h" />
     <ClInclude Include="Application\Game\Goal.h" />
+    <ClInclude Include="Engine\3d\Particle\ParticleManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\shader\Obj.hlsli">
