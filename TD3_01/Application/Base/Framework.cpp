@@ -1,6 +1,7 @@
 #include "Framework.h"
 #include "Object3d.h"
 #include "DrawBasis.h"
+#include "ParticleManager.h"
 #include "TitleScene.h"
 #include <imgui.h>
 
@@ -55,6 +56,10 @@ void Framework::Initialize(){
 	//描画基盤(スプライト)
 	DrawBasis::GetInstance();
 	DrawBasis::Initialize();
+
+	//パーティクルマネージャー
+	ParticleManager::StaticInitialize(dxBas_->GetDevice().Get(),
+		WinApp::Win_Width, WinApp::Win_Height);
 
 	//ライト静的初期化
 	LightGroup::StaticInitialize(dxBas_->GetDevice().Get());
