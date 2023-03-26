@@ -58,8 +58,7 @@ void Framework::Initialize(){
 	DrawBasis::Initialize();
 
 	//パーティクルマネージャー
-	ParticleManager::StaticInitialize(dxBas_->GetDevice().Get(),
-		WinApp::Win_Width, WinApp::Win_Height);
+	ParticleManager::StaticInitialize(dxBas_->GetDevice().Get());
 
 	//ライト静的初期化
 	LightGroup::StaticInitialize(dxBas_->GetDevice().Get());
