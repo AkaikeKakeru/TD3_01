@@ -15,6 +15,7 @@
     </FxCompile>
     <FxCompile Include="Resource\shader\ParticleVS.hlsl" />
     <FxCompile Include="Resource\shader\ParticlePS.hlsl" />
+    <FxCompile Include="Resource\shader\ParticleGS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
