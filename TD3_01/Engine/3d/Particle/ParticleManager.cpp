@@ -24,17 +24,9 @@ ComPtr<ID3D12Resource> ParticleManager::vertBuff_;
 ComPtr<ID3D12Resource> ParticleManager::texbuff_;
 CD3DX12_CPU_DESCRIPTOR_HANDLE ParticleManager::cpuDescHandleSRV_;
 CD3DX12_GPU_DESCRIPTOR_HANDLE ParticleManager::gpuDescHandleSRV_;
-Matrix4 ParticleManager::matView_{};
-Matrix4 ParticleManager::matProjection_{};
-Vector3 ParticleManager::eye_ = { 0, 0, -5.0f };
-Vector3 ParticleManager::target_ = { 0, 0, 0 };
-Vector3 ParticleManager::up_ = { 0, 1, 0 };
 D3D12_VERTEX_BUFFER_VIEW ParticleManager::vbView_{};
 
 ParticleManager::VertexPos ParticleManager::vertices_[vertexCount_];
-
-Matrix4 ParticleManager::matBillboard_ = Matrix4Identity();
-Matrix4 ParticleManager::matBillboardY_ = Matrix4Identity();
 
 void ParticleManager::StaticInitialize(ID3D12Device* device) {
 	// nullptrチェック
@@ -45,9 +37,6 @@ void ParticleManager::StaticInitialize(ID3D12Device* device) {
 	// デスクリプタヒープの初期化
 	InitializeDescriptorHeap();
 
-	// カメラ初期化
-	InitializeCamera();
-
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
 
@@ -56,7 +45,6 @@ void ParticleManager::StaticInitialize(ID3D12Device* device) {
 
 	// モデル生成
 	CreateModel();
-
 }
 
 void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList) {
@@ -96,45 +84,6 @@ ParticleManager* ParticleManager::Create() {
 	return object3d;
 }
 
-void ParticleManager::SetEye(Vector3 eye) {
-	ParticleManager::eye_ = eye;
-
-	UpdateViewMatrix();
-}
-
-void ParticleManager::SetTarget(Vector3 target) {
-	ParticleManager::target_ = target;
-
-	UpdateViewMatrix();
-}
-
-void ParticleManager::CameraMoveVector(Vector3 move) {
-	Vector3 eye_moved = GetEye();
-	Vector3 target_moved = GetTarget();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	target_moved.x += move.x;
-	target_moved.y += move.y;
-	target_moved.z += move.z;
-
-	SetEye(eye_moved);
-	SetTarget(target_moved);
-}
-
-void ParticleManager::CameraMoveEyeVector(Vector3 move) {
-	Vector3 eye_moved = GetEye();
-	Vector3 target_moved = GetTarget();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	SetEye(eye_moved);
-}
-
 void ParticleManager::InitializeDescriptorHeap() {
 	HRESULT result = S_FALSE;
 
@@ -151,36 +100,6 @@ void ParticleManager::InitializeDescriptorHeap() {
 	// デスクリプタサイズを取得
 	descriptorHandleIncrementSize_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-}
-
-void ParticleManager::InitializeCamera() {
-
-	//ビュー行列の計算
-	UpdateViewMatrix();
-
-	//垂直視野角
-	float angle_ = ConvertToRadian(60.0f);
-	//アスペクト比
-	float aspect_ = (float)WinApp::Win_Width/ WinApp::Win_Height;
-	//ニアクリップ
-	float nearClip_ = 0.1f;
-	//ファークリップ
-	float farClip_ = 1000.0f;
-
-	Vector4 pers = {
-		1.0f / (static_cast<float>(tanf(angle_ / 2.0f))) / aspect_,
-		1.0f / (static_cast<float>(tanf(angle_ / 2.0f))),
-		1.0f / (farClip_ - nearClip_) * farClip_,
-		-nearClip_ / (farClip_ - nearClip_) * farClip_,
-	};
-
-	matProjection_ = Matrix4Identity();
-	matProjection_ = {
-		pers.x,0.0f,0.0f,0.0f,
-		0.0f,pers.y,0.0f,0.0f,
-		0.0f,0.0f,pers.z,1.0f,
-		0.0f,0.0f,pers.w,0.0f
-	};
 }
 
 void ParticleManager::InitializeGraphicsPipeline() {
@@ -468,65 +387,6 @@ void ParticleManager::CreateModel() {
 	vbView_.StrideInBytes = sizeof(vertices_[0]);
 }
 
-void ParticleManager::UpdateViewMatrix() {
-	Vector3 axisZ = Vector3Normalize(target_ - eye_);
-	Vector3 axisX = Vector3Normalize(Vector3Cross(up_, axisZ));
-	Vector3 axisY = Vector3Cross(axisZ, axisX);
-
-	//カメラ回転行列
-	Matrix4 matCameraRot;
-	//カメラ座標系→ワールド座標系の変換行列0
-	matCameraRot = {
-		axisX.x,axisX.y,axisX.z,0.0f,
-		axisY.x,axisY.y,axisY.z,0.0f,
-		axisZ.x,axisZ.y,axisZ.z,0.0f,
-		0.0f,0.0f,0.0f,1.0f
-	};
-
-	//転置により逆行列(逆回転)を計算
-	matView_ = Matrix4Transposed(matCameraRot);
-
-	//視点座標に-1を掛けた座標
-	Vector3 reverseEyePosition = eye_ * -1;
-	//カメラの位置からワールド原点へのベクトル(カメラ座標系)
-	Vector3 cameraMoveVal_ = {
-		Vector3Dot(reverseEyePosition,axisX),
-		Vector3Dot(reverseEyePosition,axisY),
-		Vector3Dot(reverseEyePosition,axisZ)
-	};
-
-	//ビュー行列に平行移動成分を設定
-	matView_.m[3][0] = cameraMoveVal_.x;
-	matView_.m[3][1] = cameraMoveVal_.y;
-	matView_.m[3][2] = cameraMoveVal_.z;
-
-	// ビルボード行列
-	matBillboard_ = {
-		axisX.x,axisX.y,axisX.z,0.0f,
-		axisY.x,axisY.y,axisY.z,0.0f,
-		axisZ.x,axisZ.y,axisZ.z,0.0f,
-		0.0f,0.0f,0.0f,1.0f
-	};
-
-	// カメラX軸、Y軸、Z軸
-	Vector3 ybillCameraAxisX, ybillCameraAxisY, ybillCameraAxisZ;
-
-	// X軸は共通
-	ybillCameraAxisX = axisX;
-	// Y軸はワールド座標系のY軸
-	ybillCameraAxisY = Vector3Normalize(up_);
-	// Z軸はX軸→Y軸の外積で求まる
-	ybillCameraAxisZ = Vector3Cross(ybillCameraAxisX, ybillCameraAxisY);
-
-	// Y軸回りビルボード行列
-	matBillboardY_ = {
-		ybillCameraAxisX.x,ybillCameraAxisX.y,ybillCameraAxisX.z,0.0f,
-		ybillCameraAxisY.x,ybillCameraAxisY.y,ybillCameraAxisY.z,0.0f,
-		ybillCameraAxisZ.x,ybillCameraAxisZ.y,ybillCameraAxisZ.z,0.0f,
-		0.0f,0.0f,0.0f,1.0f
-	};
-}
-
 void ParticleManager::Add(int life, 
 	Vector3 position, Vector3 velocity, Vector3 accel,
 	float start_scale,float end_scale,
@@ -683,8 +543,8 @@ void ParticleManager::Update() {
 	ConstBufferData* constMap = nullptr;
 	result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	// 行列の合成
-	constMap->mat_ = matView_ * matProjection_;
-	constMap->matBillboard_ = matBillboard_;
+	constMap->mat_ = camera_->GetViewMatrix() * camera_->GetProjectionMatrix();
+	constMap->matBillboard_ = camera_->GetBillboardYMatrix();
 	constBuff_->Unmap(0, nullptr);
 }
 

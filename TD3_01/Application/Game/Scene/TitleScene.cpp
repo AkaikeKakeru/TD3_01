@@ -53,6 +53,7 @@ void TitleScene::Initialize(){
 
 	//パーティクルマネージャー
 	particleMan_ = ParticleManager::Create();
+	particleMan_->SetCamera(camera_);
 }
 
 void TitleScene::Update(){

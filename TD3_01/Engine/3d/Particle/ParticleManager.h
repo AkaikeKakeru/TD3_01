@@ -12,6 +12,8 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 
+#include "Camera.h"
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
@@ -95,42 +97,6 @@ public: // 静的メンバ関数
 	/// <returns></returns>
 	static ParticleManager* Create();
 
-	/// <summary>
-	/// 視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	static const Vector3& GetEye() { return eye_; }
-
-	/// <summary>
-	/// 視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	static void SetEye(Vector3 eye);
-
-	/// <summary>
-	/// 注視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	static const Vector3& GetTarget() { return target_; }
-
-	/// <summary>
-	/// 注視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	static void SetTarget(Vector3 target);
-
-	/// <summary>
-	/// ベクトルによる移動
-	/// </summary>
-	/// <param name="move">移動量</param>
-	static void CameraMoveVector(Vector3 move);
-
-	/// <summary>
-	/// ベクトルによる視点移動
-	/// </summary>
-	/// <param name="move">移動量</param>
-	static void CameraMoveEyeVector(Vector3 move);
-
 private: // 静的メンバ変数
 		 // デバイス
 	static ID3D12Device* device_;
@@ -156,24 +122,11 @@ private: // 静的メンバ変数
 	//static D3D12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV_;
 	//// シェーダリソースビューのハンドル(GPU)
 	//static D3D12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV_;
-	// ビュー行列
-	static Matrix4 matView_;
-	// 射影行列
-	static Matrix4 matProjection_;
-	// 視点座標
-	static Vector3 eye_;
-	// 注視点座標
-	static Vector3 target_;
-	// 上方向ベクトル
-	static Vector3 up_;
+
 	// 頂点バッファビュー
 	static D3D12_VERTEX_BUFFER_VIEW vbView_;
 	// 頂点データ配列
 	static VertexPos vertices_[vertexCount_];
-	//ビルボード行列
-	static Matrix4 matBillboard_;
-	//Y軸回りビルボード行列
-	static Matrix4 matBillboardY_;
 
 public: //メンバ変数
 	//パーティクル配列
@@ -184,11 +137,6 @@ private:// 静的メンバ関数
 	/// デスクリプタヒープの初期化
 	/// </summary>
 	static void InitializeDescriptorHeap();
-
-	/// <summary>
-	/// カメラ初期化
-	/// </summary>
-	static void InitializeCamera();
 
 	/// <summary>
 	/// グラフィックパイプライン生成
@@ -205,11 +153,6 @@ private:// 静的メンバ関数
 	/// モデル作成
 	/// </summary>
 	static void CreateModel();
-
-	/// <summary>
-	/// ビュー行列を更新
-	/// </summary>
-	static void UpdateViewMatrix();
 
 public: //メンバ関数
 	
@@ -249,8 +192,14 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void SetCamera(Camera* camera) {
+		camera_ = camera;
+	}
+
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff_; // 定数バッファ
 									  // ローカルスケール
 	Vector3 scale_ = { 1,1,1 };
+
+	Camera* camera_ = nullptr;
 };
