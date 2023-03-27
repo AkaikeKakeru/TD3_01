@@ -287,9 +287,9 @@ void GamePlayScene::Initialize3d() {
 	Object3d::SetLight(lightGroup_);
 
 	//ステージ生成
-	//stage_ = new Stage();
-	//stage_->Initialize(camera_);
-	//stage_->StageInitialize(filename_[1]);
+	stage_ = new Stage();
+	stage_->Initialize(camera_);
+	stage_->StageInitialize(filename_[1]);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -356,7 +356,7 @@ void GamePlayScene::Update3d() {
 	}
 
 	goal_->Update();
-	//stage_->Update();
+	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
 }
@@ -383,7 +383,7 @@ void GamePlayScene::Draw3d() {
 		fan_[i]->Draw();
 	}
 	player_->Draw();
-	//stage_->Draw();
+	stage_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -402,7 +402,7 @@ void GamePlayScene::Finalize() {
 	}
 	SafeDelete(fanModel_);
 
-	//SafeDelete(stage_);
+	SafeDelete(stage_);
 	goal_->Finalize();
 	SafeDelete(goal_);
 	SafeDelete(goalModel_);
