@@ -134,7 +134,7 @@ void ViewProjection::UpdateViewMatrix() {
 	ybillCameraAxisZ = Vector3Cross(ybillCameraAxisX, ybillCameraAxisY);
 
 	// Y軸回りビルボード行列
-	matBillboard_ = {
+	matBillboardY_ = {
 		ybillCameraAxisX.x,ybillCameraAxisX.y,ybillCameraAxisX.z,0.0f,
 		ybillCameraAxisY.x,ybillCameraAxisY.y,ybillCameraAxisY.z,0.0f,
 		ybillCameraAxisZ.x,ybillCameraAxisZ.y,ybillCameraAxisZ.z,0.0f,
