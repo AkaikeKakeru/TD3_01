@@ -119,7 +119,7 @@ void Player::Update() {
 
 		rot += rotVector;
 
-		moveVector = Vector3Transform(moveVector, worldTransform_.matWorld_);
+		moveVector = Vector3TransformCoord(moveVector, worldTransform_.matWorld_);
 
 		position = moveVector;
 	
