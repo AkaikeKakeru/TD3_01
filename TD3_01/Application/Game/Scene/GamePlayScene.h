@@ -31,7 +31,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
-
+	bool CollisionStageFlag(Player* p, Stage* s);
 private:
 	void Initialize3d();
 	void Initialize2d();

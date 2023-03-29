@@ -40,11 +40,11 @@ bool Player::Initialize() {
 	}
 
 	//コライダ－追加
-	float radius = 0.6f;
+	
 	//半径分だけ足元から浮いた座標を球の中心にする
 	SetCollider(new SphereCollider(
-		Vector3{ 0.0f,radius,0.0f },
-		radius)
+		Vector3{ 0.0f,radius_,0.0f },
+		radius_)
 	);
 
 	collider_->SetAttribute(COLLISION_ATTR_PLAYER);
@@ -62,15 +62,15 @@ void Player::Update() {
 	// 現在の座標を取得
 	Vector3 rot = Object3d::GetRotation();
 
-	float courseOut = 90.0f;
+	float courseOut = 170.0f;
 
 	// オブジェクト移動
-	if (position.x > courseOut ||
-		position.x < -courseOut ||
+	if (position.x > courseOut / 2.0f ||
+		position.x < -courseOut / 2.0f ||
 		position.z > courseOut ||
-		position.z < -courseOut ) {
+		position.z < -10.0f) {
 		IsRun_ = false;
-		position = { 10,0,0 };
+		position = { 10.0f,-20.0f,10.0f };
 		rot = CreateRotationVector(
 			{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
 	}
@@ -146,11 +146,17 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-	Object3d::Draw();
+	Object3d::Draw(worldTransform_);
 }
 
 void Player::Finalize() {
 }
 
 void Player::OnCollision(const CollisionInfo& info) {
+}
+void Player::OnCollisionStage(bool collisionFlag) {
+	if (collisionFlag) {
+		Stop();
+	}
+
 }
