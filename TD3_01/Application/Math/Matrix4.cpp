@@ -215,13 +215,65 @@ Matrix4 Matrix4Inverse(const Matrix4& m) {
 	return result;
 }
 
-Vector3 Vector3Transform(const Vector3& v, const Matrix4& m) {
-	float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + (1 * m.m[3][3]);
+
+Vector3 Vector3CrossMatrix4(const Vector3& v, const Matrix4& m) {
+	float x, y, z;
+
+	x = v.x * m.m[0][0] +
+		v.y * m.m[1][0] +
+		v.z * m.m[2][0] +
+		0 * m.m[3][0];
+
+	y = v.x * m.m[0][1] +
+		v.y * m.m[1][1] +
+		v.z * m.m[2][1] +
+		0 * m.m[3][1];
+
+	z = v.x * m.m[0][2] +
+		v.y * m.m[1][2] +
+		v.z * m.m[2][2] +
+		0 * m.m[3][1];
+
+	Vector3 result = { x,y,z };
+
+	return result;
+}
+
+Vector4 Coord3dCrossMatrix4(const Vector3 & v, const Matrix4 & m) {
+	float x, y, z, w;
+
+	x = v.x * m.m[0][0] +
+		v.y * m.m[1][0] +
+		v.z * m.m[2][0] +
+		1 * m.m[3][0];
+
+	y = v.x * m.m[0][1] +
+		v.y * m.m[1][1] +
+		v.z * m.m[2][1] +
+		1 * m.m[3][1];
+
+	z = v.x * m.m[0][2] +
+		v.y * m.m[1][2] +
+		v.z * m.m[2][2] +
+		1 * m.m[3][2];
+	
+	w = 1 * m.m[0][3] +
+		1 * m.m[1][3] +
+		1 * m.m[2][3] +
+		1 * m.m[3][3];
+
+	Vector4 result = { x,y,z,w };
+
+	return result;
+}
+
+Vector3 Vector3TransformCoord(const Vector3& v, const Matrix4& m) {
+	Vector4 coord = Coord3dCrossMatrix4(v, m);
 
 	Vector3 result = {
-	(v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + m.m[3][0]) / w,
-	(v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + m.m[3][1]) / w,
-	(v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + m.m[3][2]) / w,
+		coord.x / coord.w,
+		coord.y / coord.w,
+		coord.z / coord.w,
 	};
 
 	return result;
@@ -247,5 +299,26 @@ const Matrix4 operator*(const Matrix4& m1, const Matrix4& m2) {
 }
 
 const Vector3 operator*(const Vector3& v, const Matrix4& m) {
-	return Vector3Transform(v, m);
+	//float w = v.x * m.m[0][3] + v.y * m.m[1][3] + v.z * m.m[2][3] + (1 * m.m[3][3]);
+
+	//Vector3 result = {
+	//	(v.x * m.m[0][0] +
+	//	v.y * m.m[1][0] +
+	//		v.z * m.m[2][0] +
+	//		m.m[3][0]) / w,
+
+	//	(v.x * m.m[0][1] +
+	//		v.y * m.m[1][1] +
+	//		v.z * m.m[2][1] +
+	//		m.m[3][1]) / w,
+
+	//	(v.x * m.m[0][2] +
+	//		v.y * m.m[1][2] +
+	//		v.z * m.m[2][2] +
+	//		m.m[3][2]) / w,
+	//};
+
+	return Vector3CrossMatrix4(v, m);
+
+	 //result;
 }
