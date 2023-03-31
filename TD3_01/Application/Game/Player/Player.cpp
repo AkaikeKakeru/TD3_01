@@ -40,11 +40,11 @@ bool Player::Initialize() {
 	}
 
 	//コライダ－追加
-	float radius = 0.6f;
+
 	//半径分だけ足元から浮いた座標を球の中心にする
 	SetCollider(new SphereCollider(
-		Vector3{ 0.0f,radius,0.0f },
-		radius)
+		Vector3{ 0.0f,radius_,0.0f },
+		radius_)
 	);
 
 	collider_->SetAttribute(COLLISION_ATTR_PLAYER);
@@ -62,15 +62,15 @@ void Player::Update() {
 	// 現在の座標を取得
 	Vector3 rot = Object3d::GetRotation();
 
-	float courseOut = 90.0f;
+	float courseOut = 370.0f;
 
 	// オブジェクト移動
-	if (position.x > courseOut ||
-		position.x < -courseOut ||
+	if (position.x > courseOut / 2.0f ||
+		position.x < -courseOut / 2.0f ||
 		position.z > courseOut ||
-		position.z < -courseOut ) {
+		position.z < -10.0f) {
 		IsRun_ = false;
-		position = { 10,0,0 };
+		position = { 10.0f,-20.0f,10.0f };
 		rot = CreateRotationVector(
 			{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
 	}
@@ -80,40 +80,40 @@ void Player::Update() {
 	}
 
 	if (IsRun_) {
-	//移動スピード
-	float moveSpeed = 0.4f;
-	//回転スピード
-	float rotSpeed = ConvertToRadian(90.0f);
+		//移動スピード
+		float moveSpeed = 0.4f;
+		//回転スピード
+		float rotSpeed = ConvertToRadian(90.0f);
 
-	Vector3 angleX = { 1.0f,0.0f,0.0f };
-	Vector3 angleY = { 0.0f,1.0f,0.0f };
-	Vector3 angleZ = { 0.0f,0.0f,1.0f };
+		Vector3 angleX = { 1.0f,0.0f,0.0f };
+		Vector3 angleY = { 0.0f,1.0f,0.0f };
+		Vector3 angleZ = { 0.0f,0.0f,1.0f };
 
-	//移動ベクトル
-	Vector3 moveVector = { 0,0,0 };
-	//回転ベクトル
-	Vector3 rotVector = { 0,0,0 };
+		//移動ベクトル
+		Vector3 moveVector = { 0,0,0 };
+		//回転ベクトル
+		Vector3 rotVector = { 0,0,0 };
 
-	//移動後の座標を計算
-	//if (input_->TriggerKey(DIK_UP)) {
-	//	rotVector = CreateRotationVector(
-	//		angleX, rotSpeed);
-	//}
+		//移動後の座標を計算
+		//if (input_->TriggerKey(DIK_UP)) {
+		//	rotVector = CreateRotationVector(
+		//		angleX, rotSpeed);
+		//}
 
-	//else if (input_->TriggerKey(DIK_DOWN)) {
-	//	rotVector = CreateRotationVector(
-	//		angleX, -rotSpeed);
-	//}
+		//else if (input_->TriggerKey(DIK_DOWN)) {
+		//	rotVector = CreateRotationVector(
+		//		angleX, -rotSpeed);
+		//}
 
-	//if (input_->TriggerKey(DIK_RIGHT)) {
-	//	rotVector = CreateRotationVector(
-	//		angleY, rotSpeed);
-	//}
+		//if (input_->TriggerKey(DIK_RIGHT)) {
+		//	rotVector = CreateRotationVector(
+		//		angleY, rotSpeed);
+		//}
 
-	//else if (input_->TriggerKey(DIK_LEFT)) {
-	//	rotVector = CreateRotationVector(
-	//		angleY, -rotSpeed);
-	//}
+		//else if (input_->TriggerKey(DIK_LEFT)) {
+		//	rotVector = CreateRotationVector(
+		//		angleY, -rotSpeed);
+		//}
 
 		moveVector.z = -moveSpeed;
 
@@ -122,7 +122,7 @@ void Player::Update() {
 		moveVector = Vector3Transform(moveVector, worldTransform_.matWorld_);
 
 		position = moveVector;
-	
+
 	}
 
 	// 座標の変更を反映
@@ -146,11 +146,28 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-	Object3d::Draw();
+	Object3d::Draw(worldTransform_);
 }
 
 void Player::Finalize() {
 }
 
 void Player::OnCollision(const CollisionInfo& info) {
+}
+void Player::OnCollisionStage(const bool& collisionFlag) {
+	prePos_ = Object3d::GetPosition();
+	if (collisionFlag) {
+		prePos_ = { -10.0f,-20.0f,20.0f };
+		Object3d::SetPosition(prePos_);
+		IsRun_ = false;
+	}
+	
+	//
+}
+void Player::Stop()
+{
+	worldTransform_.position_ = { 10.0f,-20.0f,10.0f };
+	worldTransform_.rotation_ = CreateRotationVector(
+		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
+	IsRun_ = false;
 }
