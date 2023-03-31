@@ -38,7 +38,15 @@ void GamePlayScene::Update() {
 		ImGui::Text("Thank you Play");
 		ImGui::End();
 	}
-
+	if (stage_->GetIsGoal())
+	{
+		ImGui::Begin("Touch to Goal!");
+		ImGui::SetWindowPos(ImVec2(10, 10));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		ImGui::SetWindowFontScale(2.0f);
+		ImGui::Text("Thank you Play");
+		ImGui::End();
+	}
 #ifdef _DEBUG
 	{
 		float playerPos[Vector3Count_] = {
