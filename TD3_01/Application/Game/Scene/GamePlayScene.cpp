@@ -360,7 +360,7 @@ void GamePlayScene::Update3d() {
 	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
-	//CollisionStageFlag(player_, stage_);
+	CollisionStageFlag(player_, stage_);
 	player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
 }
 
@@ -436,7 +436,8 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 	pZ2 = pPos.z + pRadius;
 
 	// プレイヤーLeftTop座標
-	int pLT[2] = { static_cast<int>(pX1 / 4), static_cast<int>(((pZ1 / 4) - 19) * -1) };
+	int pLT[2] = { static_cast<int>((pX1 / 8) + 10)/* * -1)*/,
+		static_cast<int>(((pZ1 / 8) - 19) * -1) };
 	int isFloor = 0;
 
 	for (int i = 0; i < 2; i++) {
@@ -445,7 +446,9 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 			if (s->CheckFloorBlock(pLT[0] + i, pLT[1] + j)) {
 				isFloor++;
 			}
-			
+			if (isFloor == 4) {
+				p->Stop();
+			}
 			s->CheckBlock(pLT[0] + i, pLT[1] + j);
 			// 各座標変数の宣言
 			Vector3 bPos = s->GetBlockPosition(pLT[0] + i, pLT[1] + j);
@@ -463,5 +466,12 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 			}
 		}
 	}
+	ImGui::Begin("pLT");
+	ImGui::SetWindowPos(ImVec2(700, 0));
+	ImGui::SetWindowSize(ImVec2(500, 100));
+	ImGui::InputInt("plt0", &pLT[0]);
+	ImGui::InputInt("plt1", &pLT[1]);
+	ImGui::InputInt("if", &isFloor);
+	ImGui::End();
 	return false;
 }
