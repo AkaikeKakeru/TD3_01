@@ -205,7 +205,9 @@ void GamePlayScene::Initialize3d() {
 	//カメラの初期化
 	camera_ = new Camera();
 
-	camera_->SetEye({ 0.0f, 30.0f, -80.0f });
+	camera_->SetEye({ 0.0f, 50.0f, -100.0f });
+	camera_->SetTarget({ 0,0,0 });
+	camera_->SetUp({ 0, 1, 0 });
 
 	//各種モデル
 	playerModel_ = new Model();
@@ -223,23 +225,17 @@ void GamePlayScene::Initialize3d() {
 	player_->SetCamera(camera_);
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 
-	player_->SetPosition({ 10,0,0 });
+	player_->SetPosition({ 8,0,0 });
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
 
 	player_->SetCamera(camera_);
 	player_->Update();
 
-	//レイの初期値
-	//ray_ = new Ray();
-
-	//ray_->start_ = { 0.0f, 0.0f, 0.0f };
-	//ray_->dir_ = { 0,0,-1 };
-
 	goal_ = new Goal();
 	goal_->Initialize();
 	goal_->SetModel(goalModel_);
-	goal_->SetPosition({ 30,0,-30 });
+	goal_->SetPosition({ 28,0,-28 });
 	goal_->SetScale({ 2, 2, 2 });
 	goal_->SetCamera(camera_);
 
@@ -253,14 +249,13 @@ void GamePlayScene::Initialize3d() {
 	fan_[0]->SetPosition({ 0,0,10 });
 	//ファン下向き時の数値設定
 	fan_[0]->SetFanDirection(angleY, verticalAngle * 0, -angleZ);
-
 	fan_[0]->SetIsControl(true);
 
 	fan_[1]->SetPosition({ 20,0,20 });
 	//ファン左向き時の数値設定
 	fan_[1]->SetFanDirection(angleY, verticalAngle, -angleX);
 
-	fan_[2]->SetPosition({ -10,0,-30 });
+	fan_[2]->SetPosition({ -12,0,-28 });
 	//ファン右向き時の数値設定
 	fan_[2]->SetFanDirection(angleY, -verticalAngle, angleX);
 
@@ -387,7 +382,7 @@ void GamePlayScene::Draw3d() {
 }
 
 void GamePlayScene::Draw2d() {
-	sprite_->Draw();
+	//sprite_->Draw();
 }
 
 void GamePlayScene::Finalize() {
@@ -395,7 +390,6 @@ void GamePlayScene::Finalize() {
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
 
-	//SafeDelete(ray_);
 	for (int i = 0; i < FanCount_; i++) {
 		fan_[i]->Finalize();
 		SafeDelete(fan_[i]);
