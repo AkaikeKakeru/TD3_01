@@ -70,7 +70,7 @@ void Player::Update() {
 		position.z > courseOut ||
 		position.z < -courseOut ) {
 		IsRun_ = false;
-		position = { 10,0,0 };
+		position = { 8,0,0 };
 		rot = CreateRotationVector(
 			{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
 	}
