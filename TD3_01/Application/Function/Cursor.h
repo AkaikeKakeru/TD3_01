@@ -5,19 +5,20 @@
 #include "Object3d.h"
 #include "Camera.h"
 
-class Corsor {
+class Cursor {
 public:
-	Vector3 Get3DRethiclePosition(Camera* camera, const Object3d* object,
-		const float distance, const bool isOnScreen);
+	Vector3 Get3DRethiclePosition(const bool isOnScreen);
+
+	void SetCamera(Camera* camera) {
+		camera_ = camera;
+	}
 
 private:
-
-void GetMousePosition();
-void CreateMatrixInverseViewPort(/*const Camera* camera*/);
-void CheckRayDirection();
+	void CreateMatrixInverseViewPort();
+	void CheckRayDirection();
 
 private:
-	static Camera* camera_;
+	Camera* camera_;
 
 	Matrix4 matInverseVPV_ = Matrix4Identity();
 	Vector2 mousePosition_ = {};
