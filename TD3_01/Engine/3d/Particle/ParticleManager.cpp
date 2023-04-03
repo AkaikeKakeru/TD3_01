@@ -279,13 +279,13 @@ void ParticleManager::Update()
 	HRESULT result;
 	
 	particle_->Update();
-	XMMATRIX matView = camera_->GetMatViewProjection();
-	XMMATRIX matBillboard = camera_->GetMatBillboard();
+	Matrix4 matVP = camera_->GetViewProjectionMatrix();
+	Matrix4 matBillboard = camera_->GetBillboardMatrix();
 
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	constMap->mat = matView;	// 行列の合成
+	constMap->mat = matVP;	// 行列の合成
 	constMap->matBillboard = matBillboard;
 	constBuff->Unmap(0, nullptr);
 }
@@ -300,4 +300,30 @@ void ParticleManager::Draw()
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 	
 	particle_->Draw(cmdList);
+}
+
+void ParticleManager::Active(Particle* p, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const Vector2& setscale)
+{
+	for (int i = 0; i < setnum; i++)
+	{
+		//X,Y,Z全て{-20.0f,20.0f}でランダムに分布
+		const float md_pos = setpos;
+		Vector3 pos{};
+		pos.x = (float)rand() / RAND_MAX * md_pos - md_pos / 2.0f;
+		pos.y = (float)rand() / RAND_MAX * md_pos - md_pos / 2.0f;
+		pos.z = (float)rand() / RAND_MAX * md_pos - md_pos / 2.0f;
+		//X,Y,Z全て{0.1f,0.1f}でランダムに分布
+		const float md_vel = setvel;
+		Vector3 vel{};
+		vel.x = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * md_vel - md_vel / 2.0f;
+		//重力に見立ててYのみ{0.001f,0}でランダムに分布
+		Vector3 acc{};
+		const float md_acc = setacc;
+		acc.y = -(float)rand() / RAND_MAX * md_acc;
+
+		//追加
+		p->Add(60, pos, vel, acc, setscale.x, setscale.y);
+	}
 }

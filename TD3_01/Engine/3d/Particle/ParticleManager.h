@@ -3,10 +3,13 @@
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
-#include <DirectXMath.h>
 #include <d3dx12.h>
 #include "Camera.h"
 #include "Particle.h"
+
+#include "Matrix4.h"
+#include "Vector3.h"
+#include "Vector2.h"
 
 /// <summary>
 /// 3Dオブジェクト
@@ -16,28 +19,24 @@ class ParticleManager
 private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
+	
 
 public: // サブクラス
 	// 頂点データ構造体
 	//struct VertexPosNormalUv
 	//{
-	//	XMFLOAT3 pos; // xyz座標
-	//	XMFLOAT3 normal; // 法線ベクトル
-	//	XMFLOAT2 uv;  // uv座標
+	//	Vector3 pos; // xyz座標
+	//	Vector3 normal; // 法線ベクトル
+	//	Vector2 uv;  // uv座標
 	//};
 
 
 	// 定数バッファ用データ構造体
 	struct ConstBufferData
 	{
-		//XMFLOAT4 color;	// 色 (RGBA)
-		XMMATRIX mat;	// ３Ｄ変換行列
-		XMMATRIX matBillboard;	//ビルボード行列
+		//Vector4 color;	// 色 (RGBA)
+		Matrix4 mat;// ３Ｄ変換行列
+		Matrix4 matBillboard;	//ビルボード行列
 	};
 	
 private: // 定数
@@ -100,11 +99,22 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// パーティクル発射
+	/// </summary>
+	/// <param name="p">パーティクル</param>
+	/// <param name="setpos">位置</param>
+	/// <param name="setvel">移動量</param>
+	/// <param name="setacc">重力分布</param>
+	/// <param name="setnum">一気に何個か</param>
+	///  <param name="setscale">x = 開始スケール , y = 終了スケール</param>
+	void Active(Particle* p, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const Vector2& setscale);
+
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
 	// ローカルスケール
-	XMFLOAT3 scale = { 1,1,1 };
+	Vector3 scale = { 1.0f,1.0f,1.0f };
 	
 	Particle* particle_ = nullptr;
 
