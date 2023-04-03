@@ -6,6 +6,7 @@
 #include "CollisionManager.h"
 #include "CollisionAttribute.h"
 #include <cassert>
+#include <WinApp.h>
 
 Fan* Fan::Create(Model* model) {
 	//オブジェクトのインスタンスを生成
@@ -49,6 +50,8 @@ bool Fan::Initialize() {
 
 	isControl_ = false;
 
+	worldTransform3dReticle_.Initialize();
+
 	return true;
 }
 
@@ -79,10 +82,6 @@ void Fan::Update() {
 
 		//移動後の座標を計算
 		if (input_->TriggerKey(DIK_W)) {
-			//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
-			//rotQua = DirectionToDirection(rot, angleY * (verticalAngle * 2));
-			//rotVector_ = RotateVector( angleY ,rotQua );
-
 			rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
 
 			rot = angleY * verticalAngle * 2;
@@ -91,9 +90,6 @@ void Fan::Update() {
 		}
 
 		else if (input_->TriggerKey(DIK_S)) {
-			//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
-			//rot = RotateVector( angleY ,rotQua );
-
 			rotVector_ = CreateRotationVector(angleY, 0);
 
 			rot = angleY * verticalAngle * 0;
@@ -102,9 +98,6 @@ void Fan::Update() {
 		}
 
 		if (input_->TriggerKey(DIK_A)) {
-			//rotQua = DirectionToDirection(rot, angleY * verticalAngle);
-			//rot = RotateVector( angleY ,rotQua );
-
 			rotVector_ = CreateRotationVector(angleY, verticalAngle);
 
 			rot = angleY * verticalAngle;
@@ -113,9 +106,6 @@ void Fan::Update() {
 		}
 
 		else if (input_->TriggerKey(DIK_D)) {
-			//rotQua = DirectionToDirection(rot, angleY * -verticalAngle);
-			//rot = RotateVector( angleY ,rotQua );
-
 			rotVector_ = CreateRotationVector(angleY, -verticalAngle);
 
 			rot = angleY * -verticalAngle;
@@ -123,6 +113,25 @@ void Fan::Update() {
 			ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 		}
 
+		Reticle();
+
+		int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
+		int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
+		int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
+
+		worldTransform3dReticle_.position_ = { 
+			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
+			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
+			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ)) 
+		};
+
+		//再計算
+		Object3d::SetPosition(worldTransform3dReticle_.position_);
+
+		Object3d::Update();
+	}
+
+	else {
 		if (input_->PressKey(DIK_UP)) {
 			move.z += moveSpeed;
 		}
@@ -138,11 +147,11 @@ void Fan::Update() {
 		else if (input_->PressKey(DIK_LEFT)) {
 			move.x -= moveSpeed;
 		}
-	}
-	//rot = rotVector_;
 
-	// 移動の変更を反映
-	Object3d::SetPosition(move);
+		// 移動の変更を反映
+		Object3d::SetPosition(move);
+
+	}
 
 	// 回転の変更を反映
 	Object3d::SetRotation(rot);
@@ -162,4 +171,13 @@ void Fan::Finalize() {
 }
 
 void Fan::OnCollision(const CollisionInfo& info) {
+}
+
+void Fan::Reticle() {
+	assert(camera_);
+
+	cursor_.SetCamera(camera_);
+
+	worldTransform3dReticle_.position_ = 
+		cursor_.Get3DRethiclePosition( false );
 }

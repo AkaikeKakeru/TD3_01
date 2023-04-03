@@ -4,6 +4,8 @@
 #include "CollisionPrimitive.h"
 #include "Quaternion.h"
 
+#include "Cursor.h"
+
 class Fan 
 	: public Object3d{
 public: //静的メンバ関数
@@ -16,6 +18,9 @@ public: //メンバ関数
 
 	//衝突時コールバック関数
 	void OnCollision(const CollisionInfo & info) override;
+
+	//照準
+	void Reticle();
 
 public://アクセッサ
 	Ray* GetRay() {
@@ -49,10 +54,16 @@ public://アクセッサ
 	}
 
 private://メンバ変数
-	Ray* ray_;
+	Ray* ray_ = nullptr;
 	//回転ベクトル
 	Vector3 rotVector_ = { 0,0,0 };
 
 	//操作フラグ
 	bool isControl_ = false;
+
+	//レティクル用
+	WorldTransform worldTransform3dReticle_;
+
+	//レティクルカーソル
+	Cursor cursor_;
 };
