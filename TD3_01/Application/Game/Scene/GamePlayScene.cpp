@@ -38,7 +38,15 @@ void GamePlayScene::Update() {
 		ImGui::Text("Thank you Play");
 		ImGui::End();
 	}
-
+	if (stage_->GetIsGoal())
+	{
+		ImGui::Begin("Touch to Goal!");
+		ImGui::SetWindowPos(ImVec2(10, 10));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		ImGui::SetWindowFontScale(2.0f);
+		ImGui::Text("Thank you Play");
+		ImGui::End();
+	}
 #ifdef _DEBUG
 	{
 		float playerPos[Vector3Count_] = {
@@ -205,9 +213,11 @@ void GamePlayScene::Initialize3d() {
 	//カメラの初期化
 	camera_ = new Camera();
 
+
 	camera_->SetEye({ 0.0f, 50.0f, -100.0f });
 	camera_->SetTarget({ 0,0,0 });
 	camera_->SetUp({ 0, 1, 0 });
+
 
 	//各種モデル
 	playerModel_ = new Model();
@@ -226,6 +236,7 @@ void GamePlayScene::Initialize3d() {
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 
 	player_->SetPosition({ 8,0,0 });
+
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
 
@@ -235,8 +246,10 @@ void GamePlayScene::Initialize3d() {
 	goal_ = new Goal();
 	goal_->Initialize();
 	goal_->SetModel(goalModel_);
+
 	goal_->SetPosition({ 28,0,-28 });
 	goal_->SetScale({ 2, 2, 2 });
+
 	goal_->SetCamera(camera_);
 
 	for (int i = 0; i < FanCount_; i++) {
@@ -246,16 +259,18 @@ void GamePlayScene::Initialize3d() {
 		fan_[i]->SetCamera(camera_);
 	}
 
-	fan_[0]->SetPosition({ 0,0,10 });
+	fan_[0]->SetPosition({ 0.0f,-20.0f,10.0f });
 	//ファン下向き時の数値設定
 	fan_[0]->SetFanDirection(angleY, verticalAngle * 0, -angleZ);
 	fan_[0]->SetIsControl(true);
 
-	fan_[1]->SetPosition({ 20,0,20 });
+	fan_[1]->SetPosition({ 20.0f,-20.0f,50.0f });
 	//ファン左向き時の数値設定
 	fan_[1]->SetFanDirection(angleY, verticalAngle, -angleX);
 
+
 	fan_[2]->SetPosition({ -12,0,-28 });
+
 	//ファン右向き時の数値設定
 	fan_[2]->SetFanDirection(angleY, -verticalAngle, angleX);
 
@@ -282,9 +297,9 @@ void GamePlayScene::Initialize3d() {
 	Object3d::SetLight(lightGroup_);
 
 	//ステージ生成
-	//stage_ = new Stage();
-	//stage_->Initialize(camera_);
-	//stage_->StageInitialize(filename_[1]);
+	stage_ = new Stage();
+	stage_->Initialize(camera_);
+	stage_->StageInitialize(filename_[1]);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -351,9 +366,11 @@ void GamePlayScene::Update3d() {
 	}
 
 	goal_->Update();
-	//stage_->Update();
+	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
+	CollisionStageFlag(player_, stage_);
+	player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
 }
 
 void GamePlayScene::Update2d() {
@@ -378,7 +395,7 @@ void GamePlayScene::Draw3d() {
 		fan_[i]->Draw();
 	}
 	player_->Draw();
-	//stage_->Draw();
+	stage_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -396,7 +413,7 @@ void GamePlayScene::Finalize() {
 	}
 	SafeDelete(fanModel_);
 
-	//SafeDelete(stage_);
+	SafeDelete(stage_);
 	goal_->Finalize();
 	SafeDelete(goal_);
 	SafeDelete(goalModel_);
@@ -412,4 +429,57 @@ void GamePlayScene::Finalize() {
 
 	SafeDelete(lightGroup_);
 	SafeDelete(camera_);
+}
+
+bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
+{
+	// 各座標変数の宣言
+	Vector3 pPos = p->GetPosition();
+	float pRadius = p->GetRadius();
+	float pX1, pX2, pZ1, pZ2;
+	// プレイヤーの矩形座標
+	pX1 = pPos.x - pRadius;
+	pX2 = pPos.x + pRadius;
+	pZ1 = pPos.z - pRadius;
+	pZ2 = pPos.z + pRadius;
+
+	// プレイヤーLeftTop座標
+	int pLT[2] = { static_cast<int>((pX1 / 8) + 10)/* * -1)*/,
+		static_cast<int>(((pZ1 / 8) - 19) * -1) };
+	int isFloor = 0;
+
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
+			// 足元のブロックを判別
+			if (s->CheckFloorBlock(pLT[0] + i, pLT[1] + j)) {
+				isFloor++;
+			}
+			if (isFloor == 4) {
+				p->Stop();
+			}
+			s->CheckBlock(pLT[0] + i, pLT[1] + j);
+			// 各座標変数の宣言
+			Vector3 bPos = s->GetBlockPosition(pLT[0] + i, pLT[1] + j);
+			float bRadius = s->GetRadius();
+			float bX1, bX2, bZ1, bZ2;
+			// ブロックの矩形座標
+			bX1 = bPos.x - bRadius;
+			bX2 = bPos.x + bRadius;
+			bZ1 = bPos.z - bRadius;
+			bZ2 = bPos.z + bRadius;
+
+			// 当たり判定
+			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
+				return true;
+			}
+		}
+	}
+	ImGui::Begin("pLT");
+	ImGui::SetWindowPos(ImVec2(700, 0));
+	ImGui::SetWindowSize(ImVec2(500, 100));
+	ImGui::InputInt("plt0", &pLT[0]);
+	ImGui::InputInt("plt1", &pLT[1]);
+	ImGui::InputInt("if", &isFloor);
+	ImGui::End();
+	return false;
 }

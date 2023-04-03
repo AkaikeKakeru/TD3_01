@@ -11,7 +11,7 @@ void Switch::Initialize(Model* model, Object3d* obj) {
 }
 
 void Switch::Update() {
-	isFlag_ = false;
+	//isFlag_ = false;
 }
 
 void Switch::Draw() {

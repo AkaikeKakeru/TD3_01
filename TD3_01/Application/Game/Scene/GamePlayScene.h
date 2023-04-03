@@ -5,7 +5,7 @@
 #include "DrawBasis.h"
 #include "Model.h"
 #include "Sprite.h"
-//#include "Stage.h"
+#include "Stage.h"
 #include "Goal.h"
 #include "Object3d.h"
 
@@ -31,7 +31,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
-
+	bool CollisionStageFlag(Player* p, Stage* s);
 private:
 	void Initialize3d();
 	void Initialize2d();
@@ -79,15 +79,15 @@ private:
 	/// <summary>
 	/// オブジェクト
 	/// </summary>
-	//Stage* stage_ = nullptr;
-	//const std::string filename_[7] = {
-	//  "0",
-	//  "1",
-	//  "2",
-	//  "3",
-	//  "4",
-	//  "5",
-	//  "6" };
+	Stage* stage_ = nullptr;
+	const std::string filename_[7] = {
+	  "0",
+	  "1",
+	  "2",
+	  "3",
+	  "4",
+	  "5",
+	  "6" };
 
 	Goal* goal_ = nullptr;
 	Model* goalModel_ = nullptr;
