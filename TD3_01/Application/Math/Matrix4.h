@@ -36,7 +36,7 @@ Matrix4 Matrix4Inverse(const Matrix4& m);
 Vector3 Vector3CrossMatrix4(const Vector3& v, const Matrix4& m);
 
 //3D座標 と 行列の積
-Vector4 Coord3dCrossMatrix4(const Vector3& v, const Matrix4& m);
+Vector3 Coord3dCrossMatrix4(const Vector3& v, const Matrix4& m);
 
 //ベクトル変換 w除算
 Vector3 Vector3TransformCoord(const Vector3& v, const Matrix4& m);
