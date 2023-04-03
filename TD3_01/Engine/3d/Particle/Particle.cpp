@@ -247,7 +247,7 @@ void Particle::Draw(ID3D12GraphicsCommandList* cmdList)
 
 }
 
-void Particle::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale)
+void Particle::Add(int life, Vector3 position, Vector3 velocity, Vector3 accel, float start_scale, float end_scale)
 {
 	//ƒŠƒXƒg‚É—v‘f‚ð’Ç‰Á
 	particles_.emplace_front();

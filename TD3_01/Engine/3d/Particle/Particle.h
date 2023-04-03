@@ -5,37 +5,31 @@
 #include <wrl.h>
 #include <forward_list>
 
+#include "Vector3.h"
+
 class Particle
 {
 private://エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
 
 public://サブクラス
 
 	struct VertexPosScale
 	{
-		XMFLOAT3 pos; // xyz座標
+		Vector3 pos; // xyz座標
 		float scale;  //スケール
 	};
 
 	//パーティクル一粒
 	struct OneParticle
 	{
-		//DirectX::を省略
-		using XMFLOAT3 = DirectX::XMFLOAT3;
-
 		//座標
-		XMFLOAT3 position = {};
+		Vector3 position = {};
 		//速度
-		XMFLOAT3 velocity = {};
+		Vector3 velocity = {};
 		//加速度
-		XMFLOAT3 accel = {};
+		Vector3 accel = {};
 		//現在frame
 		int frame = 0;
 		//終了frame
@@ -69,7 +63,7 @@ public://メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	//パーティクルの追加
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
+	void Add(int life, Vector3 position, Vector3 velocity, Vector3 accel,
 		float start_scale, float end_scale);
 
 private://メンバ変数
@@ -103,4 +97,4 @@ public://アクセッサ置き場
 
 };
 
-const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs);
+//const Vector3 operator+(const Vector3& lhs, const Vector3& rhs);
