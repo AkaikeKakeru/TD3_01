@@ -14,19 +14,19 @@
 CollisionManager* Player::collisionManager_ = CollisionManager::GetInstance();
 
 Player* Player::Create(Model* model) {
-	//ƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ð¶¬
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
 	Player* instance = new Player();
 	if (instance == nullptr) {
 		return nullptr;
 	}
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	if (!instance->Initialize()) {
 		delete instance;
 		assert(0);
 	}
 
-	//ƒ‚ƒfƒ‹‚ÌƒZƒbƒg
+	//ãƒ¢ãƒ‡ãƒ«ã®ã‚»ãƒƒãƒˆ
 	if (model) {
 		instance->SetModel(model);
 	}
@@ -39,9 +39,9 @@ bool Player::Initialize() {
 		return false;
 	}
 
-	//ƒRƒ‰ƒCƒ_|’Ç‰Á
+	//ã‚³ãƒ©ã‚¤ãƒ€ï¼è¿½åŠ 
 
-	//”¼Œa•ª‚¾‚¯‘«Œ³‚©‚ç•‚‚¢‚½À•W‚ð‹…‚Ì’†S‚É‚·‚é
+	//åŠå¾„åˆ†ã ã‘è¶³å…ƒã‹ã‚‰æµ®ã„ãŸåº§æ¨™ã‚’çƒã®ä¸­å¿ƒã«ã™ã‚‹
 	SetCollider(new SphereCollider(
 		Vector3{ 0.0f,radius_,0.0f },
 		radius_)
@@ -57,20 +57,22 @@ bool Player::Initialize() {
 void Player::Update() {
 	Input* input_ = Input::GetInstance();
 
-	// Œ»Ý‚ÌÀ•W‚ðŽæ“¾
+	// ç¾åœ¨ã®åº§æ¨™ã‚’å–å¾—
 	Vector3 position = Object3d::GetPosition();
-	// Œ»Ý‚ÌÀ•W‚ðŽæ“¾
+	// ç¾åœ¨ã®åº§æ¨™ã‚’å–å¾—
 	Vector3 rot = Object3d::GetRotation();
 
 	float courseOut = 370.0f;
 
-	// ƒIƒuƒWƒFƒNƒgˆÚ“®
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç§»å‹•
 	if (position.x > courseOut / 2.0f ||
 		position.x < -courseOut / 2.0f ||
 		position.z > courseOut ||
 		position.z < -10.0f) {
 		IsRun_ = false;
-		position = { 10.0f,-20.0f,10.0f };
+
+		position = { 8,0,0 };
+
 		rot = CreateRotationVector(
 			{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
 	}
@@ -80,21 +82,21 @@ void Player::Update() {
 	}
 
 	if (IsRun_) {
-		//ˆÚ“®ƒXƒs[ƒh
+		//ç§»å‹•ã‚¹ãƒ”ãƒ¼ãƒ‰
 		float moveSpeed = 0.4f;
-		//‰ñ“]ƒXƒs[ƒh
+		//å›žè»¢ã‚¹ãƒ”ãƒ¼ãƒ‰
 		float rotSpeed = ConvertToRadian(90.0f);
 
 		Vector3 angleX = { 1.0f,0.0f,0.0f };
 		Vector3 angleY = { 0.0f,1.0f,0.0f };
 		Vector3 angleZ = { 0.0f,0.0f,1.0f };
 
-		//ˆÚ“®ƒxƒNƒgƒ‹
+		//ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
 		Vector3 moveVector = { 0,0,0 };
-		//‰ñ“]ƒxƒNƒgƒ‹
+		//å›žè»¢ãƒ™ã‚¯ãƒˆãƒ«
 		Vector3 rotVector = { 0,0,0 };
 
-		//ˆÚ“®Œã‚ÌÀ•W‚ðŒvŽZ
+		//ç§»å‹•å¾Œã®åº§æ¨™ã‚’è¨ˆç®—
 		//if (input_->TriggerKey(DIK_UP)) {
 		//	rotVector = CreateRotationVector(
 		//		angleX, rotSpeed);
@@ -119,16 +121,16 @@ void Player::Update() {
 
 		rot += rotVector;
 
-		moveVector = Vector3Transform(moveVector, worldTransform_.matWorld_);
+		moveVector = Vector3TransformCoord(moveVector, worldTransform_.matWorld_);
 
 		position = moveVector;
 
 	}
 
-	// À•W‚Ì•ÏX‚ð”½‰f
+	// åº§æ¨™ã®å¤‰æ›´ã‚’åæ˜ 
 	Object3d::SetRotation(rot);
 
-	// À•W‚Ì•ÏX‚ð”½‰f
+	// åº§æ¨™ã®å¤‰æ›´ã‚’åæ˜ 
 	Object3d::SetPosition(position);
 
 	camera_->Update();
@@ -136,7 +138,7 @@ void Player::Update() {
 
 	//RaycastHit raycastHit;
 
-	//ƒŒƒCƒLƒƒƒXƒg‚ðƒ`ƒFƒbƒN
+	//ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆã‚’ãƒã‚§ãƒƒã‚¯
 	//if (collisionManager_->Raycast(fan_->GetRay(),COLLISION_ATTR_PLAYER, &raycastHit)) {
 	//worldTransform_.position_.y += 0.1f;
 	//	worldTransform_.UpdateMatrix();
