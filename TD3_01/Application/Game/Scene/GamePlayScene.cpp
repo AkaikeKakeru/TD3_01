@@ -40,6 +40,9 @@ void GamePlayScene::Update() {
 	}
 	if (stage_->GetIsGoal())
 	{
+		pm1_->Active(particle1_, 40.0f, 0.2f, 0.001f, 2, { 13.0f, 0.0f });
+		pm2_->Active(particle2_, 100.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+
 		ImGui::Begin("Touch to Goal!");
 		ImGui::SetWindowPos(ImVec2(10, 10));
 		ImGui::SetWindowSize(ImVec2(500, 200));
@@ -386,10 +389,10 @@ void GamePlayScene::Update3d() {
 	collisionManager_->CheckAllCollisions();
 	CollisionStageFlag(player_, stage_);
 	player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
-	pm1_->Active(particle1_, 40.0f, 0.2f, 0.001f, 2, { 13.0f, 0.0f });
-	pm2_->Active(particle2_, 100.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+
 	pm1_->Update();
 	pm2_->Update();
+	
 }
 
 void GamePlayScene::Update2d() {
@@ -501,9 +504,8 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 			// 当たり判定
 			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
+			
 				return true;
-				
-
 			}
 		}
 	}
