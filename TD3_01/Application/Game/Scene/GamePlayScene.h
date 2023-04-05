@@ -8,6 +8,8 @@
 #include "Stage.h"
 #include "Goal.h"
 #include "Object3d.h"
+#include "Particle.h"
+#include "ParticleManager.h"
 
 #include "Camera.h"
 #include "LightGroup.h"
@@ -40,6 +42,7 @@ private:
 	void Update2d();
 
 	void Draw3d();
+	void DrawParticle();
 	void Draw2d();
 
 public://定数
@@ -107,6 +110,12 @@ private:
 
 	Skydome* skydome_ = nullptr;
 
+	Particle* particle1_ = nullptr;
+	ParticleManager* pm1_ = nullptr;
+
+	Particle* particle2_ = nullptr;
+	ParticleManager* pm2_ = nullptr;
+	
 	/// <summary>
 	/// スプライト
 	/// </summary>

@@ -12,7 +12,7 @@ using namespace std;
 
 //Ã“Iƒƒ“ƒo•Ï”‚ÌÀ‘Ì
 ID3D12Device* Particle::device_ = nullptr;
-std::string Particle::defaultTextureDirectoryPath_ = "Resources/particle/";
+std::string Particle::defaultTextureDirectoryPath_ = "Resource/particle/";
 
 Particle* Particle::LoadFromParticleTexture(const std::string& fileName)
 {
