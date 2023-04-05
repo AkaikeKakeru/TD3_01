@@ -40,6 +40,9 @@ void GamePlayScene::Update() {
 	}
 	if (stage_->GetIsGoal())
 	{
+		pm1_->Active(particle1_, 40.0f, 0.2f, 0.001f, 2, { 13.0f, 0.0f });
+		pm2_->Active(particle2_, 100.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+
 		ImGui::Begin("Touch to Goal!");
 		ImGui::SetWindowPos(ImVec2(10, 10));
 		ImGui::SetWindowSize(ImVec2(500, 200));
@@ -196,6 +199,10 @@ void GamePlayScene::Draw() {
 	Draw3d();
 	Object3d::PostDraw();
 
+	ParticleManager::PreDraw(dxBas_->GetCommandList().Get());
+	DrawParticle();
+	ParticleManager::PostDraw();
+	
 	drawBas_->PreDraw();
 	Draw2d();
 	drawBas_->PostDraw();
@@ -293,6 +300,17 @@ void GamePlayScene::Initialize3d() {
 	stage_ = new Stage();
 	stage_->Initialize(camera_);
 	stage_->StageInitialize(filename_[1]);
+
+	//パーティクル
+	particle1_ = Particle::LoadFromParticleTexture("particle1.png");
+	pm1_ = ParticleManager::Create();
+	pm1_->SetParticleModel(particle1_);
+	pm1_->SetCamera(camera_);
+
+	particle2_ = Particle::LoadFromParticleTexture("particle5.png");
+	pm2_ = ParticleManager::Create();
+	pm2_->SetParticleModel(particle2_);
+	pm2_->SetCamera(camera_);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -360,10 +378,15 @@ void GamePlayScene::Update3d() {
 
 	goal_->Update();
 	stage_->Update();
+	
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
 	CollisionStageFlag(player_, stage_);
 	player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+
+	pm1_->Update();
+	pm2_->Update();
+	
 }
 
 void GamePlayScene::Update2d() {
@@ -389,6 +412,12 @@ void GamePlayScene::Draw3d() {
 	}
 	player_->Draw();
 	stage_->Draw();
+}
+
+void GamePlayScene::DrawParticle()
+{
+	pm1_->Draw();
+	pm2_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -417,6 +446,11 @@ void GamePlayScene::Finalize() {
 	SafeDelete(rayObj_);
 	SafeDelete(rayObj_2);
 	SafeDelete(rayModel_);
+	//パーティクル
+	SafeDelete(particle1_);
+	SafeDelete(pm1_);
+	SafeDelete(particle2_);
+	SafeDelete(pm2_);
 
 	SafeDelete(sprite_);
 
@@ -463,6 +497,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 			// 当たり判定
 			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
+			
 				return true;
 			}
 		}
