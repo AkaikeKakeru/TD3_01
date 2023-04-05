@@ -3,7 +3,7 @@
 #include <WinApp.h>
 #include <cassert>
 
-Vector3 Cursor::Get3DRethiclePosition(const bool isOnScreen) {
+Vector3 Cursor::Get3DRethiclePosition() {
 	assert(camera_);
 
 	//マウスの座標を取得

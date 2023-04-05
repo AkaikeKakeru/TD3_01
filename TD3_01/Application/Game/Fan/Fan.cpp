@@ -179,5 +179,5 @@ void Fan::Reticle() {
 	cursor_.SetCamera(camera_);
 
 	worldTransform3dReticle_.position_ = 
-		cursor_.Get3DRethiclePosition( false );
+		cursor_.Get3DRethiclePosition();
 }

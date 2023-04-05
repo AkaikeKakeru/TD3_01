@@ -7,7 +7,7 @@
 
 class Cursor {
 public:
-	Vector3 Get3DRethiclePosition(const bool isOnScreen);
+	Vector3 Get3DRethiclePosition();
 
 	void SetCamera(Camera* camera) {
 		camera_ = camera;
@@ -18,7 +18,7 @@ private:
 	void CheckRayDirection();
 
 private:
-	Camera* camera_;
+	Camera* camera_ = nullptr;
 
 	Matrix4 matInverseVPV_ = Matrix4Identity();
 	Vector2 mousePosition_ = {};

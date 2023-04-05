@@ -202,13 +202,6 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Initialize3d() {
-	//回転スピード(垂直)
-	float verticalAngle = ConvertToRadian(90.0f);
-
-	Vector3 angleX = { 1.0f,0.0f,0.0f };
-	Vector3 angleY = { 0.0f,1.0f,0.0f };
-	Vector3 angleZ = { 0.0f,0.0f,1.0f };
-
 	collisionManager_ = CollisionManager::GetInstance();
 	//カメラの初期化
 	camera_ = new Camera();
@@ -261,18 +254,18 @@ void GamePlayScene::Initialize3d() {
 
 	fan_[0]->SetPosition({ 0.0f,-20.0f,10.0f });
 	//ファン下向き時の数値設定
-	fan_[0]->SetFanDirection(angleY, verticalAngle * 0, -angleZ);
+	fan_[0]->SetFanDirection(Fan::Down);
 	fan_[0]->SetIsControl(true);
 
 	fan_[1]->SetPosition({ 20.0f,-20.0f,50.0f });
 	//ファン左向き時の数値設定
-	fan_[1]->SetFanDirection(angleY, verticalAngle, -angleX);
+	fan_[1]->SetFanDirection(Fan::Left);
 
 
 	fan_[2]->SetPosition({ -12,0,-28 });
 
 	//ファン右向き時の数値設定
-	fan_[2]->SetFanDirection(angleY, -verticalAngle, angleX);
+	fan_[2]->SetFanDirection(Fan::Right);
 
 	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
