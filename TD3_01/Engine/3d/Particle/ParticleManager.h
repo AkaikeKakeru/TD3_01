@@ -14,6 +14,9 @@
 
 #include "Camera.h"
 
+#include <string>
+#include <array>
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
@@ -66,13 +69,13 @@ public: // サブクラス
 	};
 
 private: // 定数
-	static const int division_ = 50;			// 分割数
 	static const float radius_;				// 底面の半径
 	static const float prizmHeight_;			// 柱の高さ
-	static const int planeCount_ = division_ * 2 + division_ * 2;		// 面の数
-																	//static const int vertexCount = 30;		// 頂点数
 	static const int vertexCount_ = 1024;		// 頂点数
-
+	//SRVの最大個数
+	static const size_t kMaxSRVCount = 2056;
+	//デフォルトテクスチャ格納ディレクトリ
+	static std::string kDefaultTextureDhirectoryPath;
 public: // 静的メンバ関数
 	/// <summary>
 	/// 静的初期化
@@ -108,20 +111,8 @@ private: // 静的メンバ変数
 	static ComPtr<ID3D12RootSignature> rootsignature_;
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate_;
-	// デスクリプタヒープ
-	static ComPtr<ID3D12DescriptorHeap> descHeap_;
 	// 頂点バッファ
 	static ComPtr<ID3D12Resource> vertBuff_;
-	// テクスチャバッファ
-	static ComPtr<ID3D12Resource> texbuff_;
-	// シェーダリソースビューのハンドル(CPU)
-	static CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV_;
-	// シェーダリソースビューのハンドル(CPU)
-	static CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV_;
-	//// シェーダリソースビューのハンドル(CPU)
-	//static D3D12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV_;
-	//// シェーダリソースビューのハンドル(GPU)
-	//static D3D12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV_;
 
 	// 頂点バッファビュー
 	static D3D12_VERTEX_BUFFER_VIEW vbView_;
@@ -145,17 +136,18 @@ private:// 静的メンバ関数
 	static void InitializeGraphicsPipeline();
 
 	/// <summary>
-	/// テクスチャ読み込み
-	/// </summary>
-	static void LoadTexture();
-
-	/// <summary>
 	/// モデル作成
 	/// </summary>
 	static void CreateModel();
 
 public: //メンバ関数
 	
+		/// <summary>
+		/// テクスチャ読み込み
+		/// </summary>
+	void LoadTexture(uint32_t textureIndex, const std::string& fileName);
+
+
 	/// <summary>
 	/// パーティクルの追加
 	/// </summary>
@@ -196,10 +188,28 @@ public: // メンバ関数
 		camera_ = camera;
 	}
 
+	void SetTextureIndex(uint32_t index) {
+		textureIndex_ = index;
+	}
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff_; // 定数バッファ
-									  // ローカルスケール
+	//テクスチャバッファ
+	std::array<ComPtr<ID3D12Resource>, kMaxSRVCount> texBuffs_;
+	//テクスチャリソースデスク
+	D3D12_RESOURCE_DESC texResDesc_{};
+	//デスクリプタヒープ
+	static ComPtr<ID3D12DescriptorHeap> srvHeap_;
+	//SRVヒープのCPUアドレス
+	D3D12_CPU_DESCRIPTOR_HANDLE srvCPUHandle_;
+	//SRVヒープのGPUアドレス
+	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle_;
+	//テクスチャ格納ディレクトリ
+	static std::string textureDhirectoryPath_;
+
+	// ローカルスケール
 	Vector3 scale_ = { 1,1,1 };
 
 	Camera* camera_ = nullptr;
+
+	uint32_t textureIndex_;
 };

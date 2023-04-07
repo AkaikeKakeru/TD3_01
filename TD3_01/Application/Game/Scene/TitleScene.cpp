@@ -53,6 +53,9 @@ void TitleScene::Initialize(){
 
 	//パーティクルマネージャー
 	particleMan_ = ParticleManager::Create();
+	particleMan_->LoadTexture(0, "particle.png");
+	particleMan_->LoadTexture(1, "texture.png");
+	particleMan_->SetTextureIndex(0);
 	particleMan_->SetCamera(camera_);
 }
 
@@ -61,6 +64,13 @@ void TitleScene::Update(){
 
 	camera_->Update();
 	lightGroup_->Update();
+
+	if (input_->PressKey(DIK_C)) {
+		particleMan_->SetTextureIndex(1);
+	}
+	else{
+		particleMan_->SetTextureIndex(0);
+	}
 
 	if (particleNum_ >= 100) {
 		particleNum_ = 0;
@@ -101,8 +111,8 @@ void TitleScene::Draw(){
 	//モデル本命処理
 	Object3d::PreDraw(dxBas_->GetCommandList().Get());
 
-	skydomeObj_->Draw();
-	planeObj_->Draw();
+	//skydomeObj_->Draw();
+	//planeObj_->Draw();
 
 	Object3d::PostDraw();
 
