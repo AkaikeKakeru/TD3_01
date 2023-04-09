@@ -56,6 +56,11 @@ void TitleScene::Initialize(){
 	particleMan_->LoadTexture(0, "particle.png");
 	particleMan_->SetTextureIndex(0);
 	particleMan_->SetCamera(camera_);
+
+	particleMan_2 = ParticleManager::Create();
+	particleMan_2->LoadTexture(0, "texture.png");
+	particleMan_2->SetTextureIndex(0);
+	particleMan_2->SetCamera(camera_);
 }
 
 void TitleScene::Update(){
@@ -74,6 +79,7 @@ void TitleScene::Update(){
 
 		if (i == particleNum_) {
 			particleMan_->Config(10.0f, 0.1f, 0.001f, 1.0f, 256.0f);
+			particleMan_2->Config(10.0f, 0.1f, 0.001f, 1.0f, 256.0f);
 		}
 	}
 
@@ -83,6 +89,8 @@ void TitleScene::Update(){
 	sprite_->Update();
 
 	particleMan_->Update();
+
+	particleMan_2->Update();
 
 	if (input_->TriggerKey(DIK_RETURN)) {
 		//シーンの切り替えを依頼
@@ -96,6 +104,8 @@ void TitleScene::Draw(){
 
 	// パーティクルの描画
 	particleMan_->Draw();
+
+	particleMan_2->Draw();
 
 	// パーティクル描画後処理
 	ParticleManager::PostDraw();
@@ -124,6 +134,8 @@ void TitleScene::Finalize(){
 	SafeDelete(sprite_);
 
 	SafeDelete(particleMan_);
+
+	SafeDelete(particleMan_2);
 
 	SafeDelete(lightGroup_);
 	SafeDelete(camera_);

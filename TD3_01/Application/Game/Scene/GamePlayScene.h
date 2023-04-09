@@ -112,4 +112,6 @@ private:
 	/// </summary>
 	Sprite* sprite_ = new Sprite();
 
+	Sprite* title_ = new Sprite();
+
 };

@@ -296,10 +296,18 @@ void GamePlayScene::Initialize3d() {
 
 void GamePlayScene::Initialize2d() {
 	drawBas_->LoadTexture(1, "texture.png");
+	drawBas_->LoadTexture(2, "title.png");
 	sprite_->Initialize(drawBas_, 1);
 
 	sprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	sprite_->SetSize({ 64.0f,64.0f });
+
+	title_->Initialize(drawBas_, 2);
+
+	title_->SetAnchorPoint({ 0.5f, 0.5f });
+	title_->SetSize({ 64.0f,64.0f });
+	title_->SetPosition({ 100.0f,100.0f });
+	title_->SetSize({ 4.0f,4.0f });
 }
 
 void GamePlayScene::Update3d() {
@@ -371,8 +379,10 @@ void GamePlayScene::Update2d() {
 
 	// 座標の変更を反映
 	sprite_->SetPosition(position);
+	title_->SetPosition({ position.x + 20,position.y + 20 });
 
 	sprite_->Update();
+	title_->Update();
 }
 
 void GamePlayScene::Draw3d() {
@@ -389,6 +399,7 @@ void GamePlayScene::Draw3d() {
 }
 
 void GamePlayScene::Draw2d() {
+	title_->Draw();
 	sprite_->Draw();
 }
 
@@ -417,6 +428,7 @@ void GamePlayScene::Finalize() {
 	SafeDelete(rayModel_);
 
 	SafeDelete(sprite_);
+	SafeDelete(title_);
 
 	SafeDelete(lightGroup_);
 	SafeDelete(camera_);

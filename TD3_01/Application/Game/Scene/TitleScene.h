@@ -44,5 +44,7 @@ private:
 
 	//パーティクルマネージャー
 	ParticleManager* particleMan_ = nullptr;
+
+	ParticleManager* particleMan_2 = nullptr;
 	int particleNum_ = 0;
 };
