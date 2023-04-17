@@ -1,66 +1,58 @@
 #include "Cursor.h"
 #include "Input.h"
 #include <WinApp.h>
+#include <cassert>
 
-Camera* Corsor::camera_ = nullptr;
+Vector3 Cursor::Get3DRethiclePosition() {
+	assert(camera_);
 
-Vector3 Corsor::Get3DRethiclePosition(Camera* camera, const Object3d* object,
-	const float distance, const bool isOnScreen){
-	camera_ = camera;
+	//マウスの座標を取得
+	mousePosition_ = Input::GetInstance()->GetMousePosition();
 
-	GetMousePosition();
-	CreateMatrixInverseViewPort(/*camera_*/);
+	CreateMatrixInverseViewPort();
+
 	CheckRayDirection();
 
-	Vector3 position = object->GetPosition();
+	Vector3 position;
 
-	position = rayDirection_ * distance;
-
-	if (isOnScreen) {
-		position.z -= distance;
+	if (rayDirection_.y <= 0) {
+		float Lray = Vector3Dot(rayDirection_, Vector3(0, 1, 0));
+		float LP0 = Vector3Dot(-posNear_, Vector3(0, 1, 0));
+		position = posNear_ + (LP0 / Lray) * rayDirection_;
+	}
+	else {
+		position = posFar_;
 	}
 
 	return position;
 }
 
-void Corsor::GetMousePosition() {
-	//マウスの座標を取得
-	mousePosition_ = Input::GetInstance()->GetMousePosition();
-}
+void Cursor::CreateMatrixInverseViewPort(){
+	matInverseVPV_ = Matrix4Identity();
 
-void Corsor::CreateMatrixInverseViewPort(){
-	Matrix4 matViewPort = Matrix4Identity();
-	matViewPort.m[0][0] = static_cast<float>(WinApp::Win_Width) / 2.0f;
-	matViewPort.m[1][1] = static_cast<float>(-(WinApp::Win_Height)) / 2.0f;
-	matViewPort.m[3][0] = static_cast<float>(WinApp::Win_Width) / 2.0f;
-	matViewPort.m[3][1] = static_cast<float>(WinApp::Win_Height) / 2.0f;
-
-	Matrix4 matVPV = camera_->GetViewMatrix()
-		* camera_->GetProjectionMatrix()
-		* matViewPort;
+	Matrix4 matVPV = camera_->GetViewProjectionMatrix() * 
+		camera_->GetViewPortMatrix();
 
 	//上を逆行列化
 	matInverseVPV_ = Matrix4Inverse(matVPV);
 }
 
-void Corsor::CheckRayDirection(){
+void Cursor::CheckRayDirection(){
 	//ニア
 	posNear_ = Vector3(
 		mousePosition_.x,
 		mousePosition_.y,
 		0.0f);
-	posNear_ = Vector3Transform(posNear_, matInverseVPV_);
 	//ファー
 	posFar_ = Vector3(
 		mousePosition_.x,
 		mousePosition_.y,
 		1.0f);
-	posFar_ = Vector3Transform(posFar_, matInverseVPV_);
+
+	posNear_ = Vector3TransformCoord(posNear_, matInverseVPV_);
+	posFar_ = Vector3TransformCoord(posFar_, matInverseVPV_);
 
 	//レイ
 	rayDirection_ = posFar_ - posNear_;
-
-	//ニア→レイ
-	rayDirection_ = rayDirection_ - posNear_;
 	rayDirection_ = Vector3Normalize(rayDirection_);
 }
