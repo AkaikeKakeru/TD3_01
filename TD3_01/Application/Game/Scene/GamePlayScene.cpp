@@ -235,7 +235,7 @@ void GamePlayScene::Initialize3d() {
 	player_->SetCamera(camera_);
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 
-	player_->SetPosition({ 8,0,0 });
+	player_->SetPosition({ 8,-20,0 });
 
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
@@ -269,7 +269,7 @@ void GamePlayScene::Initialize3d() {
 	fan_[1]->SetFanDirection(Fan::Left);
 
 
-	fan_[2]->SetPosition({ -12,0,-28 });
+	fan_[2]->SetPosition({ -12.0f,-20.0f,-28.0f });
 
 	//ファン右向き時の数値設定
 	fan_[2]->SetFanDirection(Fan::Right);

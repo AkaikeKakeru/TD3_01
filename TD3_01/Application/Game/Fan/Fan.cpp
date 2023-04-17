@@ -121,7 +121,7 @@ void Fan::Update() {
 
 		worldTransform3dReticle_.position_ = { 
 			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
+			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)-20.0f),
 			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ)) 
 		};
 
