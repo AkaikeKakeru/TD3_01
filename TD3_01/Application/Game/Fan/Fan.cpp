@@ -49,6 +49,7 @@ bool Fan::Initialize() {
 	collider_->SetAttribute(COLLISION_ATTR_RAY);
 
 	isControl_ = false;
+	isGrab_ = false;
 
 	worldTransform3dReticle_.Initialize();
 
@@ -115,18 +116,26 @@ void Fan::Update() {
 
 		Reticle();
 
-		int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
-		int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
-		int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
+		if (input_->TriggerMouse(0)) {
+			if (Object3d::GetPosition().x < worldTransform3dReticle_.position_.x + 10.0f &&
+				Object3d::GetPosition().x > worldTransform3dReticle_.position_.x - 10.0f &&
+				Object3d::GetPosition().z < worldTransform3dReticle_.position_.z + 10.0f &&
+				Object3d::GetPosition().z > worldTransform3dReticle_.position_.z - 10.0f) {
+				isGrab_ = true;
+			}
+		}
 
-		worldTransform3dReticle_.position_ = { 
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ)) 
-		};
+		if (input_->PressMouse(0)) {
+			if (isGrab_) {
 
-		//çƒåvéZ
-		Object3d::SetPosition(worldTransform3dReticle_.position_);
+				//çƒåvéZ
+				Object3d::SetPosition(worldTransform3dReticle_.position_);
+			}
+		}
+		else {
+			isGrab_ = false;
+		}
+
 
 		Object3d::Update();
 	}
@@ -178,6 +187,17 @@ void Fan::Reticle() {
 
 	cursor_.SetCamera(camera_);
 
-	worldTransform3dReticle_.position_ = 
+	worldTransform3dReticle_.position_ =
 		cursor_.Get3DRethiclePosition();
+
+
+	int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
+	int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
+	int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
+
+	worldTransform3dReticle_.position_ = {
+		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
+		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
+		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ))
+	};
 }

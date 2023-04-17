@@ -105,6 +105,9 @@ private://メンバ変数
 	//操作フラグ
 	bool isControl_ = false;
 
+	//掴みフラグ
+	bool isGrab_= false;
+
 	//レティクル用
 	WorldTransform worldTransform3dReticle_;
 
