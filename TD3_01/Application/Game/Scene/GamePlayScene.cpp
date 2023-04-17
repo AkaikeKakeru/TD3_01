@@ -481,7 +481,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 			if (s->CheckFloorBlock(pLT[0] + i, pLT[1] + j)) {
 				isFloor++;
 			}
-			if (isFloor == 4) {
+			if (isFloor == 2) {
 				p->Stop();
 			}
 			s->CheckBlock(pLT[0] + i, pLT[1] + j);
