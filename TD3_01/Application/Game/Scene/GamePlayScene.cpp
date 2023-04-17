@@ -40,14 +40,14 @@ void GamePlayScene::Update() {
 	}
 	if (stage_->GetIsGoal())
 	{
-		pm1_->Active(particle1_, 40.0f, 0.2f, 0.001f, 2, { 13.0f, 0.0f });
-		pm2_->Active(particle2_, 100.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
+		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
 
 		ImGui::Begin("Touch to Goal!");
 		ImGui::SetWindowPos(ImVec2(10, 10));
 		ImGui::SetWindowSize(ImVec2(500, 200));
 		ImGui::SetWindowFontScale(2.0f);
-		ImGui::Text("Thank you Play");
+		ImGui::Text("Particle Active");
 		ImGui::End();
 	}
 #ifdef _DEBUG
@@ -308,7 +308,7 @@ void GamePlayScene::Initialize3d() {
 	stage_->StageInitialize(filename_[1]);
 
 	//パーティクル
-	particle1_ = Particle::LoadFromParticleTexture("particle1.png");
+	particle1_ = Particle::LoadFromParticleTexture("particle6.png");
 	pm1_ = ParticleManager::Create();
 	pm1_->SetParticleModel(particle1_);
 	pm1_->SetCamera(camera_);
