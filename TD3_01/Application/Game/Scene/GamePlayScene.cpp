@@ -233,7 +233,7 @@ void GamePlayScene::Initialize3d() {
 	player_ = Player::Create(playerModel_);
 
 	player_->SetCamera(camera_);
-	player_->SetScale({ 2.0f, 2.0f, 2.0f });
+	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 
 	player_->SetPosition({ 8.0f,0.0f,0.0f });
 
@@ -362,7 +362,7 @@ void GamePlayScene::Update3d() {
 	for (int i = 0; i < FanCount_; i++) {
 		if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
-			if (raycastHit_.distance_ <= 20) {
+			if (raycastHit_.distance_ <= 50) {
 
 				rayObj_->SetPosition(raycastHit_.inter_);
 				rayObj_->Update();

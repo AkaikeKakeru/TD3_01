@@ -190,9 +190,9 @@ void Fan::Reticle() {
 		cursor_.Get3DRethiclePosition();
 
 
-	int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
-	int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
-	int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
+	int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 1;
+	int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 1;
+	int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 1;
 
 	worldTransform3dReticle_.position_ = {
 		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),

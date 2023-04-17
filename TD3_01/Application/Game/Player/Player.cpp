@@ -157,18 +157,19 @@ void Player::Finalize() {
 void Player::OnCollision(const CollisionInfo& info) {
 }
 void Player::OnCollisionStage(const bool& collisionFlag) {
-	prePos_ = Object3d::GetPosition();
+
 	if (collisionFlag) {
-		prePos_ = { -10.0f,0.0f,20.0f };
-		Object3d::SetPosition(prePos_);
+		prePos_ = { 10.0f,0.0f,20.0f };
+		
 		IsRun_ = false;
+		Object3d::SetPosition(prePos_);
 	}
-	
+		prePos_ = Object3d::GetPosition();
 	//
 }
 void Player::Stop()
 {
-	worldTransform_.position_ = { 10.0f,0.0f,10.0f };
+	worldTransform_.position_ = { 18.0f,0.0f,10.0f };
 	worldTransform_.rotation_ = CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
 	IsRun_ = false;

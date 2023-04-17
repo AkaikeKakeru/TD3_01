@@ -327,7 +327,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	//’†‰›‘µ‚¦‚Æ‚È‚é—l‚ÉÀ•W‚ğŒvZ
 	pos.x = -74.0f + (16.0f * line);
 	pos.y = depth;
-	pos.z = 156.0f - (16.0f * row);
+	pos.z = 152.0f - (16.0f * row);
 
 	// ‰Šú‰»‚·‚é
 	InitializeStageBlock(newBlock, obj, pos, line, row);
@@ -378,7 +378,7 @@ void Stage::CheckBlock(int line, int row) {
 }
 
 bool Stage::CheckFloorBlock(int line, int row) {
-	if (line < 0 || line > 9 || row < 0 || row > 9) {
+	if (line < 0 || line > 10 || row < 0 || row > 10) {
 		return true;
 	}
 	return false;
