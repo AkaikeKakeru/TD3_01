@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "SafeDelete.h"
+#include "ParticleManager.h"
 
 #include "Framework.h"
 #include "SceneManager.h"
@@ -11,6 +12,7 @@ void TitleScene::Initialize(){
 	/// 描画初期化
 	//オブジェクト基盤
 	Object3d::StaticInitialize(dxBas_->GetDevice().Get());
+	ParticleManager::StaticInitialize(dxBas_->GetDevice().Get());
 
 	//オブジェクトモデル
 

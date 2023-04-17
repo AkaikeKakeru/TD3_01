@@ -8,6 +8,8 @@
 #include "Stage.h"
 #include "Goal.h"
 #include "Object3d.h"
+#include "Particle.h"
+#include "ParticleManager.h"
 
 #include "Camera.h"
 #include "LightGroup.h"
@@ -40,6 +42,7 @@ private:
 	void Update2d();
 
 	void Draw3d();
+	void DrawParticle();
 	void Draw2d();
 
 public://定数
@@ -80,14 +83,15 @@ private:
 	/// オブジェクト
 	/// </summary>
 	Stage* stage_ = nullptr;
-	const std::string filename_[7] = {
+	const std::string filename_[8] = {
 	  "0",
 	  "1",
 	  "2",
 	  "3",
 	  "4",
 	  "5",
-	  "6" };
+	  "6",
+	  "7" };
 
 	Goal* goal_ = nullptr;
 	Model* goalModel_ = nullptr;
@@ -107,6 +111,12 @@ private:
 
 	Skydome* skydome_ = nullptr;
 
+	Particle* particle1_ = nullptr;
+	ParticleManager* pm1_ = nullptr;
+
+	Particle* particle2_ = nullptr;
+	ParticleManager* pm2_ = nullptr;
+	
 	/// <summary>
 	/// スプライト
 	/// </summary>
