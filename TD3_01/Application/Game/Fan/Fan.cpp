@@ -112,16 +112,17 @@ void Fan::Update() {
 
 			ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 		}
-
-		Reticle();
-
+		if (input_->PressMouse(0))
+		{
+			Reticle();
+		}
 		int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
 		int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
 		int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
 
 		worldTransform3dReticle_.position_ = { 
 			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)-20.0f),
+			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
 			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ)) 
 		};
 

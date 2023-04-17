@@ -113,8 +113,8 @@ private:
 	// ブロックの半径半径
 	float radius_ = 4.0f;
 	// ブロックY座標(深度)
-	float stageDepth_ = -20.0f;
-	float floorDepth_ = -28.0f;
+	float stageDepth_ = -0.0f;
+	float floorDepth_ = -8.0f;
 	// ゴールフラグ
 	bool isGoal_ = false;
 	bool isSwitchDrawR_ = false;
