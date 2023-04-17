@@ -81,6 +81,30 @@ void Fan::Update() {
 
 		Quaternion rotQua = { 0,0,0 };
 
+		Reticle();
+
+		if (input_->TriggerMouse(0)) {
+			if (Object3d::GetPosition().x < worldTransform3dReticle_.position_.x + 10.0f &&
+				Object3d::GetPosition().x > worldTransform3dReticle_.position_.x - 10.0f &&
+				Object3d::GetPosition().z < worldTransform3dReticle_.position_.z + 10.0f &&
+				Object3d::GetPosition().z > worldTransform3dReticle_.position_.z - 10.0f) {
+				isGrab_ = true;
+			}
+		}
+
+		if (input_->PressMouse(0)) {
+			if (isGrab_) {
+				//再計算
+				Object3d::SetPosition(worldTransform3dReticle_.position_);
+			}
+		}
+		else {
+			isGrab_ = false;
+		}
+
+		if (isGrab_) {
+
+
 		//移動後の座標を計算
 		if (input_->TriggerKey(DIK_W)) {
 			rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
@@ -114,55 +138,10 @@ void Fan::Update() {
 			ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 		}
 
-		Reticle();
-
-		if (input_->TriggerMouse(0)) {
-			if (Object3d::GetPosition().x < worldTransform3dReticle_.position_.x + 10.0f &&
-				Object3d::GetPosition().x > worldTransform3dReticle_.position_.x - 10.0f &&
-				Object3d::GetPosition().z < worldTransform3dReticle_.position_.z + 10.0f &&
-				Object3d::GetPosition().z > worldTransform3dReticle_.position_.z - 10.0f) {
-				isGrab_ = true;
-			}
+		// 回転の変更を反映
+		Object3d::SetRotation(rot);
 		}
-
-		if (input_->PressMouse(0)) {
-			if (isGrab_) {
-				//再計算
-				Object3d::SetPosition(worldTransform3dReticle_.position_);
-			}
-		}
-		else {
-			isGrab_ = false;
-		}
-
-
-		Object3d::Update();
 	}
-
-	else {
-		if (input_->PressKey(DIK_UP)) {
-			move.z += moveSpeed;
-		}
-
-		else if (input_->PressKey(DIK_DOWN)) {
-			move.z -= moveSpeed;
-		}
-
-		if (input_->PressKey(DIK_RIGHT)) {
-			move.x += moveSpeed;
-		}
-
-		else if (input_->PressKey(DIK_LEFT)) {
-			move.x -= moveSpeed;
-		}
-
-		// 移動の変更を反映
-		Object3d::SetPosition(move);
-
-	}
-
-	// 回転の変更を反映
-	Object3d::SetRotation(rot);
 
 	ray_->start_ = Object3d::GetPosition();
 
@@ -190,9 +169,9 @@ void Fan::Reticle() {
 		cursor_.Get3DRethiclePosition();
 
 
-	int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
-	int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
-	int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
+	int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 1;
+	int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 1;
+	int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 1;
 
 	worldTransform3dReticle_.position_ = {
 		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
