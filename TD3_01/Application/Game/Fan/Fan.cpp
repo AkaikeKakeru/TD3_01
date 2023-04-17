@@ -9,19 +9,19 @@
 #include <WinApp.h>
 
 Fan* Fan::Create(Model* model) {
-	//ƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ð¶¬
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
 	Fan* instance = new Fan();
 	if (instance == nullptr) {
 		return nullptr;
 	}
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	if (!instance->Initialize()) {
 		delete instance;
 		assert(0);
 	}
 
-	//ƒ‚ƒfƒ‹‚ÌƒZƒbƒg
+	//ãƒ¢ãƒ‡ãƒ«ã®ã‚»ãƒƒãƒˆ
 	if (model) {
 		instance->SetModel(model);
 	}
@@ -38,9 +38,9 @@ bool Fan::Initialize() {
 	ray_->start_ = Object3d::GetPosition();
 	ray_->dir_ = Object3d::GetRotation();
 
-	//ƒRƒ‰ƒCƒ_|’Ç‰Á
+	//ã‚³ãƒ©ã‚¤ãƒ€ï¼è¿½åŠ 
 	float radius = 0.6f;
-	//”¼Œa•ª‚¾‚¯‘«Œ³‚©‚ç•‚‚¢‚½À•W‚ð‹…‚Ì’†S‚É‚·‚é
+	//åŠå¾„åˆ†ã ã‘è¶³å…ƒã‹ã‚‰æµ®ã„ãŸåº§æ¨™ã‚’çƒã®ä¸­å¿ƒã«ã™ã‚‹
 	SetCollider(new SphereCollider(
 		Vector3{ 0.0f,radius,0.0f },
 		radius)
@@ -49,6 +49,7 @@ bool Fan::Initialize() {
 	collider_->SetAttribute(COLLISION_ATTR_RAY);
 
 	isControl_ = false;
+	isGrab_ = false;
 
 	worldTransform3dReticle_.Initialize();
 
@@ -60,18 +61,18 @@ void Fan::Update() {
 
 	Input* input_ = Input::GetInstance();
 
-	// ƒIƒuƒWƒFƒNƒgˆÚ“®
-	// Œ»Ý‚ÌÀ•W‚ðŽæ“¾
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç§»å‹•
+	// ç¾åœ¨ã®åº§æ¨™ã‚’å–å¾—
 	Vector3 move = Object3d::GetPosition();
 
-	//ˆÚ“®ƒXƒs[ƒh
+	//ç§»å‹•ã‚¹ãƒ”ãƒ¼ãƒ‰
 	float moveSpeed = 0.4f;
 
-	// Œ»Ý‚Ì‰ñ“]‚ðŽæ“¾
+	// ç¾åœ¨ã®å›žè»¢ã‚’å–å¾—
 	Vector3 rot = Object3d::GetRotation();
 
 	if (isControl_) {
-		//‰ñ“]ƒXƒs[ƒh(‚’¼)
+		//å›žè»¢ã‚¹ãƒ”ãƒ¼ãƒ‰(åž‚ç›´)
 		float verticalAngle = ConvertToRadian(90.0f);
 
 		Vector3 angleX = { 1.0f,0.0f,0.0f };
@@ -80,7 +81,7 @@ void Fan::Update() {
 
 		Quaternion rotQua = { 0,0,0 };
 
-		//ˆÚ“®Œã‚ÌÀ•W‚ðŒvŽZ
+		//ç§»å‹•å¾Œã®åº§æ¨™ã‚’è¨ˆç®—
 		if (input_->TriggerKey(DIK_W)) {
 			rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
 
@@ -112,22 +113,28 @@ void Fan::Update() {
 
 			ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 		}
-		if (input_->PressMouse(0))
-		{
-			Reticle();
+
+		Reticle();
+
+		if (input_->TriggerMouse(0)) {
+			if (Object3d::GetPosition().x < worldTransform3dReticle_.position_.x + 10.0f &&
+				Object3d::GetPosition().x > worldTransform3dReticle_.position_.x - 10.0f &&
+				Object3d::GetPosition().z < worldTransform3dReticle_.position_.z + 10.0f &&
+				Object3d::GetPosition().z > worldTransform3dReticle_.position_.z - 10.0f) {
+				isGrab_ = true;
+			}
 		}
-		int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
-		int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
-		int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
 
-		worldTransform3dReticle_.position_ = { 
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
-			static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ)) 
-		};
+		if (input_->PressMouse(0)) {
+			if (isGrab_) {
+				//å†è¨ˆç®—
+				Object3d::SetPosition(worldTransform3dReticle_.position_);
+			}
+		}
+		else {
+			isGrab_ = false;
+		}
 
-		//ÄŒvŽZ
-		Object3d::SetPosition(worldTransform3dReticle_.position_);
 
 		Object3d::Update();
 	}
@@ -149,12 +156,12 @@ void Fan::Update() {
 			move.x -= moveSpeed;
 		}
 
-		// ˆÚ“®‚Ì•ÏX‚ð”½‰f
+		// ç§»å‹•ã®å¤‰æ›´ã‚’åæ˜ 
 		Object3d::SetPosition(move);
 
 	}
 
-	// ‰ñ“]‚Ì•ÏX‚ð”½‰f
+	// å›žè»¢ã®å¤‰æ›´ã‚’åæ˜ 
 	Object3d::SetRotation(rot);
 
 	ray_->start_ = Object3d::GetPosition();
@@ -179,6 +186,17 @@ void Fan::Reticle() {
 
 	cursor_.SetCamera(camera_);
 
-	worldTransform3dReticle_.position_ = 
+	worldTransform3dReticle_.position_ =
 		cursor_.Get3DRethiclePosition();
+
+
+	int surplusX = static_cast<int>(worldTransform3dReticle_.position_.x) % 4;
+	int surplusY = static_cast<int>(worldTransform3dReticle_.position_.y) % 4;
+	int surplusZ = static_cast<int>(worldTransform3dReticle_.position_.z) % 4;
+
+	worldTransform3dReticle_.position_ = {
+		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.x) - surplusX)),
+		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
+		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ))
+	};
 }
