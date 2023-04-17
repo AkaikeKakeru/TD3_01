@@ -173,7 +173,7 @@ void Stage::Draw() {
 		else 
 			if (block->type_ == GOAL) {
 			// ゴール描画
-			block->worldTransform_.position_.y = -15.5f;
+		/*	block->worldTransform_.position_.y = -15.5f;*/
 			objGoal_->Draw(block->worldTransform_);
 		}
 		
@@ -277,7 +277,7 @@ void Stage::LoadStageCommands() {
 			getline(line_stream, word, ',');
 			
 		}
-		// マップチップLineが20を超えたらリセットしてRowをインクリメント
+		// マップチップLineが10を超えたらリセットしてRowをインクリメント
 		if (mapLine == STAGE_WIDTH) {
 			mapLine = 0;
 			mapRow++;
@@ -325,9 +325,9 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	Vector3 pos;
 	
 	//中央揃えとなる様に座標を計算
-	pos.x = -74.0f + (8.0f * line);
+	pos.x = -74.0f + (16.0f * line);
 	pos.y = depth;
-	pos.z = 156.0f - (8.0f * row);
+	pos.z = 156.0f - (16.0f * row);
 
 	// 初期化する
 	InitializeStageBlock(newBlock, obj, pos, line, row);
@@ -335,14 +335,14 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	blocks_.push_back(std::move(newBlock));
 
 	if (type == SWITCHR) {
-		pos.x -= 4.0f;
-		pos.z += 4.0f;
+		pos.x -= 8.0f;
+		pos.z += 8.0f;
 		switchR_->Seting(pos, magnification_);
 		isSwitchDrawR_ = true;
 	}
 	if (type == SWITCHB) {
-		pos.x -= 4.0f;
-		pos.z += 4.0f;
+		pos.x -= 8.0f;
+		pos.z += 8.0f;
 		switchB_->Seting(pos, magnification_);
 		isSwitchDrawB_ = true;
 	}
@@ -378,7 +378,7 @@ void Stage::CheckBlock(int line, int row) {
 }
 
 bool Stage::CheckFloorBlock(int line, int row) {
-	if (line < 0 || line > 19 || row < 0 || row > 19) {
+	if (line < 0 || line > 9 || row < 0 || row > 9) {
 		return true;
 	}
 	return false;

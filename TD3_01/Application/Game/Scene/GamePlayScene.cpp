@@ -233,9 +233,9 @@ void GamePlayScene::Initialize3d() {
 	player_ = Player::Create(playerModel_);
 
 	player_->SetCamera(camera_);
-	player_->SetScale({ 1.0f, 1.0f, 1.0f });
+	player_->SetScale({ 2.0f, 2.0f, 2.0f });
 
-	player_->SetPosition({ 8,0,0 });
+	player_->SetPosition({ 8.0f,0.0f,0.0f });
 
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
@@ -247,15 +247,15 @@ void GamePlayScene::Initialize3d() {
 	goal_->Initialize();
 	goal_->SetModel(goalModel_);
 
-	goal_->SetPosition({ 28,0,-28 });
-	goal_->SetScale({ 2, 2, 2 });
+	goal_->SetPosition({ 28.0f,0.0f,-28.0f });
+	goal_->SetScale({ 2.0f, 2.0f, 2.0f });
 
 	goal_->SetCamera(camera_);
 
 	for (int i = 0; i < FanCount_; i++) {
 		//ファンの初期化
 		fan_[i] = Fan::Create(fanModel_);
-		fan_[i]->SetScale({ 1.0f,1.0f,1.0f });
+		fan_[i]->SetScale({ 2.0f,2.0f,2.0f });
 		fan_[i]->SetCamera(camera_);
 	}
 
@@ -278,13 +278,13 @@ void GamePlayScene::Initialize3d() {
 	rayObj_ = Object3d::Create();
 	rayObj_->SetModel(rayModel_);
 	rayObj_->SetPosition(fan_[0]->GetRay()->start_);
-	rayObj_->SetScale({ 2, 2, 2 });
+	rayObj_->SetScale({ 2.0f, 2.0f, 2.0f });
 	rayObj_->SetCamera(camera_);
 
 	rayObj_2 = Object3d::Create();
 	rayObj_2->SetModel(rayModel_);
 	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50 * fan_[0]->GetRay()->dir_));
-	rayObj_2->SetScale({ 2, 2, 2 });
+	rayObj_2->SetScale({ 2.0f, 2.0f, 2.0f });
 	rayObj_2->SetCamera(camera_);
 
 	skydome_ = new Skydome();
@@ -471,8 +471,8 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 	pZ2 = pPos.z + pRadius;
 
 	// プレイヤーLeftTop座標
-	int pLT[2] = { static_cast<int>((pX1 / 8) + 10)/* * -1)*/,
-		static_cast<int>(((pZ1 / 8) - 19) * -1) };
+	int pLT[2] = { static_cast<int>((pX1 / 16) + 5)/* * -1)*/,
+		static_cast<int>(((pZ1 / 16) - 9) * -1) };
 	int isFloor = 0;
 
 	for (int i = 0; i < 2; i++) {
