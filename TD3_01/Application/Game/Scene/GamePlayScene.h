@@ -83,14 +83,15 @@ private:
 	/// オブジェクト
 	/// </summary>
 	Stage* stage_ = nullptr;
-	const std::string filename_[7] = {
+	const std::string filename_[8] = {
 	  "0",
 	  "1",
 	  "2",
 	  "3",
 	  "4",
 	  "5",
-	  "6" };
+	  "6",
+	  "7" };
 
 	Goal* goal_ = nullptr;
 	Model* goalModel_ = nullptr;
