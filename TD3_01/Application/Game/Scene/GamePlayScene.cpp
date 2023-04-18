@@ -271,12 +271,12 @@ void GamePlayScene::Initialize3d() {
 	fan_[1]->SetPosition({ 20.0f,0.0f,50.0f });
 	//ファン左向き時の数値設定
 	fan_[1]->SetFanDirection(Fan::Left);
-
+	fan_[1]->SetIsControl(true);
 
 	fan_[2]->SetPosition({ -12.0f,0.0f,-28.0f });
-
 	//ファン右向き時の数値設定
 	fan_[2]->SetFanDirection(Fan::Right);
+	fan_[2]->SetIsControl(false);
 
 	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
@@ -327,8 +327,6 @@ void GamePlayScene::Initialize2d() {
 
 void GamePlayScene::Update3d() {
 	colRay_ = false;
-
-	fan_[0]->SetIsControl(!player_->GetIsRun());
 
 	{
 		//imGuiからのライトパラメータを反映
