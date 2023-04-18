@@ -51,8 +51,6 @@ bool Player::Initialize() {
 
 	IsRun_ = false;
 
-	prePos_ = { 10.0f,0.0f,40.0f };
-
 	return true;
 }
 
@@ -70,7 +68,7 @@ void Player::Update() {
 	if (position.x > courseOut / 2.0f ||
 		position.x < -courseOut / 2.0f ||
 		position.z > courseOut ||
-		position.z < -10.0f) {
+		position.z < -30.0f) {
 		IsRun_ = false;
 
 		position = { 8.0f,0.0f,0.0f };
@@ -159,12 +157,9 @@ void Player::Finalize() {
 void Player::OnCollision(const CollisionInfo& info) {
 }
 void Player::OnCollisionStage(const bool& collisionFlag) {
-
-	
 	if (collisionFlag) {
-		
+		worldTransform_.position_ = {10.0f,0.0f,40.0f};
 		IsRun_ = false;
-		Object3d::SetPosition(prePos_);
 	}
 
 	//

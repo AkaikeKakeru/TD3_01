@@ -79,6 +79,7 @@ private:
 
 	Vector3 interRay_ = {};
 
+	bool stageCollision = false;
 	/// <summary>
 	/// オブジェクト
 	/// </summary>

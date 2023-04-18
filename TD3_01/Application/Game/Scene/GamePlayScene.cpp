@@ -213,13 +213,13 @@ void GamePlayScene::Initialize3d() {
 	//カメラの初期化
 	camera_ = new Camera();
 
-	/*
+	//
 	camera_->SetEye({ 0.0f, 360.0f, 0.0f });
 	camera_->SetTarget({ 0.0f,50.0f,40.0f });
-	*/
+	/*
 	camera_->SetEye({ 0.0f, 90.0f, -100.0f });
 	camera_->SetTarget({ 0.0f,25.0f,0.0f });
-	//
+	*/
 	camera_->SetUp({ 0.0f, 1.0f, 0.0f });
 
 
@@ -364,7 +364,7 @@ void GamePlayScene::Update3d() {
 	for (int i = 0; i < FanCount_; i++) {
 		if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
-			if (raycastHit_.distance_ <= 50) {
+			if (raycastHit_.distance_ <= 50.0f) {
 
 				rayObj_->SetPosition(raycastHit_.inter_);
 				rayObj_->Update();
@@ -382,7 +382,9 @@ void GamePlayScene::Update3d() {
 	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
-	player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+	stageCollision = CollisionStageFlag(player_, stage_);
+
+	player_->OnCollisionStage(stageCollision);
 
 	pm1_->Update();
 	pm2_->Update();
