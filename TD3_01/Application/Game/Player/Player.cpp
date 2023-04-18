@@ -51,6 +51,8 @@ bool Player::Initialize() {
 
 	IsRun_ = false;
 
+	prePos_ = { 10.0f,0.0f,40.0f };
+
 	return true;
 }
 
@@ -71,7 +73,7 @@ void Player::Update() {
 		position.z < -10.0f) {
 		IsRun_ = false;
 
-		position = { 8,0,0 };
+		position = { 8.0f,0.0f,0.0f };
 
 		rot = CreateRotationVector(
 			{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
@@ -92,9 +94,9 @@ void Player::Update() {
 		Vector3 angleZ = { 0.0f,0.0f,1.0f };
 
 		//移動ベクトル
-		Vector3 moveVector = { 0,0,0 };
+		Vector3 moveVector = { 0.0f,0.0f,0.0f };
 		//回転ベクトル
-		Vector3 rotVector = { 0,0,0 };
+		Vector3 rotVector = { 0.0f,0.0f,0.0f };
 
 		//移動後の座標を計算
 		//if (input_->TriggerKey(DIK_UP)) {
@@ -158,13 +160,13 @@ void Player::OnCollision(const CollisionInfo& info) {
 }
 void Player::OnCollisionStage(const bool& collisionFlag) {
 
+	
 	if (collisionFlag) {
-		prePos_ = { 10.0f,0.0f,20.0f };
 		
 		IsRun_ = false;
 		Object3d::SetPosition(prePos_);
 	}
-		prePos_ = Object3d::GetPosition();
+
 	//
 }
 void Player::Stop()

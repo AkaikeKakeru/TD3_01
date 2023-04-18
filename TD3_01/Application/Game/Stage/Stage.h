@@ -121,6 +121,7 @@ private:
 	bool isSwitchDrawB_ = false;
 
 public: // アクセッサ
-	float GetRadius() { return radius_; }
-	bool GetIsGoal() { return isGoal_; }
+	const float& GetRadius() { return radius_; }
+	const bool& GetIsGoal() { return isGoal_; }
+	const float& GetBlockSize() { return magnification_; }
 };

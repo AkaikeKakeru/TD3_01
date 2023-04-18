@@ -202,7 +202,7 @@ void GamePlayScene::Draw() {
 	ParticleManager::PreDraw(dxBas_->GetCommandList().Get());
 	DrawParticle();
 	ParticleManager::PostDraw();
-	
+
 	drawBas_->PreDraw();
 	Draw2d();
 	drawBas_->PostDraw();
@@ -213,10 +213,14 @@ void GamePlayScene::Initialize3d() {
 	//カメラの初期化
 	camera_ = new Camera();
 
-
+	/*
+	camera_->SetEye({ 0.0f, 360.0f, 0.0f });
+	camera_->SetTarget({ 0.0f,50.0f,40.0f });
+	*/
 	camera_->SetEye({ 0.0f, 90.0f, -100.0f });
-	camera_->SetTarget({ 0,25.0f,0 });
-	camera_->SetUp({ 0, 1, 0 });
+	camera_->SetTarget({ 0.0f,25.0f,0.0f });
+	//
+	camera_->SetUp({ 0.0f, 1.0f, 0.0f });
 
 
 	//各種モデル
@@ -349,7 +353,7 @@ void GamePlayScene::Update3d() {
 
 	rayObj_->Update();
 
-	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50 * fan_[0]->GetRay()->dir_));
+	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50.0f * fan_[0]->GetRay()->dir_));
 	rayObj_2->Update();
 
 	skydome_->Update();
@@ -378,15 +382,14 @@ void GamePlayScene::Update3d() {
 
 	goal_->Update();
 	stage_->Update();
-	
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
-	CollisionStageFlag(player_, stage_);
 	player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
 
 	pm1_->Update();
 	pm2_->Update();
-	
+
+
 }
 
 void GamePlayScene::Update2d() {
@@ -463,6 +466,8 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 	// 各座標変数の宣言
 	Vector3 pPos = p->GetPosition();
 	float pRadius = p->GetRadius();
+	float bscale = s->GetBlockSize();
+
 	float pX1, pX2, pZ1, pZ2;
 	// プレイヤーの矩形座標
 	pX1 = pPos.x - pRadius;
@@ -471,8 +476,8 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 	pZ2 = pPos.z + pRadius;
 
 	// プレイヤーLeftTop座標
-	int pLT[2] = { static_cast<int>((pX1 / 16) + 5)/* * -1)*/,
-		static_cast<int>(((pZ1 / 16) - 9) * -1) };
+	int pLT[2] = { static_cast<int>((pX1 / (bscale * 2)) + 5)/* * -1)*/,
+		static_cast<int>(((pZ1 / (bscale * 2)) - 9) * -1) };
 	int isFloor = 0;
 
 	for (int i = 0; i < 2; i++) {
@@ -497,7 +502,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 			// 当たり判定
 			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
-			
+
 				return true;
 			}
 		}
