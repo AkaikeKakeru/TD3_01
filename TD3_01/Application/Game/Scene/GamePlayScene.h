@@ -6,7 +6,6 @@
 #include "Model.h"
 #include "Sprite.h"
 #include "Stage.h"
-#include "Goal.h"
 #include "Object3d.h"
 #include "Particle.h"
 #include "ParticleManager.h"
@@ -93,9 +92,6 @@ private:
 	  "5",
 	  "6",
 	  "7" };
-
-	Goal* goal_ = nullptr;
-	Model* goalModel_ = nullptr;
 
 	Object3d* rayObj_ = nullptr;
 	Model* rayModel_ = nullptr;

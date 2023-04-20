@@ -28,28 +28,6 @@ void GamePlayScene::Update() {
 	Update3d();
 	Update2d();
 
-	if (goal_->GetIsGoal()) {
-		////シーンの切り替えを依頼
-		//SceneManager::GetInstance()->ChangeScene("TITLE");
-		ImGui::Begin("Touch to Goal");
-		ImGui::SetWindowPos(ImVec2(10, 10));
-		ImGui::SetWindowSize(ImVec2(500, 200));
-		ImGui::SetWindowFontScale(2.0f);
-		ImGui::Text("Thank you Play");
-		ImGui::End();
-	}
-	if (stage_->GetIsGoal())
-	{
-		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
-		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
-
-		ImGui::Begin("Touch to Goal!");
-		ImGui::SetWindowPos(ImVec2(10, 10));
-		ImGui::SetWindowSize(ImVec2(500, 200));
-		ImGui::SetWindowFontScale(2.0f);
-		ImGui::Text("Particle Active");
-		ImGui::End();
-	}
 #ifdef _DEBUG
 	{
 		float playerPos[Vector3Count_] = {
@@ -214,7 +192,7 @@ void GamePlayScene::Initialize3d() {
 	camera_ = new Camera();
 
 	//
-	camera_->SetEye({ 15.0f, 70.0f, -30.0f });
+	camera_->SetEye({ 15.0f, 70.0f, -40.0f });
 	camera_->SetTarget({ 15.0f,20.0f,10.0f });
 	/*
 	camera_->SetEye({ 0.0f, 90.0f, -100.0f });
@@ -230,8 +208,6 @@ void GamePlayScene::Initialize3d() {
 	rayModel_ = Model::LoadFromOBJ("cube", true);
 	fanModel_ = new Model();
 	fanModel_ = Model::LoadFromOBJ("planeEnemy", false);
-	goalModel_ = new Model();
-	goalModel_ = Model::LoadFromOBJ("goal", true);
 
 	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
@@ -239,22 +215,13 @@ void GamePlayScene::Initialize3d() {
 	player_->SetCamera(camera_);
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 
-	player_->SetPosition({ 8.0f,0.0f,0.0f });
+	player_->SetPosition({ 8.0f,0.0f,12.0f });
 
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
 
 	player_->SetCamera(camera_);
 	player_->Update();
-
-	goal_ = new Goal();
-	goal_->Initialize();
-	goal_->SetModel(goalModel_);
-
-	goal_->SetPosition({ 28.0f,0.0f,-28.0f });
-	goal_->SetScale({ 2.0f, 2.0f, 2.0f });
-
-	goal_->SetCamera(camera_);
 
 	for (int i = 0; i < FanCount_; i++) {
 		//ファンの初期化
@@ -327,6 +294,18 @@ void GamePlayScene::Initialize2d() {
 
 void GamePlayScene::Update3d() {
 	colRay_ = false;
+	if (stage_->GetIsGoal())
+	{
+		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
+		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+
+		ImGui::Begin("Touch to Goal!");
+		ImGui::SetWindowPos(ImVec2(10, 10));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		ImGui::SetWindowFontScale(2.0f);
+		ImGui::Text("Particle Active");
+		ImGui::End();
+	}
 
 	{
 		//imGuiからのライトパラメータを反映
@@ -377,13 +356,9 @@ void GamePlayScene::Update3d() {
 			}
 		}
 	}
-
-	goal_->Update();
 	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
-	CollisionStageFlag(player_, stage_);
-
 	stageCollision = CollisionStageFlag(player_, stage_);
 
 	player_->OnCollisionStage(stageCollision);
@@ -408,8 +383,7 @@ void GamePlayScene::Update2d() {
 
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
-	goal_->Draw();
-
+	
 	rayObj_->Draw();
 	rayObj_2->Draw();
 	for (int i = 0; i < FanCount_; i++) {
@@ -441,9 +415,6 @@ void GamePlayScene::Finalize() {
 	SafeDelete(fanModel_);
 
 	SafeDelete(stage_);
-	goal_->Finalize();
-	SafeDelete(goal_);
-	SafeDelete(goalModel_);
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
@@ -479,7 +450,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 	// プレイヤーLeftTop座標
 	int pLT[2] = { static_cast<int>((pX1 / (bscale * 2) + 5))/* * -1)*/,
-		static_cast<int>(((pZ1 / (bscale * 2)) - 9) * -1) };
+		static_cast<int>(((pZ1 / (bscale * 2)) - 11)*-1) };
 	int isFloor = 0;
 
 	for (int i = 0; i < 2; i++) {
@@ -509,7 +480,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 			}
 		}
 	}
-	ImGui::Begin("pLT");
+		ImGui::Begin("pLT");
 	ImGui::SetWindowPos(ImVec2(700, 0));
 	ImGui::SetWindowSize(ImVec2(500, 100));
 	ImGui::InputInt("plt0", &pLT[0]);
