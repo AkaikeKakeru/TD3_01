@@ -141,7 +141,7 @@ void Player::Finalize() {
 
 void Player::OnCollision(const CollisionInfo& info) {
 }
-void Player::OnCollisionStage(const bool& collisionFlag,Vector3 pos) {
+void Player::OnCollisionStage(const bool& collisionFlag, const Vector3& pos) {
 	if (collisionFlag) {
 		worldTransform_.position_ = pos;
 		IsRun_ = false;
@@ -149,7 +149,7 @@ void Player::OnCollisionStage(const bool& collisionFlag,Vector3 pos) {
 
 	//
 }
-void Player::Stop(Vector3 pos)
+void Player::Stop(const Vector3& pos)
 {
 	worldTransform_.position_ = pos;
 	worldTransform_.rotation_ = CreateRotationVector(

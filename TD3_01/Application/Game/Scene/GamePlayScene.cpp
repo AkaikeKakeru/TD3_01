@@ -271,8 +271,6 @@ void GamePlayScene::Initialize3d() {
 	//ステージ生成
 	stage_ = new Stage();
 	stage_->Initialize(camera_);
-	stage_->StageInitialize(filename_[1]);
-
 	//パーティクル
 	particle1_ = Particle::LoadFromParticleTexture("particle6.png");
 	pm1_ = ParticleManager::Create();
@@ -283,6 +281,8 @@ void GamePlayScene::Initialize3d() {
 	pm2_ = ParticleManager::Create();
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
+
+	Parameter(positionStage1, 1);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -481,12 +481,14 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 			}
 		}
 	}
-		ImGui::Begin("pLT");
-	ImGui::SetWindowPos(ImVec2(700, 0));
-	ImGui::SetWindowSize(ImVec2(500, 100));
-	ImGui::InputInt("plt0", &pLT[0]);
-	ImGui::InputInt("plt1", &pLT[1]);
-	ImGui::InputInt("if", &isFloor);
-	ImGui::End();
+	
 	return false;
+}
+
+void GamePlayScene::Parameter(const Vector3& playerPos, const int& stageNum)
+{
+	Vector3 pos = playerPos;
+	player_->SetPosition(pos);
+
+	stage_->StageInitialize(filename_[stageNum]);
 }

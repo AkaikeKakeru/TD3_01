@@ -21,7 +21,7 @@ public://メンバ関数
 	//衝突時コールバック関数
 	void OnCollision(const CollisionInfo & info) override;
 
-	void OnCollisionStage(const bool& collisionFlag, Vector3 pos);
+	void OnCollisionStage(const bool& collisionFlag, const Vector3& pos);
 public://アクセッサ
 	void SetFan(Fan*fan) {
 		fan_ = fan;
@@ -31,8 +31,8 @@ public://アクセッサ
 	bool GetIsRun() {
 		return IsRun_;
 	}
-	void Stop(Vector3 pos);
-	Vector3 GetPosition() const { return worldTransform_.position_; }
+	void Stop(const Vector3& pos);
+	const Vector3& GetPosition() const { return worldTransform_.position_; }
 	float GetRadius() const { return radius_; }
 private:
 	//衝突マネージャー
