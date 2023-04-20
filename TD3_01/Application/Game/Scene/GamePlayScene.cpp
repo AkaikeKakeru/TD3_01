@@ -210,12 +210,13 @@ void GamePlayScene::Initialize3d() {
 	fanModel_ = Model::LoadFromOBJ("planeEnemy", false);
 
 	//プレイヤーの初期化
+	positionStage1 = { 8.0f,0.0f,20.0f };
 	player_ = Player::Create(playerModel_);
 
 	player_->SetCamera(camera_);
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
 
-	player_->SetPosition({ 8.0f,0.0f,12.0f });
+	player_->SetPosition(positionStage1);
 
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
@@ -230,17 +231,17 @@ void GamePlayScene::Initialize3d() {
 		fan_[i]->SetCamera(camera_);
 	}
 
-	fan_[0]->SetPosition({ 0.0f,0.0f,10.0f });
+	fan_[0]->SetPosition({ 0.0f,0.0f,20.0f });
 	//ファン下向き時の数値設定
 	fan_[0]->SetFanDirection(Fan::Down);
 	fan_[0]->SetIsControl(true);
 
-	fan_[1]->SetPosition({ 20.0f,0.0f,30.0f });
+	fan_[1]->SetPosition({ 20.0f,0.0f,40.0f });
 	//ファン左向き時の数値設定
 	fan_[1]->SetFanDirection(Fan::Left);
 	fan_[1]->SetIsControl(true);
 
-	fan_[2]->SetPosition({ -12.0f,0.0f,8.0f });
+	fan_[2]->SetPosition({ -12.0f,0.0f,30.0f });
 	//ファン右向き時の数値設定
 	fan_[2]->SetFanDirection(Fan::Right);
 	fan_[2]->SetIsControl(true);
@@ -361,7 +362,7 @@ void GamePlayScene::Update3d() {
 	collisionManager_->CheckAllCollisions();
 	stageCollision = CollisionStageFlag(player_, stage_);
 
-	player_->OnCollisionStage(stageCollision);
+	player_->OnCollisionStage(stageCollision, positionStage1);
 
 	pm1_->Update();
 	pm2_->Update();
@@ -460,7 +461,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 				isFloor++;
 			}
 			if (isFloor == 2) {
-				p->Stop();
+				p->Stop(positionStage1);
 			}
 			s->CheckBlock(pLT[0] + i, pLT[1] + j);
 			// 各座標変数の宣言

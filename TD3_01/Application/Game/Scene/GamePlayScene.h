@@ -119,4 +119,6 @@ private:
 	/// </summary>
 	Sprite* sprite_ = new Sprite();
 
+	//ポジション
+	Vector3 positionStage1;
 };
