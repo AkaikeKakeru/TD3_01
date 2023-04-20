@@ -106,15 +106,15 @@ private:
 	Switch* switchB_ = nullptr;
 
 	//カメラ
-	Camera* cameraStage_ = nullptr;
+	static Camera* cameraStage_;
 
 	// ブロックの倍率(Scale)
-	float magnification_ = 8.0f;
+	float magnification_ = 4.0f;
 	// ブロックの半径半径
-	float radius_ = 8.0f;
+	float radius_ = 4.0f;
 	// ブロックY座標(深度)
 	float stageDepth_ = 0.0f;
-	float floorDepth_ = -16.0f;
+	float floorDepth_ = -8.0f;
 	// ゴールフラグ
 	bool isGoal_ = false;
 	bool isSwitchDrawR_ = false;

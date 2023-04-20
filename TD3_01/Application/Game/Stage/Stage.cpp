@@ -4,6 +4,7 @@
 #include "SafeDelete.h"
 
 //using namespace std;
+Camera* Stage::cameraStage_ = nullptr;
 
 Stage::~Stage() {
 	SafeDelete(model_);
@@ -302,17 +303,17 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* ob
 	// スケール設定
 	block->worldTransform_.scale_ = block->obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
-	block->obj->SetScale(block->worldTransform_.scale_);
 	
 	// 座標設定
 	block->worldTransform_.position_ = block->obj->GetPosition();
 	block->worldTransform_.position_ = pos;
-	block->obj->SetPosition(block->worldTransform_.position_);
 	
 	block->line_ = line;
 	block->row_ = row;
 
-	block->obj->SetWorldTransform(block->worldTransform_);
+	obj->SetWorldTransform(block->worldTransform_);
+
+	obj->Update();
 
 }
 
@@ -325,9 +326,9 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	Vector3 pos;
 	
 	//中央揃えとなる様に座標を計算
-	pos.x = -72.0f + (16.0f * line);
+	pos.x = -36.0f + (8.0f * line);
 	pos.y = depth;
-	pos.z = 152.0f - (16.0f * row);
+	pos.z = 76.0f - (8.0f * row);
 
 	// 初期化する
 	InitializeStageBlock(newBlock, obj, pos, line, row);
@@ -346,10 +347,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 		switchB_->Seting(pos, magnification_);
 		isSwitchDrawB_ = true;
 	}
-	for (std::unique_ptr<StageData>& stage : blocks_)
-	{
-		stage->obj->Update();
-	}
+	
 }
 
 void Stage::CheckBlock(int line, int row) {

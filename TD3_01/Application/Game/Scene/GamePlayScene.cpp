@@ -214,8 +214,8 @@ void GamePlayScene::Initialize3d() {
 	camera_ = new Camera();
 
 	//
-	camera_->SetEye({ 0.0f, 360.0f, 0.0f });
-	camera_->SetTarget({ 0.0f,50.0f,40.0f });
+	camera_->SetEye({ 15.0f, 70.0f, -30.0f });
+	camera_->SetTarget({ 15.0f,20.0f,10.0f });
 	/*
 	camera_->SetEye({ 0.0f, 90.0f, -100.0f });
 	camera_->SetTarget({ 0.0f,25.0f,0.0f });
@@ -259,7 +259,7 @@ void GamePlayScene::Initialize3d() {
 	for (int i = 0; i < FanCount_; i++) {
 		//ファンの初期化
 		fan_[i] = Fan::Create(fanModel_);
-		fan_[i]->SetScale({ 2.0f,2.0f,2.0f });
+		fan_[i]->SetScale({ 1.0f,1.0f,1.0f });
 		fan_[i]->SetCamera(camera_);
 	}
 
@@ -268,15 +268,15 @@ void GamePlayScene::Initialize3d() {
 	fan_[0]->SetFanDirection(Fan::Down);
 	fan_[0]->SetIsControl(true);
 
-	fan_[1]->SetPosition({ 20.0f,0.0f,50.0f });
+	fan_[1]->SetPosition({ 20.0f,0.0f,30.0f });
 	//ファン左向き時の数値設定
 	fan_[1]->SetFanDirection(Fan::Left);
 	fan_[1]->SetIsControl(true);
 
-	fan_[2]->SetPosition({ -12.0f,0.0f,-28.0f });
+	fan_[2]->SetPosition({ -12.0f,0.0f,8.0f });
 	//ファン右向き時の数値設定
 	fan_[2]->SetFanDirection(Fan::Right);
-	fan_[2]->SetIsControl(false);
+	fan_[2]->SetIsControl(true);
 
 	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
@@ -382,6 +382,8 @@ void GamePlayScene::Update3d() {
 	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
+	CollisionStageFlag(player_, stage_);
+
 	stageCollision = CollisionStageFlag(player_, stage_);
 
 	player_->OnCollisionStage(stageCollision);
@@ -476,7 +478,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 	pZ2 = pPos.z + pRadius;
 
 	// プレイヤーLeftTop座標
-	int pLT[2] = { static_cast<int>((pX1 / (bscale * 2)) + 5)/* * -1)*/,
+	int pLT[2] = { static_cast<int>((pX1 / (bscale * 2) + 5))/* * -1)*/,
 		static_cast<int>(((pZ1 / (bscale * 2)) - 9) * -1) };
 	int isFloor = 0;
 
