@@ -62,22 +62,7 @@ void Player::Update() {
 	// 現在の座標を取得
 	Vector3 rot = Object3d::GetRotation();
 
-	float courseOut = 370.0f;
-
-	// オブジェクト移動
-	if (position.x > courseOut / 2.0f ||
-		position.x < -courseOut / 2.0f ||
-		position.z > courseOut ||
-		position.z < -10.0f) {
-		IsRun_ = false;
-
-		position = { 8,0,0 };
-
-		rot = CreateRotationVector(
-			{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
-	}
-
-	if (input_->PressKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		IsRun_ = true;
 	}
 
@@ -92,9 +77,9 @@ void Player::Update() {
 		Vector3 angleZ = { 0.0f,0.0f,1.0f };
 
 		//移動ベクトル
-		Vector3 moveVector = { 0,0,0 };
+		Vector3 moveVector = { 0.0f,0.0f,0.0f };
 		//回転ベクトル
-		Vector3 rotVector = { 0,0,0 };
+		Vector3 rotVector = { 0.0f,0.0f,0.0f };
 
 		//移動後の座標を計算
 		//if (input_->TriggerKey(DIK_UP)) {
@@ -156,19 +141,17 @@ void Player::Finalize() {
 
 void Player::OnCollision(const CollisionInfo& info) {
 }
-void Player::OnCollisionStage(const bool& collisionFlag) {
-	prePos_ = Object3d::GetPosition();
+void Player::OnCollisionStage(const bool& collisionFlag,Vector3 pos) {
 	if (collisionFlag) {
-		prePos_ = { -10.0f,0.0f,20.0f };
-		Object3d::SetPosition(prePos_);
+		worldTransform_.position_ = pos;
 		IsRun_ = false;
 	}
-	
+
 	//
 }
-void Player::Stop()
+void Player::Stop(Vector3 pos)
 {
-	worldTransform_.position_ = { 10.0f,0.0f,10.0f };
+	worldTransform_.position_ = pos;
 	worldTransform_.rotation_ = CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
 	IsRun_ = false;
