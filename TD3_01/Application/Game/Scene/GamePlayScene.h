@@ -33,7 +33,11 @@ public:
 	void Draw() override;
 	void Finalize() override;
 	bool CollisionStageFlag(Player* p, Stage* s);
-	void Parameter(const Vector3& playerPos, const int& stageNum);
+	void ParameterPlayer(const Vector3& playerPos, const int& stageNum);
+	void ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3);
+	void ReSetPositionPlayer(const Vector3& playerPos);
+	void ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3);
+
 private:
 	void Initialize3d();
 	void Initialize2d();
@@ -121,5 +125,11 @@ private:
 	Sprite* sprite_ = new Sprite();
 
 	//ポジション
-	Vector3 positionStage1;
+	Vector3 positionPlayer = { 8.0f,0.0f,20.0f };
+	Vector3 positionFan[FanCount_] =
+	{
+		{ 0.0f,0.0f,20.0f },
+		{ 20.0f,0.0f,40.0f},
+		{ -12.0f,0.0f,30.0f }
+	};
 };

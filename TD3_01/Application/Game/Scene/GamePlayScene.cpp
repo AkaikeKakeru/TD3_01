@@ -210,13 +210,10 @@ void GamePlayScene::Initialize3d() {
 	fanModel_ = Model::LoadFromOBJ("planeEnemy", false);
 
 	//プレイヤーの初期化
-	positionStage1 = { 8.0f,0.0f,20.0f };
 	player_ = Player::Create(playerModel_);
 
 	player_->SetCamera(camera_);
 	player_->SetScale({ 1.0f, 1.0f, 1.0f });
-
-	player_->SetPosition(positionStage1);
 
 	player_->SetRotation(CreateRotationVector(
 		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f)));
@@ -231,17 +228,14 @@ void GamePlayScene::Initialize3d() {
 		fan_[i]->SetCamera(camera_);
 	}
 
-	fan_[0]->SetPosition({ 0.0f,0.0f,20.0f });
 	//ファン下向き時の数値設定
 	fan_[0]->SetFanDirection(Fan::Down);
 	fan_[0]->SetIsControl(true);
 
-	fan_[1]->SetPosition({ 20.0f,0.0f,40.0f });
 	//ファン左向き時の数値設定
 	fan_[1]->SetFanDirection(Fan::Left);
 	fan_[1]->SetIsControl(true);
 
-	fan_[2]->SetPosition({ -12.0f,0.0f,30.0f });
 	//ファン右向き時の数値設定
 	fan_[2]->SetFanDirection(Fan::Right);
 	fan_[2]->SetIsControl(true);
@@ -268,9 +262,6 @@ void GamePlayScene::Initialize3d() {
 	lightGroup_->SetAmbientColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(lightGroup_);
 
-	//ステージ生成
-	stage_ = new Stage();
-	stage_->Initialize(camera_);
 	//パーティクル
 	particle1_ = Particle::LoadFromParticleTexture("particle6.png");
 	pm1_ = ParticleManager::Create();
@@ -282,7 +273,8 @@ void GamePlayScene::Initialize3d() {
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
 
-	Parameter(positionStage1, 1);
+	ParameterPlayer(positionPlayer, 1);
+	ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -295,18 +287,6 @@ void GamePlayScene::Initialize2d() {
 
 void GamePlayScene::Update3d() {
 	colRay_ = false;
-	if (stage_->GetIsGoal())
-	{
-		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
-		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
-
-		ImGui::Begin("Touch to Goal!");
-		ImGui::SetWindowPos(ImVec2(10, 10));
-		ImGui::SetWindowSize(ImVec2(500, 200));
-		ImGui::SetWindowFontScale(2.0f);
-		ImGui::Text("Particle Active");
-		ImGui::End();
-	}
 
 	{
 		//imGuiからのライトパラメータを反映
@@ -329,16 +309,41 @@ void GamePlayScene::Update3d() {
 	lightGroup_->Update();
 	camera_->Update();
 
-	rayObj_->Update();
-
 	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50.0f * fan_[0]->GetRay()->dir_));
-	rayObj_2->Update();
+	
+	if (stage_->GetIsGoal())
+	{
+		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
+		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+
+		ImGui::Begin("Touch to Goal!");
+		ImGui::SetWindowPos(ImVec2(10, 10));
+		ImGui::SetWindowSize(ImVec2(500, 200));
+		ImGui::SetWindowFontScale(2.0f);
+		ImGui::Text("Particle Active");
+		ImGui::End();
+
+	}
+	else
+	{
+		player_->Update();
+
+		rayObj_->Update();
+	
+		rayObj_2->Update();
+
+		if (input_->TriggerKey(DIK_R))
+		{
+			ReSetPositionPlayer(positionPlayer);
+			ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2]);
+		}
+	}
+
 
 	skydome_->Update();
 	for (int i = 0; i < FanCount_; i++) {
 		fan_[i]->Update();
 	}
-	player_->Update();
 
 	//レイキャストをチェック
 	for (int i = 0; i < FanCount_; i++) {
@@ -362,7 +367,7 @@ void GamePlayScene::Update3d() {
 	collisionManager_->CheckAllCollisions();
 	stageCollision = CollisionStageFlag(player_, stage_);
 
-	player_->OnCollisionStage(stageCollision, positionStage1);
+	player_->OnCollisionStage(stageCollision, positionPlayer);
 
 	pm1_->Update();
 	pm2_->Update();
@@ -384,7 +389,7 @@ void GamePlayScene::Update2d() {
 
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
-	
+
 	rayObj_->Draw();
 	rayObj_2->Draw();
 	for (int i = 0; i < FanCount_; i++) {
@@ -451,7 +456,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 	// プレイヤーLeftTop座標
 	int pLT[2] = { static_cast<int>((pX1 / (bscale * 2) + 5))/* * -1)*/,
-		static_cast<int>(((pZ1 / (bscale * 2)) - 11)*-1) };
+		static_cast<int>(((pZ1 / (bscale * 2)) - 11) * -1) };
 	int isFloor = 0;
 
 	for (int i = 0; i < 2; i++) {
@@ -461,7 +466,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 				isFloor++;
 			}
 			if (isFloor == 2) {
-				p->Stop(positionStage1);
+				p->Stop(positionPlayer);
 			}
 			s->CheckBlock(pLT[0] + i, pLT[1] + j);
 			// 各座標変数の宣言
@@ -481,14 +486,43 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 			}
 		}
 	}
-	
+
 	return false;
 }
 
-void GamePlayScene::Parameter(const Vector3& playerPos, const int& stageNum)
+void GamePlayScene::ParameterPlayer(const Vector3& playerPos, const int& stageNum)
 {
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
 
+	//ステージ生成
+	stage_ = new Stage();
+	stage_->Initialize(camera_);
 	stage_->StageInitialize(filename_[stageNum]);
+}
+
+void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3)
+{
+	Vector3 pos[FanCount_] = { {fanPos1},{fanPos2},{fanPos3} };
+	for (size_t i = 0; i < FanCount_; i++)
+	{
+		fan_[i]->SetPosition(pos[i]);
+	}
+
+}
+
+void GamePlayScene::ReSetPositionPlayer(const Vector3& playerPos)
+{
+	Vector3 pos = playerPos;
+	player_->SetPosition(pos);
+}
+
+void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3)
+{
+	Vector3 pos[FanCount_] = { {fanPos1},{fanPos2},{fanPos3} };
+	for (size_t i = 0; i < FanCount_; i++)
+	{
+		fan_[i]->SetPosition(pos[i]);
+	}
+	
 }
