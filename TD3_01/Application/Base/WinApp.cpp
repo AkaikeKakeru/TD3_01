@@ -31,7 +31,7 @@ void WinApp::Initialize(){
 	//ウィンドウクラス
 	w_.cbSize = sizeof(WNDCLASSEX);
 	w_.lpfnWndProc = (WNDPROC)WindowProc;
-	w_.lpszClassName = L"MyEngine";
+	w_.lpszClassName = L"3121_KAMI_HIKO-KI";
 	w_.hInstance = GetModuleHandle(nullptr);
 	w_.hCursor = LoadCursor(NULL, IDC_ARROW);
 
@@ -46,7 +46,7 @@ void WinApp::Initialize(){
 #pragma region ウィンドウの生成
 	hwnd_ = CreateWindow(
 		w_.lpszClassName,
-		L"MyEngine",
+		L"3121_KAMI_HIKO-KI",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
