@@ -328,8 +328,12 @@ void GamePlayScene::Update3d() {
 			{
 			case Stage0:
 				//ここで次の値をセット
-				positionPlayer = { 20.0f,0.0f,40.0f };
-				fan_[1]->SetIsControl(false);
+				positionPlayer = { 20.0f,0.0f,20.0f };
+				fan_[0]->SetIsControl(false);
+				fan_[1]->SetIsControl(true);
+				fan_[2]->SetIsControl(true);
+
+
 				ParameterPlayer(positionPlayer, 1);
 				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
 				scene_ = Stage1;
