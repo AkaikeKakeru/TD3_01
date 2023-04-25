@@ -316,11 +316,11 @@ void GamePlayScene::Update3d() {
 		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
 		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
 
-		ImGui::Begin("Touch to Goal!");
+		ImGui::Begin("Stage Clear!");
 		ImGui::SetWindowPos(ImVec2(10, 10));
 		ImGui::SetWindowSize(ImVec2(500, 200));
 		ImGui::SetWindowFontScale(2.0f);
-		ImGui::Text("Particle Active");
+		ImGui::Text("Pless Enter Next Stage");
 		ImGui::End();
 		if (input_->TriggerKey(DIK_RETURN))
 		{
