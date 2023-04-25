@@ -348,7 +348,7 @@ void GamePlayScene::Update3d() {
 				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
 				positionPlayer = { 28.0f,0.0f,24.0f };
 				ParameterPlayer(positionPlayer, 1);
-				
+
 				positionFan[0] = { 60.0f,0.0f,50.0f };
 				positionFan[1] = { -10.0f,0.0f,18.0f };
 				positionFan[2] = { -36.0f,0.0f,42.0f };
@@ -374,7 +374,7 @@ void GamePlayScene::Update3d() {
 			case Stage1:
 				positionPlayer = { -28.0f,0.0f,40.0f };
 				ParameterPlayer(positionPlayer, 2);
-				
+
 				positionFan[0] = { 60.0f,0.0f,50.0f };
 				positionFan[1] = { 60.0f,0.0f,40.0f };
 				positionFan[2] = { -36.0f,0.0f,26.0f };
@@ -421,9 +421,34 @@ void GamePlayScene::Update3d() {
 				scene_ = Stage3;
 				break;
 			case Stage3:
-				ParameterPlayer(positionPlayer, 4);
+				positionPlayer = { 8.0f,0.0f,20.0f };
+				ParameterPlayer(positionPlayer, 0);
+
+				positionFan[0] = { 60.0f, 0.0f, 50.0f };
+				positionFan[1] = { 60.0f,0.0f,50.0f };
+				positionFan[2] = { 60.0f,0.0f,50.0f };
+				positionFan[3] = { 60.0f,0.0f,50.0f };
+				positionFan[4] = { 60.0f,0.0f,50.0f };
+				//ファン下向き時の数値設定
+				fan_[0]->SetFanDirection(Fan::Down);
+				fan_[0]->SetIsControl(true);
+
+				//ファン左向き時の数値設定
+				fan_[1]->SetFanDirection(Fan::Down);
+				fan_[1]->SetIsControl(true);
+
+				//ファン右向き時の数値設定
+				fan_[2]->SetFanDirection(Fan::Down);
+				fan_[2]->SetIsControl(true);
+
+				fan_[3]->SetFanDirection(Fan::Down);
+				fan_[3]->SetIsControl(true);
+
+				fan_[4]->SetFanDirection(Fan::Down);
+				fan_[4]->SetIsControl(true);
 				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
-				scene_ = Stage4;
+
+				scene_ = Stage0;
 				break;
 			case Stage4:
 				ParameterPlayer(positionPlayer, 0);
@@ -472,7 +497,7 @@ void GamePlayScene::Update3d() {
 			}
 		}
 	}
-	
+
 	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
@@ -636,7 +661,7 @@ void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanP
 	for (size_t i = 0; i < FanCount_; i++)
 	{
 		fan_[i]->SetPosition(pos[i]);
-		
+
 	}
-	
+
 }
