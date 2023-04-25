@@ -348,8 +348,7 @@ void GamePlayScene::Update3d() {
 				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
 				positionPlayer = { 28.0f,0.0f,24.0f };
 				ParameterPlayer(positionPlayer, 1);
-				player_->OnCollisionStage(stageCollision, positionPlayer);
-
+				
 				positionFan[0] = { 60.0f,0.0f,50.0f };
 				positionFan[1] = { -10.0f,0.0f,18.0f };
 				positionFan[2] = { -36.0f,0.0f,42.0f };
@@ -373,7 +372,6 @@ void GamePlayScene::Update3d() {
 				break;
 
 			case Stage1:
-				player_->OnCollisionStage(stageCollision, positionPlayer);
 				positionPlayer = { -28.0f,0.0f,40.0f };
 				ParameterPlayer(positionPlayer, 2);
 				
@@ -399,7 +397,26 @@ void GamePlayScene::Update3d() {
 				break;
 
 			case Stage2:
+				positionPlayer = { 36.0f,0.0f,82.0f };
 				ParameterPlayer(positionPlayer, 3);
+
+				positionFan[0] = { 60.0f,0.0f,50.0f };
+				positionFan[1] = { 60.0f,0.0f,40.0f };
+				positionFan[2] = { 60.0f,0.0f,30.0f };
+				positionFan[3] = { 12.0f,0.0f,90.0f };
+				positionFan[4] = { -12.0f,0.0f,66.0f };
+
+				fan_[0]->SetIsControl(true);
+				fan_[0]->SetFanDirection(Fan::Up);
+				fan_[1]->SetIsControl(true);
+				fan_[1]->SetFanDirection(Fan::Up);
+				fan_[2]->SetIsControl(true);
+				fan_[2]->SetFanDirection(Fan::Up);
+				fan_[3]->SetIsControl(false);
+				fan_[3]->SetFanDirection(Fan::Down);
+				fan_[4]->SetIsControl(false);
+				fan_[4]->SetFanDirection(Fan::Down);
+
 				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 				scene_ = Stage3;
 				break;
