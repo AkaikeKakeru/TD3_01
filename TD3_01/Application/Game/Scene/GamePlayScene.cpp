@@ -203,7 +203,7 @@ void GamePlayScene::Initialize3d() {
 
 	//各種モデル
 	playerModel_ = new Model();
-	playerModel_ = Model::LoadFromOBJ("PaperPlane", true);
+	playerModel_ = Model::LoadFromOBJ("plane", false);
 	rayModel_ = new Model();
 	rayModel_ = Model::LoadFromOBJ("cube", true);
 	fanModel_ = new Model();
