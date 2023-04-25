@@ -421,34 +421,38 @@ void GamePlayScene::Update3d() {
 				scene_ = Stage3;
 				break;
 			case Stage3:
-				positionPlayer = { 8.0f,0.0f,20.0f };
-				ParameterPlayer(positionPlayer, 0);
+				//positionPlayer = { 8.0f,0.0f,20.0f };
+				//ParameterPlayer(positionPlayer, 0);
 
-				positionFan[0] = { 60.0f, 0.0f, 50.0f };
-				positionFan[1] = { 60.0f,0.0f,50.0f };
-				positionFan[2] = { 60.0f,0.0f,50.0f };
-				positionFan[3] = { 60.0f,0.0f,50.0f };
-				positionFan[4] = { 60.0f,0.0f,50.0f };
-				//ファン下向き時の数値設定
-				fan_[0]->SetFanDirection(Fan::Down);
-				fan_[0]->SetIsControl(true);
+				//positionFan[0] = { 60.0f, 0.0f, 50.0f };
+				//positionFan[1] = { 60.0f,0.0f,50.0f };
+				//positionFan[2] = { 60.0f,0.0f,50.0f };
+				//positionFan[3] = { 60.0f,0.0f,50.0f };
+				//positionFan[4] = { 60.0f,0.0f,50.0f };
+				////ファン下向き時の数値設定
+				//fan_[0]->SetFanDirection(Fan::Down);
+				//fan_[0]->SetIsControl(true);
 
-				//ファン左向き時の数値設定
-				fan_[1]->SetFanDirection(Fan::Down);
-				fan_[1]->SetIsControl(true);
+				////ファン左向き時の数値設定
+				//fan_[1]->SetFanDirection(Fan::Down);
+				//fan_[1]->SetIsControl(true);
 
-				//ファン右向き時の数値設定
-				fan_[2]->SetFanDirection(Fan::Down);
-				fan_[2]->SetIsControl(true);
+				////ファン右向き時の数値設定
+				//fan_[2]->SetFanDirection(Fan::Down);
+				//fan_[2]->SetIsControl(true);
 
-				fan_[3]->SetFanDirection(Fan::Down);
-				fan_[3]->SetIsControl(true);
+				//fan_[3]->SetFanDirection(Fan::Down);
+				//fan_[3]->SetIsControl(true);
 
-				fan_[4]->SetFanDirection(Fan::Down);
-				fan_[4]->SetIsControl(true);
-				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+				//fan_[4]->SetFanDirection(Fan::Down);
+				//fan_[4]->SetIsControl(true);
+				//ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 
-				scene_ = Stage0;
+				//scene_ = Stage0;
+				if (input_->TriggerKey(DIK_RETURN)) {
+					//シーンの切り替えを依頼
+					SceneManager::GetInstance()->ChangeScene("TITLE");
+				}
 				break;
 			case Stage4:
 				ParameterPlayer(positionPlayer, 0);
