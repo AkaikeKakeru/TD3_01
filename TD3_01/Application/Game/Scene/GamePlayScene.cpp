@@ -327,7 +327,7 @@ void GamePlayScene::Update3d() {
 			switch (scene_)
 			{
 			case Stage0:
-				//ここで次の値をセット
+				//ここで次の値をセット(サンプル)
 				positionPlayer = { 20.0f,0.0f,20.0f };
 				fan_[0]->SetIsControl(false);
 				fan_[1]->SetIsControl(true);
