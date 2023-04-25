@@ -69,14 +69,14 @@ void Framework::Update(){
 
 	imGuiManager_->Begin();
 	ImGui::Begin("How to Play");
-	ImGui::SetWindowPos(ImVec2(10, 10));
-	ImGui::SetWindowSize(ImVec2(500, 200));
+	ImGui::SetWindowPos(ImVec2(10, 400));
+	ImGui::SetWindowSize(ImVec2(800, 200));
 	ImGui::SetWindowFontScale(2.0f);
-	ImGui::Text("Arrow : Move of Fan Positon");
-	ImGui::Text("WASD : Rota of Fan Direction");
-	ImGui::Text("Hold Space : Plane Move Forward");
+	ImGui::Text("Mouse Click Left : Move of Fan Positon");
+	ImGui::Text("hold-> + WASD : Rota of Fan Direction");
+	ImGui::Text("Space : Plane Move Forward");
 	ImGui::Text("");
-	ImGui::Text("Press ENTER to Start");
+	ImGui::Text("Press ENTER to GameStart");
 	ImGui::End();
 
 #ifdef _DEBUG

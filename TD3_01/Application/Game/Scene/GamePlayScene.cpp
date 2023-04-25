@@ -327,11 +327,14 @@ void GamePlayScene::Update3d() {
 			switch (scene_)
 			{
 			case Stage0:
-				//ここで次の値をセット(サンプル)
+				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
 				positionPlayer = { 20.0f,0.0f,20.0f };
-				fan_[0]->SetIsControl(false);
+				fan_[0]->SetIsControl(true);
+				fan_[0]->SetFanDirection(Fan::Down);
 				fan_[1]->SetIsControl(true);
+				fan_[1]->SetFanDirection(Fan::Up);
 				fan_[2]->SetIsControl(true);
+				fan_[2]->SetFanDirection(Fan::Right);
 
 
 				ParameterPlayer(positionPlayer, 1);
