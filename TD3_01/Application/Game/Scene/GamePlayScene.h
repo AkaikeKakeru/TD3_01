@@ -87,16 +87,25 @@ private:
 	/// <summary>
 	/// オブジェクト
 	/// </summary>
+
 	Stage* stage_ = nullptr;
-	const std::string filename_[8] = {
+	const std::string filename_[5] = {
 	  "0",
 	  "1",
 	  "2",
 	  "3",
 	  "4",
-	  "5",
-	  "6",
-	  "7" };
+	};
+
+	enum GameScene
+	{
+		Stage0,
+		Stage1,
+		Stage2,
+		Stage3,
+		Stage4,
+	};
+	size_t scene_ = Stage0;
 
 	Object3d* rayObj_ = nullptr;
 	Model* rayModel_ = nullptr;

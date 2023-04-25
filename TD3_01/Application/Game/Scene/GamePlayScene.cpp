@@ -273,7 +273,7 @@ void GamePlayScene::Initialize3d() {
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
 
-	ParameterPlayer(positionPlayer, 1);
+	ParameterPlayer(positionPlayer, 0);
 	ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
 }
 
@@ -310,18 +310,62 @@ void GamePlayScene::Update3d() {
 	camera_->Update();
 
 	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50.0f * fan_[0]->GetRay()->dir_));
-	
+
 	if (stage_->GetIsGoal())
 	{
 		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
 		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
 
-		ImGui::Begin("Touch to Goal!");
+		ImGui::Begin("Stage Clear!");
 		ImGui::SetWindowPos(ImVec2(10, 10));
 		ImGui::SetWindowSize(ImVec2(500, 200));
 		ImGui::SetWindowFontScale(2.0f);
-		ImGui::Text("Particle Active");
+		ImGui::Text("Pless Enter Next Stage");
 		ImGui::End();
+		if (input_->TriggerKey(DIK_RETURN))
+		{
+			switch (scene_)
+			{
+			case Stage0:
+				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
+				positionPlayer = { 20.0f,0.0f,20.0f };
+				fan_[0]->SetIsControl(true);
+				fan_[0]->SetFanDirection(Fan::Down);
+				fan_[1]->SetIsControl(true);
+				fan_[1]->SetFanDirection(Fan::Up);
+				fan_[2]->SetIsControl(true);
+				fan_[2]->SetFanDirection(Fan::Right);
+
+
+				ParameterPlayer(positionPlayer, 1);
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+				scene_ = Stage1;
+				break;
+			case Stage1:
+				
+				ParameterPlayer(positionPlayer, 2);
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+				scene_ = Stage2;
+				break;
+			case Stage2:
+				ParameterPlayer(positionPlayer, 3);
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+				scene_ = Stage3;
+				break;
+			case Stage3:
+				ParameterPlayer(positionPlayer, 4);
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+				scene_ = Stage4;
+				break;
+			case Stage4:
+				ParameterPlayer(positionPlayer, 0);
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+				scene_ = Stage0;
+				break;
+
+			}
+
+		}
 
 	}
 	else
@@ -329,7 +373,7 @@ void GamePlayScene::Update3d() {
 		player_->Update();
 
 		rayObj_->Update();
-	
+
 		rayObj_2->Update();
 
 		if (input_->TriggerKey(DIK_R))
@@ -524,5 +568,5 @@ void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanP
 	{
 		fan_[i]->SetPosition(pos[i]);
 	}
-	
+
 }
