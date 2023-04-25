@@ -143,4 +143,6 @@ private:
 		{ 60.0f,0.0f,50.0f },
 		{ 60.0f,0.0f,50.0f },
 	};
+	//クリアしたか
+	bool isClear_ = false;
 };

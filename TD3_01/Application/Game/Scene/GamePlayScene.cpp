@@ -279,6 +279,10 @@ void GamePlayScene::Initialize3d() {
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
 
+	//ステージ生成
+	stage_ = new Stage();
+	stage_->Initialize(camera_);
+
 	ParameterPlayer(positionPlayer, 0);
 	ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 }
@@ -317,7 +321,14 @@ void GamePlayScene::Update3d() {
 
 	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50.0f * fan_[0]->GetRay()->dir_));
 
+	stageCollision = CollisionStageFlag(player_, stage_);
+
 	if (stage_->GetIsGoal())
+	{
+		isClear_ = true;
+	}
+
+	if (isClear_)
 	{
 		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
 		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
@@ -333,15 +344,17 @@ void GamePlayScene::Update3d() {
 			switch (scene_)
 			{
 			case Stage0:
+
 				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
 				positionPlayer = { 28.0f,0.0f,24.0f };
-				
+				ParameterPlayer(positionPlayer, 1);
+				player_->OnCollisionStage(stageCollision, positionPlayer);
+
 				positionFan[0] = { 60.0f,0.0f,50.0f };
 				positionFan[1] = { -10.0f,0.0f,18.0f };
 				positionFan[2] = { -36.0f,0.0f,42.0f };
 				positionFan[3] = { 36.0f,0.0f,66.0f };
 				positionFan[4] = { 12.0f,0.0f,90.0f };
-				
 
 				fan_[0]->SetIsControl(true);
 				fan_[0]->SetFanDirection(Fan::Up);
@@ -354,21 +367,21 @@ void GamePlayScene::Update3d() {
 				fan_[4]->SetIsControl(false);
 				fan_[4]->SetFanDirection(Fan::Left);
 
-
-				ParameterPlayer(positionPlayer, 1);
 				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+
 				scene_ = Stage1;
 				break;
 
 			case Stage1:
+				player_->OnCollisionStage(stageCollision, positionPlayer);
 				positionPlayer = { -28.0f,0.0f,40.0f };
-
+				ParameterPlayer(positionPlayer, 2);
+				
 				positionFan[0] = { 60.0f,0.0f,50.0f };
 				positionFan[1] = { 60.0f,0.0f,40.0f };
 				positionFan[2] = { -36.0f,0.0f,26.0f };
 				positionFan[3] = { 28.0f,0.0f,18.0f };
 				positionFan[4] = { 20.0f,0.0f,90.0f };
-
 
 				fan_[0]->SetIsControl(true);
 				fan_[0]->SetFanDirection(Fan::Up);
@@ -381,11 +394,10 @@ void GamePlayScene::Update3d() {
 				fan_[4]->SetIsControl(false);
 				fan_[4]->SetFanDirection(Fan::Left);
 
-				ParameterPlayer(positionPlayer, 2);
 				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
-				scene_ = Stage2;	
+				scene_ = Stage2;
 				break;
-			
+
 			case Stage2:
 				ParameterPlayer(positionPlayer, 3);
 				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
@@ -412,6 +424,9 @@ void GamePlayScene::Update3d() {
 
 		rayObj_2->Update();
 
+		for (int i = 0; i < FanCount_; i++) {
+			fan_[i]->Update();
+		}
 		if (input_->TriggerKey(DIK_R))
 		{
 			ReSetPositionPlayer(positionPlayer);
@@ -421,9 +436,7 @@ void GamePlayScene::Update3d() {
 
 
 	skydome_->Update();
-	for (int i = 0; i < FanCount_; i++) {
-		fan_[i]->Update();
-	}
+
 
 	//レイキャストをチェック
 	for (int i = 0; i < FanCount_; i++) {
@@ -442,10 +455,10 @@ void GamePlayScene::Update3d() {
 			}
 		}
 	}
+	
 	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
-	stageCollision = CollisionStageFlag(player_, stage_);
 
 	player_->OnCollisionStage(stageCollision, positionPlayer);
 
@@ -574,11 +587,12 @@ void GamePlayScene::ParameterPlayer(const Vector3& playerPos, const int& stageNu
 {
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
+	player_->Update();
+	player_->Stop(pos);
 
-	//ステージ生成
-	stage_ = new Stage();
-	stage_->Initialize(camera_);
 	stage_->StageInitialize(filename_[stageNum]);
+	isClear_ = false;
+
 }
 
 void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5)
@@ -587,6 +601,7 @@ void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2,
 	for (size_t i = 0; i < FanCount_; i++)
 	{
 		fan_[i]->SetPosition(pos[i]);
+		fan_[i]->Update();
 	}
 
 }
@@ -595,6 +610,7 @@ void GamePlayScene::ReSetPositionPlayer(const Vector3& playerPos)
 {
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
+
 }
 
 void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5)
@@ -603,6 +619,7 @@ void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanP
 	for (size_t i = 0; i < FanCount_; i++)
 	{
 		fan_[i]->SetPosition(pos[i]);
+		
 	}
-
+	
 }
