@@ -233,12 +233,18 @@ void GamePlayScene::Initialize3d() {
 	fan_[0]->SetIsControl(true);
 
 	//ファン左向き時の数値設定
-	fan_[1]->SetFanDirection(Fan::Left);
+	fan_[1]->SetFanDirection(Fan::Down);
 	fan_[1]->SetIsControl(true);
 
 	//ファン右向き時の数値設定
-	fan_[2]->SetFanDirection(Fan::Right);
+	fan_[2]->SetFanDirection(Fan::Down);
 	fan_[2]->SetIsControl(true);
+
+	fan_[3]->SetFanDirection(Fan::Down);
+	fan_[3]->SetIsControl(true);
+
+	fan_[4]->SetFanDirection(Fan::Down);
+	fan_[4]->SetIsControl(true);
 
 	//レイ接触確認オブジェクトの初期化
 	rayObj_ = Object3d::Create();
@@ -273,8 +279,12 @@ void GamePlayScene::Initialize3d() {
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
 
+	//ステージ生成
+	stage_ = new Stage();
+	stage_->Initialize(camera_);
+
 	ParameterPlayer(positionPlayer, 0);
-	ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+	ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 }
 
 void GamePlayScene::Initialize2d() {
@@ -311,7 +321,14 @@ void GamePlayScene::Update3d() {
 
 	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50.0f * fan_[0]->GetRay()->dir_));
 
+	stageCollision = CollisionStageFlag(player_, stage_);
+
 	if (stage_->GetIsGoal())
+	{
+		isClear_ = true;
+	}
+
+	if (isClear_)
 	{
 		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
 		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
@@ -327,46 +344,123 @@ void GamePlayScene::Update3d() {
 			switch (scene_)
 			{
 			case Stage0:
+
 				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
-				positionPlayer = { 20.0f,0.0f,20.0f };
+				positionPlayer = { 28.0f,0.0f,24.0f };
+				ParameterPlayer(positionPlayer, 1);
+
+				positionFan[0] = { 60.0f,0.0f,50.0f };
+				positionFan[1] = { -10.0f,0.0f,18.0f };
+				positionFan[2] = { -36.0f,0.0f,42.0f };
+				positionFan[3] = { 36.0f,0.0f,66.0f };
+				positionFan[4] = { 12.0f,0.0f,90.0f };
+
 				fan_[0]->SetIsControl(true);
-				fan_[0]->SetFanDirection(Fan::Down);
+				fan_[0]->SetFanDirection(Fan::Up);
+				fan_[1]->SetIsControl(false);
+				fan_[1]->SetFanDirection(Fan::Up);
+				fan_[2]->SetIsControl(false);
+				fan_[2]->SetFanDirection(Fan::Up);
+				fan_[3]->SetIsControl(false);
+				fan_[3]->SetFanDirection(Fan::Left);
+				fan_[4]->SetIsControl(false);
+				fan_[4]->SetFanDirection(Fan::Left);
+
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+
+				scene_ = Stage1;
+				break;
+
+			case Stage1:
+				positionPlayer = { -28.0f,0.0f,40.0f };
+				ParameterPlayer(positionPlayer, 2);
+
+				positionFan[0] = { 60.0f,0.0f,50.0f };
+				positionFan[1] = { 60.0f,0.0f,40.0f };
+				positionFan[2] = { -36.0f,0.0f,26.0f };
+				positionFan[3] = { 28.0f,0.0f,18.0f };
+				positionFan[4] = { 20.0f,0.0f,90.0f };
+
+				fan_[0]->SetIsControl(true);
+				fan_[0]->SetFanDirection(Fan::Up);
+				fan_[1]->SetIsControl(true);
+				fan_[1]->SetFanDirection(Fan::Up);
+				fan_[2]->SetIsControl(false);
+				fan_[2]->SetFanDirection(Fan::Right);
+				fan_[3]->SetIsControl(false);
+				fan_[3]->SetFanDirection(Fan::Up);
+				fan_[4]->SetIsControl(false);
+				fan_[4]->SetFanDirection(Fan::Left);
+
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+				scene_ = Stage2;
+				break;
+
+			case Stage2:
+				positionPlayer = { 36.0f,0.0f,82.0f };
+				ParameterPlayer(positionPlayer, 3);
+
+				positionFan[0] = { 60.0f,0.0f,50.0f };
+				positionFan[1] = { 60.0f,0.0f,40.0f };
+				positionFan[2] = { 60.0f,0.0f,30.0f };
+				positionFan[3] = { 12.0f,0.0f,90.0f };
+				positionFan[4] = { -12.0f,0.0f,66.0f };
+
+				fan_[0]->SetIsControl(true);
+				fan_[0]->SetFanDirection(Fan::Up);
 				fan_[1]->SetIsControl(true);
 				fan_[1]->SetFanDirection(Fan::Up);
 				fan_[2]->SetIsControl(true);
-				fan_[2]->SetFanDirection(Fan::Right);
+				fan_[2]->SetFanDirection(Fan::Up);
+				fan_[3]->SetIsControl(false);
+				fan_[3]->SetFanDirection(Fan::Down);
+				fan_[4]->SetIsControl(false);
+				fan_[4]->SetFanDirection(Fan::Down);
 
-
-				ParameterPlayer(positionPlayer, 1);
-				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
-				scene_ = Stage1;
-				break;
-			case Stage1:
-				
-				ParameterPlayer(positionPlayer, 2);
-				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
-				scene_ = Stage2;
-				break;
-			case Stage2:
-				ParameterPlayer(positionPlayer, 3);
-				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 				scene_ = Stage3;
 				break;
 			case Stage3:
-				ParameterPlayer(positionPlayer, 4);
-				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
-				scene_ = Stage4;
+				//positionPlayer = { 8.0f,0.0f,20.0f };
+				//ParameterPlayer(positionPlayer, 0);
+
+				//positionFan[0] = { 60.0f, 0.0f, 50.0f };
+				//positionFan[1] = { 60.0f,0.0f,50.0f };
+				//positionFan[2] = { 60.0f,0.0f,50.0f };
+				//positionFan[3] = { 60.0f,0.0f,50.0f };
+				//positionFan[4] = { 60.0f,0.0f,50.0f };
+				////ファン下向き時の数値設定
+				//fan_[0]->SetFanDirection(Fan::Down);
+				//fan_[0]->SetIsControl(true);
+
+				////ファン左向き時の数値設定
+				//fan_[1]->SetFanDirection(Fan::Down);
+				//fan_[1]->SetIsControl(true);
+
+				////ファン右向き時の数値設定
+				//fan_[2]->SetFanDirection(Fan::Down);
+				//fan_[2]->SetIsControl(true);
+
+				//fan_[3]->SetFanDirection(Fan::Down);
+				//fan_[3]->SetIsControl(true);
+
+				//fan_[4]->SetFanDirection(Fan::Down);
+				//fan_[4]->SetIsControl(true);
+				//ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+
+				//scene_ = Stage0;
+				if (input_->TriggerKey(DIK_RETURN)) {
+					//シーンの切り替えを依頼
+					SceneManager::GetInstance()->ChangeScene("TITLE");
+				}
 				break;
 			case Stage4:
 				ParameterPlayer(positionPlayer, 0);
-				ParamaterFun(positionFan[0], positionFan[1], positionFan[2]);
+				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 				scene_ = Stage0;
 				break;
-
 			}
-
 		}
-
 	}
 	else
 	{
@@ -376,18 +470,19 @@ void GamePlayScene::Update3d() {
 
 		rayObj_2->Update();
 
+		for (int i = 0; i < FanCount_; i++) {
+			fan_[i]->Update();
+		}
 		if (input_->TriggerKey(DIK_R))
 		{
 			ReSetPositionPlayer(positionPlayer);
-			ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2]);
+			ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 		}
 	}
 
 
 	skydome_->Update();
-	for (int i = 0; i < FanCount_; i++) {
-		fan_[i]->Update();
-	}
+
 
 	//レイキャストをチェック
 	for (int i = 0; i < FanCount_; i++) {
@@ -406,10 +501,10 @@ void GamePlayScene::Update3d() {
 			}
 		}
 	}
+
 	stage_->Update();
 	//全ての衝突をチェック
 	collisionManager_->CheckAllCollisions();
-	stageCollision = CollisionStageFlag(player_, stage_);
 
 	player_->OnCollisionStage(stageCollision, positionPlayer);
 
@@ -538,19 +633,21 @@ void GamePlayScene::ParameterPlayer(const Vector3& playerPos, const int& stageNu
 {
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
+	player_->Update();
+	player_->Stop(pos);
 
-	//ステージ生成
-	stage_ = new Stage();
-	stage_->Initialize(camera_);
 	stage_->StageInitialize(filename_[stageNum]);
+	isClear_ = false;
+
 }
 
-void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3)
+void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5)
 {
-	Vector3 pos[FanCount_] = { {fanPos1},{fanPos2},{fanPos3} };
+	Vector3 pos[FanCount_] = { {fanPos1},{fanPos2},{fanPos3},{fanPos4},{fanPos5} };
 	for (size_t i = 0; i < FanCount_; i++)
 	{
 		fan_[i]->SetPosition(pos[i]);
+		fan_[i]->Update();
 	}
 
 }
@@ -559,14 +656,16 @@ void GamePlayScene::ReSetPositionPlayer(const Vector3& playerPos)
 {
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
+
 }
 
-void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3)
+void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5)
 {
-	Vector3 pos[FanCount_] = { {fanPos1},{fanPos2},{fanPos3} };
+	Vector3 pos[FanCount_] = { {fanPos1},{fanPos2},{fanPos3},{fanPos4},{fanPos5} };
 	for (size_t i = 0; i < FanCount_; i++)
 	{
 		fan_[i]->SetPosition(pos[i]);
+
 	}
 
 }

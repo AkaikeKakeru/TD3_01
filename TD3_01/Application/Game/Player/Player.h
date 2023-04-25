@@ -47,7 +47,7 @@ private:
 	// 前フレーム座標
 	Vector3 prePos_{};
 	//半径
-	float radius_ = 4.0f;
+	float radius_ = 2.0f;
 public:
 	Player() = default;
 	~Player() = default;

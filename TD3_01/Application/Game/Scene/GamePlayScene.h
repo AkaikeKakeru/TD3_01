@@ -34,9 +34,9 @@ public:
 	void Finalize() override;
 	bool CollisionStageFlag(Player* p, Stage* s);
 	void ParameterPlayer(const Vector3& playerPos, const int& stageNum);
-	void ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3);
+	void ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
 	void ReSetPositionPlayer(const Vector3& playerPos);
-	void ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3);
+	void ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
 
 private:
 	void Initialize3d();
@@ -52,7 +52,7 @@ private:
 public://定数
 	static const int Vector3Count_ = 3;
 
-	static const int FanCount_ = 3;
+	static const int FanCount_ = 5;
 
 private:
 	//基盤
@@ -137,8 +137,12 @@ private:
 	Vector3 positionPlayer = { 8.0f,0.0f,20.0f };
 	Vector3 positionFan[FanCount_] =
 	{
-		{ 0.0f,0.0f,20.0f },
-		{ 20.0f,0.0f,40.0f},
-		{ -12.0f,0.0f,30.0f }
+		{ 60.0f,0.0f,50.0f },
+		{ 60.0f,0.0f,50.0f},
+		{ 60.0f,0.0f,50.0f },
+		{ 60.0f,0.0f,50.0f },
+		{ 60.0f,0.0f,50.0f },
 	};
+	//クリアしたか
+	bool isClear_ = false;
 };
