@@ -207,7 +207,7 @@ void GamePlayScene::Initialize3d() {
 	rayModel_ = new Model();
 	rayModel_ = Model::LoadFromOBJ("cube", true);
 	fanModel_ = new Model();
-	fanModel_ = Model::LoadFromOBJ("planeEnemy", false);
+	fanModel_ = Model::LoadFromOBJ("Fan", true);
 
 	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
