@@ -375,8 +375,8 @@ void GamePlayScene::Update3d() {
 				positionPlayer = { -28.0f,0.0f,40.0f };
 				ParameterPlayer(positionPlayer, 2);
 
-				positionFan[0] = { 60.0f,0.0f,50.0f };
-				positionFan[1] = { 60.0f,0.0f,40.0f };
+				positionFan[0] = { 60.0f,0.0f,60.0f };
+				positionFan[1] = { 60.0f,0.0f,30.0f };
 				positionFan[2] = { -36.0f,0.0f,26.0f };
 				positionFan[3] = { 28.0f,0.0f,18.0f };
 				positionFan[4] = { 20.0f,0.0f,90.0f };
@@ -400,9 +400,9 @@ void GamePlayScene::Update3d() {
 				positionPlayer = { 36.0f,0.0f,82.0f };
 				ParameterPlayer(positionPlayer, 3);
 
-				positionFan[0] = { 60.0f,0.0f,50.0f };
-				positionFan[1] = { 60.0f,0.0f,40.0f };
-				positionFan[2] = { 60.0f,0.0f,30.0f };
+				positionFan[0] = { 60.0f,0.0f,80.0f };
+				positionFan[1] = { 60.0f,0.0f,50.0f };
+				positionFan[2] = { 60.0f,0.0f,20.0f };
 				positionFan[3] = { 12.0f,0.0f,90.0f };
 				positionFan[4] = { -12.0f,0.0f,66.0f };
 
