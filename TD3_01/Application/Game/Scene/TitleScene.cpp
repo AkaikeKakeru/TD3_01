@@ -21,7 +21,7 @@ void TitleScene::Initialize(){
 	camera_->SetEye({ 0,10,-20 });
 
 	planeModel_ = new Model();
-	planeModel_ = Model::LoadFromOBJ("plane", false);
+	planeModel_ = Model::LoadFromOBJ("PaperPlane", false);
 
 	skydomeModel_ = new Model();
 	skydomeModel_ = Model::LoadFromOBJ("skydome",false);

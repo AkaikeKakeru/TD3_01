@@ -203,11 +203,11 @@ void GamePlayScene::Initialize3d() {
 
 	//各種モデル
 	playerModel_ = new Model();
-	playerModel_ = Model::LoadFromOBJ("plane", false);
+	playerModel_ = Model::LoadFromOBJ("PaperPlane", false);
 	rayModel_ = new Model();
 	rayModel_ = Model::LoadFromOBJ("cube", true);
 	fanModel_ = new Model();
-	fanModel_ = Model::LoadFromOBJ("planeEnemy", false);
+	fanModel_ = Model::LoadFromOBJ("Fan", false);
 
 	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
