@@ -8,6 +8,8 @@
 #include <cassert>
 #include <WinApp.h>
 
+#include "Stage.h"
+
 Fan* Fan::Create(Model* model) {
 	//オブジェクトのインスタンスを生成
 	Fan* instance = new Fan();
@@ -94,8 +96,29 @@ void Fan::Update() {
 
 		if (input_->PressMouse(0)) {
 			if (isGrab_) {
+				Stage stage;
+
 				//再計算
-				Object3d::SetPosition(worldTransform3dReticle_.position_);
+				Vector3 localPos = worldTransform3dReticle_.position_;
+				Vector3 localPosRema = {
+					static_cast<float>(static_cast<int>(localPos.x) % static_cast<int>(stage.GetRadius())),
+					localPos.y,
+					static_cast<float>(static_cast<int>(localPos.z) % static_cast<int>(stage.GetRadius()))
+				};
+
+				localPos = {
+					localPos.x - localPosRema.x,
+					localPos.y,
+					localPos.z - localPosRema.z
+				};
+
+				localPos = {
+					localPos.x + stage.GetRadius(),
+					localPos.y,
+					localPos.z + stage.GetRadius()
+				};
+
+				Object3d::SetPosition(localPos);
 			}
 		}
 		else {
@@ -105,41 +128,41 @@ void Fan::Update() {
 		if (isGrab_) {
 
 
-		//移動後の座標を計算
-		if (input_->TriggerKey(DIK_W)) {
-			rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
+			//移動後の座標を計算
+			if (input_->TriggerKey(DIK_W)) {
+				rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
 
-			rot = angleY * verticalAngle * 2;
+				rot = angleY * verticalAngle * 2;
 
-			ray_->dir_ = angleZ;
-		}
+				ray_->dir_ = angleZ;
+			}
 
-		else if (input_->TriggerKey(DIK_S)) {
-			rotVector_ = CreateRotationVector(angleY, 0);
+			else if (input_->TriggerKey(DIK_S)) {
+				rotVector_ = CreateRotationVector(angleY, 0);
 
-			rot = angleY * verticalAngle * 0;
+				rot = angleY * verticalAngle * 0;
 
-			ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
-		}
+				ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
+			}
 
-		if (input_->TriggerKey(DIK_A)) {
-			rotVector_ = CreateRotationVector(angleY, verticalAngle);
+			if (input_->TriggerKey(DIK_A)) {
+				rotVector_ = CreateRotationVector(angleY, verticalAngle);
 
-			rot = angleY * verticalAngle;
+				rot = angleY * verticalAngle;
 
-			ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
-		}
+				ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
+			}
 
-		else if (input_->TriggerKey(DIK_D)) {
-			rotVector_ = CreateRotationVector(angleY, -verticalAngle);
+			else if (input_->TriggerKey(DIK_D)) {
+				rotVector_ = CreateRotationVector(angleY, -verticalAngle);
 
-			rot = angleY * -verticalAngle;
+				rot = angleY * -verticalAngle;
 
-			ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
-		}
+				ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
+			}
 
-		// 回転の変更を反映
-		Object3d::SetRotation(rot);
+			// 回転の変更を反映
+			Object3d::SetRotation(rot);
 		}
 	}
 
