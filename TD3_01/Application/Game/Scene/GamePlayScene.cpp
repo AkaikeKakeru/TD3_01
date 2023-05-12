@@ -330,8 +330,8 @@ void GamePlayScene::Update3d() {
 
 	if (isClear_)
 	{
-		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
-		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+		pm1_->Active(particle1_, {camera_->GetEye()}, { 100.0f, 100.0f, 100.0f }, {0.2f ,0.2f,0.2f}, {0.0f,0.001f,0.0f}, 5, {13.0f, 0.0f});
+		//pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
 
 		ImGui::Begin("Stage Clear!");
 		ImGui::SetWindowPos(ImVec2(10, 10));
@@ -542,6 +542,7 @@ void GamePlayScene::DrawParticle()
 {
 	pm1_->Draw();
 	pm2_->Draw();
+	
 }
 
 void GamePlayScene::Draw2d() {

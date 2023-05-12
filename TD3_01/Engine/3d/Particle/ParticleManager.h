@@ -103,13 +103,16 @@ public: // メンバ関数
 	/// パーティクル発射
 	/// </summary>
 	/// <param name="p">パーティクル</param>
+	/// <param name="setmove">初期位置</param>
 	/// <param name="setpos">位置</param>
 	/// <param name="setvel">移動量</param>
 	/// <param name="setacc">重力分布</param>
 	/// <param name="setnum">一気に何個か</param>
 	///  <param name="setscale">x = 開始スケール , y = 終了スケール</param>
-	void Active(Particle* p, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const Vector2& setscale);
-
+	void Active(Particle* p, const Vector3& setmove, const Vector3& setpos, const Vector3& setvel, const Vector3& setacc, const int& setnum, const Vector2& setscale);
+	void ActiveX(Particle* p,const Vector3& setmove, const Vector3& setpos, const Vector3& setvel, const Vector3& setacc, const int& setnum, const Vector2& setscale);
+	void ActiveY(Particle* p,const Vector3& setmove, const Vector3& setpos, const Vector3& setvel, const Vector3& setacc, const int& setnum, const Vector2& setscale);
+	void ActiveZ(Particle* p,const Vector3& setmove, const Vector3& setpos, const Vector3& setvel, const Vector3& setacc, const int& setnum, const Vector2& setscale);
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
