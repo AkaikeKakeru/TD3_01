@@ -86,7 +86,7 @@ void TitleScene::Draw() {
 	//モデル本命処理
 	Object3d::PreDraw(dxBas_->GetCommandList().Get());
 
-	skydomeObj_->Draw();
+	//skydomeObj_->Draw();
 	planeObj_->Draw();
 
 	Object3d::PostDraw();
