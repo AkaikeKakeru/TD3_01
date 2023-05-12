@@ -274,7 +274,7 @@ void GamePlayScene::Initialize3d() {
 	pm1_->SetParticleModel(particle1_);
 	pm1_->SetCamera(camera_);
 
-	particle2_ = Particle::LoadFromParticleTexture("particle5.png");
+	particle2_ = Particle::LoadFromParticleTexture("particle1.png");
 	pm2_ = ParticleManager::Create();
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
@@ -621,8 +621,9 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 			// 当たり判定
 			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
-
+				pm2_->Active(particle2_,pPos, {0.0f ,0.0f,25.0f}, {3.0f,3.0f,3.0f}, {0.0f,0.001f,0.0f}, 100, {1.0f, 0.0f});
 				return true;
+				
 			}
 		}
 	}
