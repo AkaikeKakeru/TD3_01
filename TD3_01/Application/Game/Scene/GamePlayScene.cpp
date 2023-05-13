@@ -279,6 +279,11 @@ void GamePlayScene::Initialize3d() {
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
 
+	wind_ = Particle::LoadFromParticleTexture("particle5.png");
+	windpm_ = ParticleManager::Create();
+	windpm_->SetParticleModel(wind_);
+	windpm_->SetCamera(camera_);
+
 	//ステージ生成
 	stage_ = new Stage();
 	stage_->Initialize(camera_);
@@ -471,7 +476,7 @@ void GamePlayScene::Update3d() {
 		rayObj_2->Update();
 
 		for (int i = 0; i < FanCount_; i++) {
-			fan_[i]->ActiveWind(fan_[i]->GetFanDirection(),fan_[i]->GetPosition());
+			ActiveWind(fan_[i]->GetFanDirection(), fan_[i]->GetPosition());
 			fan_[i]->Update();
 		}
 		if (input_->TriggerKey(DIK_R))
@@ -511,7 +516,7 @@ void GamePlayScene::Update3d() {
 
 	pm1_->Update();
 	pm2_->Update();
-
+	windpm_->Update();
 
 }
 
@@ -543,9 +548,8 @@ void GamePlayScene::DrawParticle()
 {
 	pm1_->Draw();
 	pm2_->Draw();
-	for (int i = 0; i < FanCount_; i++) {
-		fan_[i]->DrawWind();
-	}
+	
+	windpm_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -576,6 +580,8 @@ void GamePlayScene::Finalize() {
 	SafeDelete(pm1_);
 	SafeDelete(particle2_);
 	SafeDelete(pm2_);
+	SafeDelete(wind_);
+	SafeDelete(windpm_);
 
 	SafeDelete(sprite_);
 
@@ -673,4 +679,27 @@ void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanP
 
 	}
 
+}
+
+void GamePlayScene::ActiveWind(const int dir, const Vector3& position)
+{
+	switch (dir) {
+	case Fan::Direction::Up:
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	case Fan::Direction::Down:
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	case Fan::Direction::Right:
+		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	case Fan::Direction::Left:
+		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	}
+	
 }

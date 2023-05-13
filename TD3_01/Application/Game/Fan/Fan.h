@@ -3,9 +3,6 @@
 #include "Object3d.h"
 #include "CollisionPrimitive.h"
 #include "Quaternion.h"
-#include "Particle.h"
-#include "ParticleManager.h"
-
 
 #include "Cursor.h"
 
@@ -25,7 +22,6 @@ public: //メンバ関数
 	bool Initialize() override;
 	void Update() override;
 	void Draw();
-	void DrawWind();
 	void Finalize();
 
 	//衝突時コールバック関数
@@ -33,9 +29,7 @@ public: //メンバ関数
 
 	//照準
 	void Reticle();
-	//風
-	void ActiveWind(const int dir, const Vector3& position);
-
+	
 public://アクセッサ
 	Ray* GetRay() {
 		return ray_;
@@ -73,8 +67,6 @@ private://メンバ変数
 	//レティクルカーソル
 	Cursor cursor_;
 
-	//風
-	Particle* wind_ = nullptr;
-	ParticleManager* windpm_ = nullptr;
+	
 
 };

@@ -53,12 +53,7 @@ bool Fan::Initialize() {
 	isGrab_ = false;
 
 	worldTransform3dReticle_.Initialize();
-	//パーティクル
-	wind_ = Particle::LoadFromParticleTexture("particle5.png");
-	windpm_ = ParticleManager::Create();
-	windpm_->SetParticleModel(wind_);
-	windpm_->SetCamera(camera_);
-
+	
 	return true;
 }
 
@@ -150,9 +145,8 @@ void Fan::Update() {
 	}
 
 	ray_->start_ = Object3d::GetPosition();
-	
 	camera_->Update();
-	windpm_->Update();
+	
 	Object3d::Update();
 }
 
@@ -160,16 +154,10 @@ void Fan::Draw() {
 	Object3d::Draw();
 }
 
-void Fan::DrawWind()
-{
-	windpm_->Draw();
-}
 
 void Fan::Finalize() {
 	delete ray_;
-	//風
-	delete wind_;
-	delete windpm_;
+	
 }
 
 void Fan::OnCollision(const CollisionInfo& info) {
@@ -193,29 +181,6 @@ void Fan::Reticle() {
 		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
 		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ))
 	};
-}
-
-void Fan::ActiveWind(const int dir, const Vector3& position)
-{
-	switch (dir) {
-	case Up:
-		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
-		break;
-
-	case Down:
-		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
-		break;
-
-	case Right:
-		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
-		break;
-
-	case Left:
-		windpm_->ActiveX(wind_,position, { 8.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
-		break;
-
-	}
-	
 }
 
 void Fan::SetFanDirection(const int dirNum) {
