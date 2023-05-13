@@ -30,6 +30,7 @@ Fan* Fan::Create(Model* model) {
 }
 
 bool Fan::Initialize() {
+	
 	if (!Object3d::Initialize()) {
 		return false;
 	}
@@ -63,7 +64,7 @@ bool Fan::Initialize() {
 
 void Fan::Update() {
 	assert(&ray_);
-
+	
 	Input* input_ = Input::GetInstance();
 
 	// オブジェクト移動
@@ -149,8 +150,9 @@ void Fan::Update() {
 	}
 
 	ray_->start_ = Object3d::GetPosition();
-	ActiveWind(direction_);
+	
 	camera_->Update();
+	windpm_->Update();
 	Object3d::Update();
 }
 
@@ -193,31 +195,30 @@ void Fan::Reticle() {
 	};
 }
 
-void Fan::ActiveWind(const int dir)
+void Fan::ActiveWind(const int dir, const Vector3& position)
 {
 	switch (dir) {
 	case Up:
-		windpm_->ActiveZ(wind_, worldTransform_.position_, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Down:
-		windpm_->ActiveZ(wind_, worldTransform_.position_, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Right:
-		windpm_->ActiveX(wind_, worldTransform_.position_, { 8.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Left:
-		windpm_->ActiveX(wind_, worldTransform_.position_, { 8.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveX(wind_,position, { 8.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	}
-
-	windpm_->Update();
+	
 }
 
-inline void Fan::SetFanDirection(const int dirNum) {
+void Fan::SetFanDirection(const int dirNum) {
 	this->direction_ = dirNum;
 	//回転スピード(垂直)
 	static const float verticalAngle = ConvertToRadian(90.0f);

@@ -34,7 +34,7 @@ public: //メンバ関数
 	//照準
 	void Reticle();
 	//風
-	void ActiveWind(const int dir);
+	void ActiveWind(const int dir, const Vector3& position);
 
 public://アクセッサ
 	Ray* GetRay() {

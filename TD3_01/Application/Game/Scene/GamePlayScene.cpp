@@ -471,6 +471,7 @@ void GamePlayScene::Update3d() {
 		rayObj_2->Update();
 
 		for (int i = 0; i < FanCount_; i++) {
+			fan_[i]->ActiveWind(fan_[i]->GetFanDirection(),fan_[i]->GetPosition());
 			fan_[i]->Update();
 		}
 		if (input_->TriggerKey(DIK_R))
