@@ -39,4 +39,6 @@ private:
 	/// スプライト
 	/// </summary>
 	Sprite* sprite_ = new Sprite();
+	Sprite* sprite2_ = new Sprite();
+	bool spriteChange = false;
 };
