@@ -542,7 +542,9 @@ void GamePlayScene::DrawParticle()
 {
 	pm1_->Draw();
 	pm2_->Draw();
-	
+	for (int i = 0; i < FanCount_; i++) {
+		fan_[i]->DrawWind();
+	}
 }
 
 void GamePlayScene::Draw2d() {
