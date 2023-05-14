@@ -6,6 +6,8 @@
 
 #include "Cursor.h"
 
+#include "Stage.h"
+
 class Fan
 	: public Object3d {
 public: //enum
@@ -16,21 +18,21 @@ public: //enum
 		Left = 3,
 	} Direction;
 
-public: //Ã“Iƒƒ“ƒoŠÖ”
+public: //é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
 	static Fan* Create(Model* model);
-public: //ƒƒ“ƒoŠÖ”
+public: //ãƒ¡ãƒ³ãƒé–¢æ•°
 	bool Initialize() override;
 	void Update() override;
 	void Draw();
 	void Finalize();
 
-	//Õ“ËƒR[ƒ‹ƒoƒbƒNŠÖ”
+	//è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision(const CollisionInfo& info) override;
 
-	//Æ€
+	//ç…§æº–
 	void Reticle();
 	
-public://ƒAƒNƒZƒbƒT
+public://ã‚¢ã‚¯ã‚»ãƒƒã‚µ
 	Ray* GetRay() {
 		return ray_;
 	}
@@ -41,32 +43,45 @@ public://ƒAƒNƒZƒbƒT
 
 	void SetFanDirection(const int dirNum);
 
-	//‘€ìƒtƒ‰ƒO‚ÌƒZƒbƒg
+	//æ“ä½œãƒ•ãƒ©ã‚°ã®ã‚»ãƒƒãƒˆ
+	bool GetIsControl() {
+		return isControl_;
+	}
+
+	//æ“ä½œãƒ•ãƒ©ã‚°ã®ã‚»ãƒƒãƒˆ
 	void SetIsControl(bool isControl) {
 		isControl_ = isControl;
 	}
 
+
+	//ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚»ãƒƒãƒˆ
+	void SetStage(Stage* stage) {
+		stage_ = stage;
+	}
+
 	int GetFanDirection() { return direction_; }
 	void SetDirection(const int dir) { this->direction_ = dir; }
-private://ƒƒ“ƒo•Ï”
-	//Œü‚«
+private://ãƒ¡ãƒ³ãƒå¤‰æ•°
+	//å‘ã
 	size_t direction_ = Up;
 	Ray* ray_ = nullptr;
-	//‰ñ“]ƒxƒNƒgƒ‹
+	//å›è»¢ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 rotVector_ = { 0,0,0 };
 
-	//‘€ìƒtƒ‰ƒO
+	//æ“ä½œãƒ•ãƒ©ã‚°
 	bool isControl_ = false;
 
-	//’Í‚İƒtƒ‰ƒO
+	//æ´ã¿ãƒ•ãƒ©ã‚°
 	bool isGrab_= false;
 
-	//ƒŒƒeƒBƒNƒ‹—p
+	//ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ç”¨
 	WorldTransform worldTransform3dReticle_;
 
-	//ƒŒƒeƒBƒNƒ‹ƒJ[ƒ\ƒ‹
+	//ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ã‚«ãƒ¼ã‚½ãƒ«
 	Cursor cursor_;
 
-	
-
+	//ã‚¹ãƒ†ãƒ¼ã‚¸
+	Stage* stage_;
+	//ã‚¹ãƒ†ãƒ¼ã‚¸ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆåº§æ¨™
+	Vector3 defaultFloorPos_;
 };

@@ -56,8 +56,10 @@ public:
 	// 床からはみ出しているか
 	bool CheckFloorBlock(int line, int row);
 
-	// 座標ゲッター
+	// 接地物座標ゲッター
 	Vector3 GetBlockPosition(int line, int row);
+	// 床座標ゲッター
+	Vector3 GetFloorPosition(int line, int row);
 
 private:
 	// ステージ床の読み込み
