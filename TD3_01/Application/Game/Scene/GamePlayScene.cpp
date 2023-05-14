@@ -283,7 +283,7 @@ void GamePlayScene::Initialize3d() {
 	stage_ = new Stage();
 	stage_->Initialize(camera_);
 
-	ParameterPlayer(positionPlayer, 0);
+	ParameterPlayer(positionPlayer,player_->GetStartDirection(), 0);
 	ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 }
 
@@ -347,7 +347,8 @@ void GamePlayScene::Update3d() {
 
 				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
 				positionPlayer = { 28.0f,0.0f,24.0f };
-				ParameterPlayer(positionPlayer, 1);
+				player_->SetStartDirection(Player::Left);
+				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 1);
 
 				positionFan[0] = { 60.0f,0.0f,50.0f };
 				positionFan[1] = { -10.0f,0.0f,18.0f };
@@ -373,7 +374,8 @@ void GamePlayScene::Update3d() {
 
 			case Stage1:
 				positionPlayer = { -28.0f,0.0f,40.0f };
-				ParameterPlayer(positionPlayer, 2);
+				player_->SetStartDirection(Player::Down);
+				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 2);
 
 				positionFan[0] = { 60.0f,0.0f,60.0f };
 				positionFan[1] = { 60.0f,0.0f,30.0f };
@@ -398,7 +400,8 @@ void GamePlayScene::Update3d() {
 
 			case Stage2:
 				positionPlayer = { 36.0f,0.0f,82.0f };
-				ParameterPlayer(positionPlayer, 3);
+				player_->SetStartDirection(Player::Left);
+				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 3);
 
 				positionFan[0] = { 60.0f,0.0f,80.0f };
 				positionFan[1] = { 60.0f,0.0f,50.0f };
@@ -455,7 +458,9 @@ void GamePlayScene::Update3d() {
 				}
 				break;
 			case Stage4:
-				ParameterPlayer(positionPlayer, 0);
+
+				player_->SetStartDirection(Player::Up);
+				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 0);
 				ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 				scene_ = Stage0;
 				break;
@@ -471,6 +476,8 @@ void GamePlayScene::Update3d() {
 		rayObj_2->Update();
 
 		for (int i = 0; i < FanCount_; i++) {
+			fan_[i]->SetStage(stage_);
+
 			fan_[i]->Update();
 		}
 		if (input_->TriggerKey(DIK_R))
@@ -480,24 +487,25 @@ void GamePlayScene::Update3d() {
 		}
 	}
 
-
 	skydome_->Update();
-
 
 	//レイキャストをチェック
 	for (int i = 0; i < FanCount_; i++) {
-		if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
+		if (player_->GetIsRun() == true) {
 
-			if (raycastHit_.distance_ <= 50.0f) {
+			if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
-				rayObj_->SetPosition(raycastHit_.inter_);
-				rayObj_->Update();
+				if (raycastHit_.distance_ <= 50.0f) {
 
-				raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
-				raycastHit_.object_->Update();
+					rayObj_->SetPosition(raycastHit_.inter_);
+					rayObj_->Update();
 
-				colRay_ = true;
-				interRay_ = raycastHit_.inter_;
+					raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
+					raycastHit_.object_->Update();
+
+					colRay_ = true;
+					interRay_ = raycastHit_.inter_;
+				}
 			}
 		}
 	}
@@ -605,7 +613,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 				isFloor++;
 			}
 			if (isFloor == 2) {
-				p->Stop(positionPlayer);
+				p->Stop(positionPlayer,player_->GetStartDirection());
 			}
 			s->CheckBlock(pLT[0] + i, pLT[1] + j);
 			// 各座標変数の宣言
@@ -629,12 +637,12 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 	return false;
 }
 
-void GamePlayScene::ParameterPlayer(const Vector3& playerPos, const int& stageNum)
+void GamePlayScene::ParameterPlayer(const Vector3& playerPos, const float direction, const int& stageNum)
 {
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
 	player_->Update();
-	player_->Stop(pos);
+	player_->Stop(pos,direction);
 
 	stage_->StageInitialize(filename_[stageNum]);
 	isClear_ = false;
@@ -656,7 +664,7 @@ void GamePlayScene::ReSetPositionPlayer(const Vector3& playerPos)
 {
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
-
+	player_->SetDirection(player_->GetStartDirection());
 }
 
 void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5)

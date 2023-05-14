@@ -33,10 +33,14 @@ public:
 	void Draw() override;
 	void Finalize() override;
 	bool CollisionStageFlag(Player* p, Stage* s);
-	void ParameterPlayer(const Vector3& playerPos, const int& stageNum);
+	void ParameterPlayer(const Vector3& playerPos, const float direction, const int& stageNum);
 	void ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
 	void ReSetPositionPlayer(const Vector3& playerPos);
 	void ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
+
+	Stage* GetStage() {
+		return stage_;
+	}
 
 private:
 	void Initialize3d();
