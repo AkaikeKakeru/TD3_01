@@ -8,7 +8,7 @@
 DirectXBasis* TitleScene::dxBas_ = DirectXBasis::GetInstance();
 Input* TitleScene::input_ = Input::GetInstance();
 
-void TitleScene::Initialize(){
+void TitleScene::Initialize() {
 	/// 描画初期化
 	//オブジェクト基盤
 	Object3d::StaticInitialize(dxBas_->GetDevice().Get());
@@ -24,7 +24,7 @@ void TitleScene::Initialize(){
 	planeModel_ = Model::LoadFromOBJ("PaperPlane", false);
 
 	skydomeModel_ = new Model();
-	skydomeModel_ = Model::LoadFromOBJ("skydome",false);
+	skydomeModel_ = Model::LoadFromOBJ("skydome", false);
 
 
 	planeObj_ = new Object3d();
@@ -48,13 +48,16 @@ void TitleScene::Initialize(){
 	drawBas_->Initialize();
 
 	drawBas_->LoadTexture(0, "title.png");
+	drawBas_->LoadTexture(1, "tutorial.png");
 
 	//描画スプライト
 
-	sprite_->Initialize(drawBas_,0);
+	sprite_->Initialize(drawBas_, 0);
+	sprite2_->Initialize(drawBas_, 1);
+	spriteChange = false;
 }
 
-void TitleScene::Update(){
+void TitleScene::Update() {
 	input_->Update();
 
 	camera_->Update();
@@ -65,13 +68,21 @@ void TitleScene::Update(){
 
 	sprite_->Update();
 
-	if (input_->TriggerKey(DIK_RETURN)) {
-		//シーンの切り替えを依頼
-		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+	if (input_->TriggerKey(DIK_SPACE))
+	{
+		spriteChange = true;
 	}
+	if (spriteChange)
+	{
+		if (input_->TriggerKey(DIK_RETURN)) {
+			//シーンの切り替えを依頼
+			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		}
+	}
+
 }
 
-void TitleScene::Draw(){
+void TitleScene::Draw() {
 	//モデル本命処理
 	Object3d::PreDraw(dxBas_->GetCommandList().Get());
 
@@ -82,18 +93,25 @@ void TitleScene::Draw(){
 
 	//スプライト本命処理
 	drawBas_->PreDraw();
-
-	sprite_->Draw();
+	if (spriteChange)
+	{
+		sprite2_->Draw();
+	}
+	else
+	{
+		sprite_->Draw();
+	}
 
 	drawBas_->PostDraw();
 }
 
-void TitleScene::Finalize(){
+void TitleScene::Finalize() {
 	SafeDelete(planeObj_);
 	SafeDelete(skydomeObj_);
 	SafeDelete(planeModel_);
 	SafeDelete(skydomeModel_);
 	SafeDelete(sprite_);
+	SafeDelete(sprite2_);
 
 	SafeDelete(lightGroup_);
 	SafeDelete(camera_);

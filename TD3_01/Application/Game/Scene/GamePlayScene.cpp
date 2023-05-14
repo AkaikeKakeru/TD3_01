@@ -204,8 +204,6 @@ void GamePlayScene::Initialize3d() {
 	//各種モデル
 	playerModel_ = new Model();
 	playerModel_ = Model::LoadFromOBJ("PaperPlane", true);
-	rayModel_ = new Model();
-	rayModel_ = Model::LoadFromOBJ("cube", true);
 	fanModel_ = new Model();
 	fanModel_ = Model::LoadFromOBJ("Fan", true);
 
@@ -246,19 +244,6 @@ void GamePlayScene::Initialize3d() {
 	fan_[4]->SetFanDirection(Fan::Down);
 	fan_[4]->SetIsControl(true);
 
-	//レイ接触確認オブジェクトの初期化
-	rayObj_ = Object3d::Create();
-	rayObj_->SetModel(rayModel_);
-	rayObj_->SetPosition(fan_[0]->GetRay()->start_);
-	rayObj_->SetScale({ 2.0f, 2.0f, 2.0f });
-	rayObj_->SetCamera(camera_);
-
-	rayObj_2 = Object3d::Create();
-	rayObj_2->SetModel(rayModel_);
-	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50 * fan_[0]->GetRay()->dir_));
-	rayObj_2->SetScale({ 2.0f, 2.0f, 2.0f });
-	rayObj_2->SetCamera(camera_);
-
 	skydome_ = new Skydome();
 	skydome_->Initialize(camera_);
 
@@ -274,10 +259,15 @@ void GamePlayScene::Initialize3d() {
 	pm1_->SetParticleModel(particle1_);
 	pm1_->SetCamera(camera_);
 
-	particle2_ = Particle::LoadFromParticleTexture("particle5.png");
+	particle2_ = Particle::LoadFromParticleTexture("particle1.png");
 	pm2_ = ParticleManager::Create();
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
+
+	wind_ = Particle::LoadFromParticleTexture("particle5.png");
+	windpm_ = ParticleManager::Create();
+	windpm_->SetParticleModel(wind_);
+	windpm_->SetCamera(camera_);
 
 	//ステージ生成
 	stage_ = new Stage();
@@ -319,8 +309,6 @@ void GamePlayScene::Update3d() {
 	lightGroup_->Update();
 	camera_->Update();
 
-	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50.0f * fan_[0]->GetRay()->dir_));
-
 	stageCollision = CollisionStageFlag(player_, stage_);
 
 	if (stage_->GetIsGoal())
@@ -330,8 +318,8 @@ void GamePlayScene::Update3d() {
 
 	if (isClear_)
 	{
-		pm1_->Active(particle1_, 100.0f, 0.2f, 0.001f, 10, { 13.0f, 0.0f });
-		pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
+		pm1_->Active(particle1_, {camera_->GetEye()}, { 100.0f, 100.0f, 100.0f }, {0.2f ,0.2f,0.2f}, {0.0f,0.001f,0.0f}, 5, {13.0f, 0.0f});
+		//pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
 
 		ImGui::Begin("Stage Clear!");
 		ImGui::SetWindowPos(ImVec2(10, 10));
@@ -471,13 +459,11 @@ void GamePlayScene::Update3d() {
 	{
 		player_->Update();
 
-		rayObj_->Update();
-
-		rayObj_2->Update();
-
 		for (int i = 0; i < FanCount_; i++) {
 			fan_[i]->SetStage(stage_);
 
+
+			ActiveWind(fan_[i]->GetFanDirection(), fan_[i]->GetPosition());
 			fan_[i]->Update();
 		}
 		if (input_->TriggerKey(DIK_R))
@@ -499,6 +485,8 @@ void GamePlayScene::Update3d() {
 
 					rayObj_->SetPosition(raycastHit_.inter_);
 					rayObj_->Update();
+				raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
+				raycastHit_.object_->Update();
 
 					raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
 					raycastHit_.object_->Update();
@@ -518,7 +506,7 @@ void GamePlayScene::Update3d() {
 
 	pm1_->Update();
 	pm2_->Update();
-
+	windpm_->Update();
 
 }
 
@@ -537,8 +525,6 @@ void GamePlayScene::Update2d() {
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
 
-	rayObj_->Draw();
-	rayObj_2->Draw();
 	for (int i = 0; i < FanCount_; i++) {
 		fan_[i]->Draw();
 	}
@@ -550,6 +536,8 @@ void GamePlayScene::DrawParticle()
 {
 	pm1_->Draw();
 	pm2_->Draw();
+	
+	windpm_->Draw();
 }
 
 void GamePlayScene::Draw2d() {
@@ -572,14 +560,13 @@ void GamePlayScene::Finalize() {
 	skydome_->Finalize();
 	SafeDelete(skydome_);
 
-	SafeDelete(rayObj_);
-	SafeDelete(rayObj_2);
-	SafeDelete(rayModel_);
 	//パーティクル
 	SafeDelete(particle1_);
 	SafeDelete(pm1_);
 	SafeDelete(particle2_);
 	SafeDelete(pm2_);
+	SafeDelete(wind_);
+	SafeDelete(windpm_);
 
 	SafeDelete(sprite_);
 
@@ -628,8 +615,9 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 			// 当たり判定
 			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
-
+				pm2_->Active(particle2_,pPos, {0.0f ,0.0f,25.0f}, {3.0f,3.0f,3.0f}, {0.0f,0.001f,0.0f}, 100, {1.0f, 0.0f});
 				return true;
+				
 			}
 		}
 	}
@@ -676,4 +664,27 @@ void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanP
 
 	}
 
+}
+
+void GamePlayScene::ActiveWind(const int dir, const Vector3& position)
+{
+	switch (dir) {
+	case Fan::Direction::Up:
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	case Fan::Direction::Down:
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	case Fan::Direction::Right:
+		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	case Fan::Direction::Left:
+		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		break;
+
+	}
+	
 }

@@ -37,6 +37,8 @@ public:
 	void ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
 	void ReSetPositionPlayer(const Vector3& playerPos);
 	void ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
+	//風
+	void ActiveWind(const int dir, const Vector3& position);
 
 	Stage* GetStage() {
 		return stage_;
@@ -111,11 +113,6 @@ private:
 	};
 	size_t scene_ = Stage0;
 
-	Object3d* rayObj_ = nullptr;
-	Model* rayModel_ = nullptr;
-
-	Object3d* rayObj_2 = nullptr;
-
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
 	
@@ -131,7 +128,9 @@ private:
 
 	Particle* particle2_ = nullptr;
 	ParticleManager* pm2_ = nullptr;
-	
+	//風
+	Particle* wind_ = nullptr;
+	ParticleManager* windpm_ = nullptr;
 	/// <summary>
 	/// スプライト
 	/// </summary>
