@@ -30,143 +30,124 @@ void GamePlayScene::Update() {
 
 #ifdef _DEBUG
 	{
-		float playerPos[Vector3Count_] = {
-			player_->GetPosition().x,
-			player_->GetPosition().y,
-			player_->GetPosition().z
-		};
+			float playerPos[Vector3Count_] = {
+				player_->GetPosition().x,
+				player_->GetPosition().y,
+				player_->GetPosition().z
+			};
 
-		float playerDir[Vector3Count_] = {
-			player_->GetRotation().x,
-			player_->GetRotation().y,
-			player_->GetRotation().z
-		};
+			float playerDir[Vector3Count_] = {
+				player_->GetRotation().x,
+				player_->GetRotation().y,
+				player_->GetRotation().z
+			};
 
-		float blockPos[Vector3Count_] = {
-			rayObj_->GetPosition().x,
-			rayObj_->GetPosition().y,
-			rayObj_->GetPosition().z
-		};
-		float block2Pos[Vector3Count_] = {
-			rayObj_2->GetPosition().x,
-			rayObj_2->GetPosition().y,
-			rayObj_2->GetPosition().z
-		};
+			float rayDir0[Vector3Count_] = {
+				fan_[0]->GetRay()->dir_.x,
+				fan_[0]->GetRay()->dir_.y,
+				fan_[0]->GetRay()->dir_.z
+			};
+			float rayPos0[Vector3Count_] = {
+				fan_[0]->GetRay()->start_.x,
+				fan_[0]->GetRay()->start_.y,
+				fan_[0]->GetRay()->start_.z
+			};
 
-		float rayDir0[Vector3Count_] = {
-			fan_[0]->GetRay()->dir_.x,
-			fan_[0]->GetRay()->dir_.y,
-			fan_[0]->GetRay()->dir_.z
-		};
-		float rayPos0[Vector3Count_] = {
-			fan_[0]->GetRay()->start_.x,
-			fan_[0]->GetRay()->start_.y,
-			fan_[0]->GetRay()->start_.z
-		};
+			float rayDir1[Vector3Count_] = {
+				fan_[1]->GetRay()->dir_.x,
+				fan_[1]->GetRay()->dir_.y,
+				fan_[1]->GetRay()->dir_.z
+			};
+			float rayPos1[Vector3Count_] = {
+				fan_[1]->GetRay()->start_.x,
+				fan_[1]->GetRay()->start_.y,
+				fan_[1]->GetRay()->start_.z
+			};
 
-		float rayDir1[Vector3Count_] = {
-			fan_[1]->GetRay()->dir_.x,
-			fan_[1]->GetRay()->dir_.y,
-			fan_[1]->GetRay()->dir_.z
-		};
-		float rayPos1[Vector3Count_] = {
-			fan_[1]->GetRay()->start_.x,
-			fan_[1]->GetRay()->start_.y,
-			fan_[1]->GetRay()->start_.z
-		};
+			float rayDir2[Vector3Count_] = {
+				fan_[2]->GetRay()->dir_.x,
+				fan_[2]->GetRay()->dir_.y,
+				fan_[2]->GetRay()->dir_.z
+			};
+			float rayPos2[Vector3Count_] = {
+				fan_[2]->GetRay()->start_.x,
+				fan_[2]->GetRay()->start_.y,
+				fan_[2]->GetRay()->start_.z
+			};
+			float rayInter[Vector3Count_] = {
+				interRay_.x,
+				interRay_.y,
+				interRay_.z
+			};
 
-		float rayDir2[Vector3Count_] = {
-			fan_[2]->GetRay()->dir_.x,
-			fan_[2]->GetRay()->dir_.y,
-			fan_[2]->GetRay()->dir_.z
-		};
-		float rayPos2[Vector3Count_] = {
-			fan_[2]->GetRay()->start_.x,
-			fan_[2]->GetRay()->start_.y,
-			fan_[2]->GetRay()->start_.z
-		};
-		float rayInter[Vector3Count_] = {
-			interRay_.x,
-			interRay_.y,
-			interRay_.z
-		};
+			float fanDir0[Vector3Count_] = {
+				fan_[0]->GetRotation().x,
+				fan_[0]->GetRotation().y,
+				fan_[0]->GetRotation().z
+			};
+			float fanPos0[Vector3Count_] = {
+				fan_[0]->GetPosition().x,
+				fan_[0]->GetPosition().y,
+				fan_[0]->GetPosition().z
+			};
 
-		float fanDir0[Vector3Count_] = {
-			fan_[0]->GetRotation().x,
-			fan_[0]->GetRotation().y,
-			fan_[0]->GetRotation().z
-		};
-		float fanPos0[Vector3Count_] = {
-			fan_[0]->GetPosition().x,
-			fan_[0]->GetPosition().y,
-			fan_[0]->GetPosition().z
-		};
+			float fanDir1[Vector3Count_] = {
+				fan_[1]->GetRotation().x,
+				fan_[1]->GetRotation().y,
+				fan_[1]->GetRotation().z
+			};
+			float fanPos1[Vector3Count_] = {
+				fan_[1]->GetPosition().x,
+				fan_[1]->GetPosition().y,
+				fan_[1]->GetPosition().z
+			};
 
-		float fanDir1[Vector3Count_] = {
-			fan_[1]->GetRotation().x,
-			fan_[1]->GetRotation().y,
-			fan_[1]->GetRotation().z
-		};
-		float fanPos1[Vector3Count_] = {
-			fan_[1]->GetPosition().x,
-			fan_[1]->GetPosition().y,
-			fan_[1]->GetPosition().z
-		};
+			float fanDir2[Vector3Count_] = {
+				fan_[2]->GetRotation().x,
+				fan_[2]->GetRotation().y,
+				fan_[2]->GetRotation().z
+			};
+			float fanPos2[Vector3Count_] = {
+				fan_[2]->GetPosition().x,
+				fan_[2]->GetPosition().y,
+				fan_[2]->GetPosition().z
+			};
 
-		float fanDir2[Vector3Count_] = {
-			fan_[2]->GetRotation().x,
-			fan_[2]->GetRotation().y,
-			fan_[2]->GetRotation().z
-		};
-		float fanPos2[Vector3Count_] = {
-			fan_[2]->GetPosition().x,
-			fan_[2]->GetPosition().y,
-			fan_[2]->GetPosition().z
-		};
+			float rayCol[1] = {
+				colRay_
+			};
 
-		float rayCol[1] = {
-			colRay_
-		};
+			ImGui::Begin("Player");
+			ImGui::SetWindowPos(ImVec2(700, 0));
+			ImGui::SetWindowSize(ImVec2(500, 100));
+			ImGui::InputFloat3("PlayerPos", playerPos);
+			ImGui::InputFloat3("PlayerDir", playerDir);
+			ImGui::End();
 
-		ImGui::Begin("Player");
-		ImGui::SetWindowPos(ImVec2(700, 0));
-		ImGui::SetWindowSize(ImVec2(500, 100));
-		ImGui::InputFloat3("PlayerPos", playerPos);
-		ImGui::InputFloat3("PlayerDir", playerDir);
-		ImGui::End();
+			ImGui::Begin("Fan");
+			ImGui::SetWindowPos(ImVec2(0, 0));
+			ImGui::SetWindowSize(ImVec2(500, 200));
+			ImGui::InputFloat3("FanPos", fanPos0);
+			ImGui::InputFloat3("FanDir", fanDir0);
+			ImGui::InputFloat3("FanPos", fanPos1);
+			ImGui::InputFloat3("FanDir", fanDir1);
+			ImGui::InputFloat3("FanPos", fanPos2);
+			ImGui::InputFloat3("FanDir", fanDir2);
+			ImGui::End();
 
-		ImGui::Begin("Block");
-		ImGui::SetWindowPos(ImVec2(0, 400));
-		ImGui::SetWindowSize(ImVec2(500, 100));
-		ImGui::InputFloat3("BlockPos", blockPos);
-		ImGui::InputFloat3("Block2Pos", block2Pos);
-		ImGui::InputFloat3("RayInter", rayInter);
-		ImGui::End();
+			ImGui::Begin("Ray");
+			ImGui::SetWindowPos(ImVec2(0, 500));
+			ImGui::SetWindowSize(ImVec2(500, 200));
+			ImGui::InputFloat3("RayPos", rayPos0);
+			ImGui::InputFloat3("RayDir", rayDir0);
+			ImGui::InputFloat3("RayPos", rayPos1);
+			ImGui::InputFloat3("RayDir", rayDir1);
+			ImGui::InputFloat3("RayPos", rayPos2);
+			ImGui::InputFloat3("RayDir", rayDir2);
+			ImGui::InputFloat("RayCol", rayCol);
+			ImGui::End();
 
-		ImGui::Begin("Fan");
-		ImGui::SetWindowPos(ImVec2(0, 0));
-		ImGui::SetWindowSize(ImVec2(500, 200));
-		ImGui::InputFloat3("FanPos", fanPos0);
-		ImGui::InputFloat3("FanDir", fanDir0);
-		ImGui::InputFloat3("FanPos", fanPos1);
-		ImGui::InputFloat3("FanDir", fanDir1);
-		ImGui::InputFloat3("FanPos", fanPos2);
-		ImGui::InputFloat3("FanDir", fanDir2);
-		ImGui::End();
-
-		ImGui::Begin("Ray");
-		ImGui::SetWindowPos(ImVec2(0, 500));
-		ImGui::SetWindowSize(ImVec2(500, 200));
-		ImGui::InputFloat3("RayPos", rayPos0);
-		ImGui::InputFloat3("RayDir", rayDir0);
-		ImGui::InputFloat3("RayPos", rayPos1);
-		ImGui::InputFloat3("RayDir", rayDir1);
-		ImGui::InputFloat3("RayPos", rayPos2);
-		ImGui::InputFloat3("RayDir", rayDir2);
-		ImGui::InputFloat("RayCol", rayCol);
-		ImGui::End();
-
-	}
+		}
 #endif
 
 	imGuiManager_->End();
@@ -482,11 +463,8 @@ void GamePlayScene::Update3d() {
 			if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
 				if (raycastHit_.distance_ <= 50.0f) {
-
-					rayObj_->SetPosition(raycastHit_.inter_);
-					rayObj_->Update();
-				raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
-				raycastHit_.object_->Update();
+					raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
+					raycastHit_.object_->Update();
 
 					raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
 					raycastHit_.object_->Update();
@@ -536,7 +514,7 @@ void GamePlayScene::DrawParticle()
 {
 	pm1_->Draw();
 	pm2_->Draw();
-	
+
 	windpm_->Draw();
 }
 
@@ -617,7 +595,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
 				pm2_->Active(particle2_,pPos, {0.0f ,0.0f,25.0f}, {3.0f,3.0f,3.0f}, {0.0f,0.001f,0.0f}, 100, {1.0f, 0.0f});
 				return true;
-				
+
 			}
 		}
 	}
@@ -686,5 +664,5 @@ void GamePlayScene::ActiveWind(const int dir, const Vector3& position)
 		break;
 
 	}
-	
+
 }

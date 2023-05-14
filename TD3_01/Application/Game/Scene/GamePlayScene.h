@@ -69,7 +69,7 @@ private:
 	static DrawBasis* drawBas_;
 	//ImGuiマネージャー
 	static ImGuiManager* imGuiManager_;
-	
+
 	//カメラ
 	Camera* camera_ = nullptr;
 	//ライトグループ
@@ -96,11 +96,11 @@ private:
 
 	Stage* stage_ = nullptr;
 	const std::string filename_[5] = {
-	  "0",
-	  "1",
-	  "2",
-	  "3",
-	  "4",
+		"0",
+		"1",
+		"2",
+		"3",
+		"4",
 	};
 
 	enum GameScene
@@ -115,7 +115,7 @@ private:
 
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
-	
+
 	Fan* fan_[FanCount_] = { nullptr };
 	//std::list<Fan> fans_;
 
