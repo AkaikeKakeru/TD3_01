@@ -37,6 +37,8 @@ public:
 	void ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
 	void ReSetPositionPlayer(const Vector3& playerPos);
 	void ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5);
+	//風
+	void ActiveWind(const int dir, const Vector3& position);
 
 private:
 	void Initialize3d();
@@ -127,7 +129,9 @@ private:
 
 	Particle* particle2_ = nullptr;
 	ParticleManager* pm2_ = nullptr;
-	
+	//風
+	Particle* wind_ = nullptr;
+	ParticleManager* windpm_ = nullptr;
 	/// <summary>
 	/// スプライト
 	/// </summary>

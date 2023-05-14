@@ -30,6 +30,7 @@ Fan* Fan::Create(Model* model) {
 }
 
 bool Fan::Initialize() {
+	
 	if (!Object3d::Initialize()) {
 		return false;
 	}
@@ -52,13 +53,13 @@ bool Fan::Initialize() {
 	isGrab_ = false;
 
 	worldTransform3dReticle_.Initialize();
-
+	
 	return true;
 }
 
 void Fan::Update() {
 	assert(&ray_);
-
+	
 	Input* input_ = Input::GetInstance();
 
 	// オブジェクト移動
@@ -110,7 +111,7 @@ void Fan::Update() {
 			rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
 
 			rot = angleY * verticalAngle * 2;
-
+			direction_ = Up;
 			ray_->dir_ = angleZ;
 		}
 
@@ -118,7 +119,7 @@ void Fan::Update() {
 			rotVector_ = CreateRotationVector(angleY, 0);
 
 			rot = angleY * verticalAngle * 0;
-
+			direction_ = Down;
 			ray_->dir_ = -angleZ; //{ -verticalAngle ,0,0 };
 		}
 
@@ -126,7 +127,7 @@ void Fan::Update() {
 			rotVector_ = CreateRotationVector(angleY, verticalAngle);
 
 			rot = angleY * verticalAngle;
-
+			direction_ = Left;
 			ray_->dir_ = -angleX; //{ 0,verticalAngle,0 };
 		}
 
@@ -134,7 +135,7 @@ void Fan::Update() {
 			rotVector_ = CreateRotationVector(angleY, -verticalAngle);
 
 			rot = angleY * -verticalAngle;
-
+			direction_ = Right;
 			ray_->dir_ = angleX; //{ 0,-verticalAngle,0 };
 		}
 
@@ -144,8 +145,8 @@ void Fan::Update() {
 	}
 
 	ray_->start_ = Object3d::GetPosition();
-
 	camera_->Update();
+	
 	Object3d::Update();
 }
 
@@ -153,8 +154,10 @@ void Fan::Draw() {
 	Object3d::Draw();
 }
 
+
 void Fan::Finalize() {
 	delete ray_;
+	
 }
 
 void Fan::OnCollision(const CollisionInfo& info) {
@@ -178,4 +181,59 @@ void Fan::Reticle() {
 		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.y) - surplusY)),
 		static_cast<float>((static_cast<int>(worldTransform3dReticle_.position_.z) - surplusZ))
 	};
+}
+
+void Fan::SetFanDirection(const int dirNum) {
+	this->direction_ = dirNum;
+	//回転スピード(垂直)
+	static const float verticalAngle = ConvertToRadian(90.0f);
+
+	static const Vector3 angleX = { 1.0f,0.0f,0.0f };
+	static const Vector3 angleY = { 0.0f,1.0f,0.0f };
+	static const Vector3 angleZ = { 0.0f,0.0f,1.0f };
+
+	Vector3 fanAngle = angleY;
+	float fanRotaSpeed = 0.0f;
+	Vector3 rayDir{};
+	
+
+	switch (direction_) {
+	case Up:
+		fanRotaSpeed = verticalAngle * 2;
+		rayDir = angleZ;
+		break;
+
+	case Down:
+		fanRotaSpeed = verticalAngle * 0;
+		rayDir = -angleZ;
+		break;
+
+	case Right:
+		fanRotaSpeed = -verticalAngle;
+		rayDir = angleX;
+		break;
+
+	case Left:
+		fanRotaSpeed = verticalAngle;
+		rayDir = -angleX;
+		break;
+
+	default:
+		fanRotaSpeed = ConvertToRadian(30.0f);
+		rayDir = angleZ;
+		break;
+	}
+
+	// 現在の回転を取得
+	Vector3 rot = Object3d::GetRotation();
+
+	rotVector_ = CreateRotationVector(fanAngle, fanRotaSpeed);
+
+	rot = fanAngle * fanRotaSpeed;
+
+	// 回転の変更を反映
+	Object3d::SetRotation(rot);
+
+	ray_->start_ = Object3d::GetPosition();
+	ray_->dir_ = rayDir;
 }

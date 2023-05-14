@@ -29,7 +29,7 @@ public: //メンバ関数
 
 	//照準
 	void Reticle();
-
+	
 public://アクセッサ
 	Ray* GetRay() {
 		return ray_;
@@ -39,65 +39,18 @@ public://アクセッサ
 		ray_ = ray;
 	}
 
-	void SetFanDirection(const int dirNum) {
-		//回転スピード(垂直)
-		static const float verticalAngle = ConvertToRadian(90.0f);
-
-		static const Vector3 angleX = { 1.0f,0.0f,0.0f };
-		static const Vector3 angleY = { 0.0f,1.0f,0.0f };
-		static const Vector3 angleZ = { 0.0f,0.0f,1.0f };
-
-		Vector3 fanAngle = angleY;
-		float fanRotaSpeed = 0.0f;
-		Vector3 rayDir{};
-
-		switch (dirNum) {
-		case Up:
-			fanRotaSpeed = verticalAngle * 2;
-			rayDir = angleZ;
-			break;
-
-		case Down:
-			fanRotaSpeed = verticalAngle * 0;
-			rayDir = -angleZ;
-			break;
-
-		case Right:
-			fanRotaSpeed = -verticalAngle;
-			rayDir = angleX;
-			break;
-
-		case Left:
-			fanRotaSpeed = verticalAngle;
-			rayDir = -angleX;
-			break;
-
-		default:
-			fanRotaSpeed = ConvertToRadian(30.0f);
-			rayDir = angleZ;
-			break;
-		}
-
-		// 現在の回転を取得
-		Vector3 rot = Object3d::GetRotation();
-
-		rotVector_ = CreateRotationVector(fanAngle, fanRotaSpeed);
-
-		rot = fanAngle * fanRotaSpeed;
-
-		// 回転の変更を反映
-		Object3d::SetRotation(rot);
-
-		ray_->start_ = Object3d::GetPosition();
-		ray_->dir_ = rayDir;
-	}
+	void SetFanDirection(const int dirNum);
 
 	//操作フラグのセット
 	void SetIsControl(bool isControl) {
 		isControl_ = isControl;
 	}
 
+	int GetFanDirection() { return direction_; }
+	void SetDirection(const int dir) { this->direction_ = dir; }
 private://メンバ変数
+	//向き
+	size_t direction_ = Up;
 	Ray* ray_ = nullptr;
 	//回転ベクトル
 	Vector3 rotVector_ = { 0,0,0 };
@@ -113,4 +66,7 @@ private://メンバ変数
 
 	//レティクルカーソル
 	Cursor cursor_;
+
+	
+
 };
