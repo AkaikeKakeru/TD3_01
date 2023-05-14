@@ -8,8 +8,6 @@
 #include <cassert>
 #include <WinApp.h>
 
-#include "Stage.h"
-
 Fan* Fan::Create(Model* model) {
 	//オブジェクトのインスタンスを生成
 	Fan* instance = new Fan();
@@ -55,6 +53,8 @@ bool Fan::Initialize() {
 
 	worldTransform3dReticle_.Initialize();
 
+	stage_ = nullptr;
+
 	return true;
 }
 
@@ -94,16 +94,28 @@ void Fan::Update() {
 			}
 		}
 
-		if (input_->PressMouse(0)) {
-			if (isGrab_) {
-				Stage stage;
-
+		if (isGrab_) {
+			if (input_->PressMouse(0)) {
+				Object3d::SetPosition(worldTransform3dReticle_.position_);
+			}
+			else {
 				//再計算
-				Vector3 localPos = worldTransform3dReticle_.position_;
+				Vector3 localPos = Object3d::GetPosition();
+
+				//for (int i = 0; i < localPos.x; i++) {
+
+				//}
+				//localPos.x 
+
+				//float kLine = localPos.x / (stage_->GetRadius()*2);
+				//float kRow = localPos.z / (stage_->GetRadius()*2);
+
+				//Vector3 localStagePos = stage_->GetFloorPosition(kLine,kRow);
+
 				Vector3 localPosRema = {
-					static_cast<float>(static_cast<int>(localPos.x) % static_cast<int>(stage.GetRadius())),
+					static_cast<float>(static_cast<int>(localPos.x) % static_cast<int>(stage_->GetRadius())),
 					localPos.y,
-					static_cast<float>(static_cast<int>(localPos.z) % static_cast<int>(stage.GetRadius()))
+					static_cast<float>(static_cast<int>(localPos.z) % static_cast<int>(stage_->GetRadius()))
 				};
 
 				localPos = {
@@ -112,22 +124,13 @@ void Fan::Update() {
 					localPos.z - localPosRema.z
 				};
 
-				localPos = {
-					localPos.x + stage.GetRadius(),
-					localPos.y,
-					localPos.z + stage.GetRadius()
-				};
-
 				Object3d::SetPosition(localPos);
+
+				isGrab_ = false;
 			}
-		}
-		else {
-			isGrab_ = false;
 		}
 
 		if (isGrab_) {
-
-
 			//移動後の座標を計算
 			if (input_->TriggerKey(DIK_W)) {
 				rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);

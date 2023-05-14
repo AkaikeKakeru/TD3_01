@@ -6,6 +6,8 @@
 
 #include "Cursor.h"
 
+#include "Stage.h"
+
 class Fan
 	: public Object3d {
 public: //enum
@@ -93,8 +95,18 @@ public://アクセッサ
 	}
 
 	//操作フラグのセット
+	bool GetIsControl() {
+		return isControl_;
+	}
+
+	//操作フラグのセット
 	void SetIsControl(bool isControl) {
 		isControl_ = isControl;
+	}
+
+	//ステージのセット
+	void SetStage(Stage* stage) {
+		stage_ = stage;
 	}
 
 private://メンバ変数
@@ -113,4 +125,9 @@ private://メンバ変数
 
 	//レティクルカーソル
 	Cursor cursor_;
+
+	//ステージ
+	Stage* stage_;
+	//ステージのデフォルト座標
+	Vector3 defaultFloorPos_;
 };
