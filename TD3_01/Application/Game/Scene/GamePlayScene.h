@@ -109,11 +109,6 @@ private:
 	};
 	size_t scene_ = Stage0;
 
-	Object3d* rayObj_ = nullptr;
-	Model* rayModel_ = nullptr;
-
-	Object3d* rayObj_2 = nullptr;
-
 	Player* player_ = nullptr;
 	Model* playerModel_ = nullptr;
 	
