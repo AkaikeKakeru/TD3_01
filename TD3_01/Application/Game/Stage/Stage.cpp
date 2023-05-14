@@ -171,14 +171,14 @@ void Stage::Draw() {
 			// 青壁描画
 			objWallB_->Draw(block->worldTransform_);
 		}
-		else 
+		else
 			if (block->type_ == GOAL) {
-			// ゴール描画
-		/*	block->worldTransform_.position_.y = -15.5f;*/
-			objGoal_->Draw(block->worldTransform_);
-		}
-		
-	
+				// ゴール描画
+			/*	block->worldTransform_.position_.y = -15.5f;*/
+				objGoal_->Draw(block->worldTransform_);
+			}
+
+
 	}
 
 	// 床描画
@@ -240,43 +240,43 @@ void Stage::LoadStageCommands() {
 			}
 			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objFloor_, BLOCK, mapLine, mapRow, stageDepth_);
+				PushStageBlockList(stageBlocks_, objFloor_, BLOCK, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("2") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objSwitchR_, SWITCHR, mapLine, mapRow, stageDepth_);
+				PushStageBlockList(stageBlocks_, objSwitchR_, SWITCHR, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("3") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objWallR_, WALLR, mapLine, mapRow, stageDepth_);
+				PushStageBlockList(stageBlocks_, objWallR_, WALLR, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("4") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objSwitchB_, SWITCHB, mapLine, mapRow, stageDepth_);
+				PushStageBlockList(stageBlocks_, objSwitchB_, SWITCHB, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("5") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objWallB_, WALLB, mapLine, mapRow, stageDepth_);
+				PushStageBlockList(stageBlocks_, objWallB_, WALLB, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("GOAL") == 0 || word.find("6") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_,objGoal_, GOAL, mapLine, mapRow, stageDepth_);
+				PushStageBlockList(stageBlocks_, objGoal_, GOAL, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
 			// 次の内容へ
 			getline(line_stream, word, ',');
-			
+
 		}
 		// マップチップLineが10を超えたらリセットしてRowをインクリメント
 		if (mapLine == STAGE_WIDTH) {
@@ -303,11 +303,11 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* ob
 	// スケール設定
 	block->worldTransform_.scale_ = block->obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
-	
+
 	// 座標設定
 	block->worldTransform_.position_ = block->obj->GetPosition();
 	block->worldTransform_.position_ = pos;
-	
+
 	block->line_ = line;
 	block->row_ = row;
 
@@ -324,7 +324,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	newBlock->type_ = type;
 	// 座標
 	Vector3 pos;
-	
+
 	//中央揃えとなる様に座標を計算
 	pos.x = -36.0f + (8.0f * line);
 	pos.y = depth;
@@ -347,7 +347,7 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 		switchB_->Seting(pos, magnification_);
 		isSwitchDrawB_ = true;
 	}
-	
+
 }
 
 void Stage::CheckBlock(int line, int row) {
@@ -391,6 +391,18 @@ Vector3 Stage::GetBlockPosition(int line, int row) {
 			if (block->line_ == line && block->row_ == row) {
 				return block->worldTransform_.position_;
 			}
+		}
+	}
+	// なかったら0を返す
+	return Vector3(0.0f, 0.0f, 0.0f);
+}
+
+Vector3 Stage::GetFloorPosition(int line, int row) {
+	// 範囲for
+	for (std::unique_ptr<StageData>& block : floorBlocks_) {
+		// 指定した番号に合った座標を返す
+		if (block->line_ == line && block->row_ == row) {
+			return block->worldTransform_.position_;
 		}
 	}
 	// なかったら0を返す
