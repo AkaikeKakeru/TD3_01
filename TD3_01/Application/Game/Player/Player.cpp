@@ -144,15 +144,19 @@ void Player::OnCollision(const CollisionInfo& info) {
 void Player::OnCollisionStage(const bool& collisionFlag, const Vector3& pos) {
 	if (collisionFlag) {
 		worldTransform_.position_ = pos;
+
+		SetDirection(GetStartDirection());
 		IsRun_ = false;
 	}
 
 	//
 }
-void Player::Stop(const Vector3& pos)
+void Player::Stop(const Vector3& pos,const float direction)
 {
 	worldTransform_.position_ = pos;
-	worldTransform_.rotation_ = CreateRotationVector(
-		{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
+	//worldTransform_.rotation_ = CreateRotationVector(
+	//	{ 0.0f,1.0f,0.0f }, ConvertToRadian(180.0f));
+
+	SetDirection(direction);
 	IsRun_ = false;
 }
