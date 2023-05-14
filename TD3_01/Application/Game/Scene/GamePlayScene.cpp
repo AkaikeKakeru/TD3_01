@@ -204,8 +204,6 @@ void GamePlayScene::Initialize3d() {
 	//各種モデル
 	playerModel_ = new Model();
 	playerModel_ = Model::LoadFromOBJ("PaperPlane", true);
-	rayModel_ = new Model();
-	rayModel_ = Model::LoadFromOBJ("cube", true);
 	fanModel_ = new Model();
 	fanModel_ = Model::LoadFromOBJ("Fan", true);
 
@@ -245,19 +243,6 @@ void GamePlayScene::Initialize3d() {
 
 	fan_[4]->SetFanDirection(Fan::Down);
 	fan_[4]->SetIsControl(true);
-
-	//レイ接触確認オブジェクトの初期化
-	rayObj_ = Object3d::Create();
-	rayObj_->SetModel(rayModel_);
-	rayObj_->SetPosition(fan_[0]->GetRay()->start_);
-	rayObj_->SetScale({ 2.0f, 2.0f, 2.0f });
-	rayObj_->SetCamera(camera_);
-
-	rayObj_2 = Object3d::Create();
-	rayObj_2->SetModel(rayModel_);
-	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50 * fan_[0]->GetRay()->dir_));
-	rayObj_2->SetScale({ 2.0f, 2.0f, 2.0f });
-	rayObj_2->SetCamera(camera_);
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(camera_);
@@ -323,8 +308,6 @@ void GamePlayScene::Update3d() {
 
 	lightGroup_->Update();
 	camera_->Update();
-
-	rayObj_2->SetPosition(fan_[0]->GetRay()->start_ + (50.0f * fan_[0]->GetRay()->dir_));
 
 	stageCollision = CollisionStageFlag(player_, stage_);
 
@@ -471,10 +454,6 @@ void GamePlayScene::Update3d() {
 	{
 		player_->Update();
 
-		rayObj_->Update();
-
-		rayObj_2->Update();
-
 		for (int i = 0; i < FanCount_; i++) {
 			ActiveWind(fan_[i]->GetFanDirection(), fan_[i]->GetPosition());
 			fan_[i]->Update();
@@ -495,9 +474,6 @@ void GamePlayScene::Update3d() {
 		if (collisionManager_->Raycast(*fan_[i]->GetRay(), COLLISION_ATTR_PLAYER, &raycastHit_)) {
 
 			if (raycastHit_.distance_ <= 50.0f) {
-
-				rayObj_->SetPosition(raycastHit_.inter_);
-				rayObj_->Update();
 
 				raycastHit_.object_->SetRotation(fan_[i]->GetRotation());
 				raycastHit_.object_->Update();
@@ -535,8 +511,6 @@ void GamePlayScene::Update2d() {
 void GamePlayScene::Draw3d() {
 	skydome_->Draw();
 
-	rayObj_->Draw();
-	rayObj_2->Draw();
 	for (int i = 0; i < FanCount_; i++) {
 		fan_[i]->Draw();
 	}
@@ -572,9 +546,6 @@ void GamePlayScene::Finalize() {
 	skydome_->Finalize();
 	SafeDelete(skydome_);
 
-	SafeDelete(rayObj_);
-	SafeDelete(rayObj_2);
-	SafeDelete(rayModel_);
 	//パーティクル
 	SafeDelete(particle1_);
 	SafeDelete(pm1_);
