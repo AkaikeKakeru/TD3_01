@@ -172,7 +172,7 @@ void GamePlayScene::Initialize3d() {
 	//カメラの初期化
 	camera_ = new Camera();
 
-	//
+	//視点等セット
 	camera_->SetEye({ 15.0f, 70.0f, -40.0f });
 	camera_->SetTarget({ 15.0f,20.0f,10.0f });
 	/*
@@ -299,7 +299,7 @@ void GamePlayScene::Update3d() {
 		isClear_ = true;
 	}
 
-	if (isClear_)
+	if (isClear_)//クリアしたら
 	{
 		pm1_->Active(particle1_, {camera_->GetEye()}, { 100.0f, 100.0f, 100.0f }, {0.2f ,0.2f,0.2f}, {0.0f,0.001f,0.0f}, 5, {13.0f, 0.0f});
 		//pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
@@ -444,9 +444,9 @@ void GamePlayScene::Update3d() {
 
 		for (int i = 0; i < FanCount_; i++) {
 			fan_[i]->SetStage(stage_);
-
-
+			//風の演出
 			ActiveWind(fan_[i]->GetFanDirection(), fan_[i]->GetPosition());
+			//ファンが動かせるかどうかかどうか
 			if (fan_[i]->GetIsControl())
 			{
 				fan_[i]->SetModel(fanModel_);
@@ -457,6 +457,7 @@ void GamePlayScene::Update3d() {
 			}
 			fan_[i]->Update();
 		}
+		//リセット
 		if (input_->TriggerKey(DIK_R))
 		{
 			ReSetPositionPlayer(positionPlayer);
@@ -659,18 +660,22 @@ void GamePlayScene::ActiveWind(const int dir, const Vector3& position)
 {
 	switch (dir) {
 	case Fan::Direction::Up:
+		//上方向に風の演出
 		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,0.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Fan::Direction::Down:
+		//下方向に風の演出
 		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,0.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Fan::Direction::Right:
+		//右方向に風の演出
 		windpm_->ActiveX(wind_, position, { 0.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Fan::Direction::Left:
+		//左方向に風の演出
 		windpm_->ActiveX(wind_, position, { 0.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
