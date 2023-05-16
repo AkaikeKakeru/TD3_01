@@ -120,6 +120,7 @@ private:
 	//std::list<Fan> fans_;
 
 	Model* fanModel_ = nullptr;
+	Model* fanModelConst_ = nullptr;
 
 	Skydome* skydome_ = nullptr;
 

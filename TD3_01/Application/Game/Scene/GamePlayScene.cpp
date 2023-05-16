@@ -186,7 +186,9 @@ void GamePlayScene::Initialize3d() {
 	playerModel_ = new Model();
 	playerModel_ = Model::LoadFromOBJ("PaperPlane", true);
 	fanModel_ = new Model();
-	fanModel_ = Model::LoadFromOBJ("constfan", true);
+	fanModel_ = Model::LoadFromOBJ("Fan", true);
+	fanModelConst_ = new Model();
+	fanModelConst_ = Model::LoadFromOBJ("constfan", true);
 
 	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
@@ -445,6 +447,14 @@ void GamePlayScene::Update3d() {
 
 
 			ActiveWind(fan_[i]->GetFanDirection(), fan_[i]->GetPosition());
+			if (fan_[i]->GetIsControl())
+			{
+				fan_[i]->SetModel(fanModel_);
+			}
+			else
+			{
+				fan_[i]->SetModel(fanModelConst_);
+			}
 			fan_[i]->Update();
 		}
 		if (input_->TriggerKey(DIK_R))
@@ -532,6 +542,7 @@ void GamePlayScene::Finalize() {
 		SafeDelete(fan_[i]);
 	}
 	SafeDelete(fanModel_);
+	SafeDelete(fanModelConst_);
 
 	SafeDelete(stage_);
 
