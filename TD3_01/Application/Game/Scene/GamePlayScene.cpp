@@ -186,7 +186,7 @@ void GamePlayScene::Initialize3d() {
 	playerModel_ = new Model();
 	playerModel_ = Model::LoadFromOBJ("PaperPlane", true);
 	fanModel_ = new Model();
-	fanModel_ = Model::LoadFromOBJ("Fan", true);
+	fanModel_ = Model::LoadFromOBJ("constfan", true);
 
 	//プレイヤーの初期化
 	player_ = Player::Create(playerModel_);
@@ -245,7 +245,7 @@ void GamePlayScene::Initialize3d() {
 	pm2_->SetParticleModel(particle2_);
 	pm2_->SetCamera(camera_);
 
-	wind_ = Particle::LoadFromParticleTexture("particle5.png");
+	wind_ = Particle::LoadFromParticleTexture("particle1.png");
 	windpm_ = ParticleManager::Create();
 	windpm_->SetParticleModel(wind_);
 	windpm_->SetCamera(camera_);
@@ -315,15 +315,15 @@ void GamePlayScene::Update3d() {
 			case Stage0:
 
 				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
-				positionPlayer = { 28.0f,0.0f,24.0f };
+				positionPlayer = { 28.0f,0.0f,26.0f };
 				player_->SetStartDirection(Player::Left);
 				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 1);
 
 				positionFan[0] = { 60.0f,0.0f,50.0f };
-				positionFan[1] = { -10.0f,0.0f,18.0f };
-				positionFan[2] = { -36.0f,0.0f,42.0f };
+				positionFan[1] = { -12.0f,0.0f,18.0f };
+				positionFan[2] = { -36.0f,0.0f,34.0f };
 				positionFan[3] = { 36.0f,0.0f,66.0f };
-				positionFan[4] = { 12.0f,0.0f,90.0f };
+				positionFan[4] = { 20.0f,0.0f,90.0f };
 
 				fan_[0]->SetIsControl(true);
 				fan_[0]->SetFanDirection(Fan::Up);
@@ -342,12 +342,12 @@ void GamePlayScene::Update3d() {
 				break;
 
 			case Stage1:
-				positionPlayer = { -28.0f,0.0f,40.0f };
+				positionPlayer = { -28.0f,0.0f,42.0f };
 				player_->SetStartDirection(Player::Down);
 				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 2);
 
-				positionFan[0] = { 60.0f,0.0f,60.0f };
-				positionFan[1] = { 60.0f,0.0f,30.0f };
+				positionFan[0] = { 60.0f,0.0f,66.0f };
+				positionFan[1] = { 60.0f,0.0f,34.0f };
 				positionFan[2] = { -36.0f,0.0f,26.0f };
 				positionFan[3] = { 28.0f,0.0f,18.0f };
 				positionFan[4] = { 20.0f,0.0f,90.0f };
@@ -372,9 +372,9 @@ void GamePlayScene::Update3d() {
 				player_->SetStartDirection(Player::Left);
 				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 3);
 
-				positionFan[0] = { 60.0f,0.0f,80.0f };
+				positionFan[0] = { 60.0f,0.0f,90.0f };
 				positionFan[1] = { 60.0f,0.0f,50.0f };
-				positionFan[2] = { 60.0f,0.0f,20.0f };
+				positionFan[2] = { 60.0f,0.0f,10.0f };
 				positionFan[3] = { 12.0f,0.0f,90.0f };
 				positionFan[4] = { -12.0f,0.0f,66.0f };
 
@@ -648,19 +648,19 @@ void GamePlayScene::ActiveWind(const int dir, const Vector3& position)
 {
 	switch (dir) {
 	case Fan::Direction::Up:
-		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,0.0f }, { 0.0f,0.0f,4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Fan::Direction::Down:
-		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,8.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveZ(wind_, position, { 8.0f ,8.0f,0.0f }, { 0.0f,0.0f,-4.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Fan::Direction::Right:
-		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveX(wind_, position, { 0.0f ,8.0f,8.0f }, { 4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	case Fan::Direction::Left:
-		windpm_->ActiveX(wind_, position, { 8.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
+		windpm_->ActiveX(wind_, position, { 0.0f ,8.0f,8.0f }, { -4.0f,0.0f,0.0f }, { 0.0f,0.001f,0.0f }, 1, { 2.0f, 0.0f });
 		break;
 
 	}

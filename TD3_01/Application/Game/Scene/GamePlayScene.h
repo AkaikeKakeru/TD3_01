@@ -137,7 +137,7 @@ private:
 	Sprite* sprite_ = new Sprite();
 
 	//ポジション
-	Vector3 positionPlayer = { 8.0f,0.0f,20.0f };
+	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
 	Vector3 positionFan[FanCount_] =
 	{
 		{ 60.0f,0.0f,50.0f },
