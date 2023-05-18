@@ -138,14 +138,14 @@ private:
 	Sprite* sprite_ = new Sprite();
 
 	//ポジション
-	Vector3 positionPlayer = { 0.0f,0.0f,22.0f };
+	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
 	Vector3 positionFan[FanCount_] =
 	{
-		{ 56.0f,0.0f,54.0f },
-		{ 56.0f,0.0f,54.0f},
-		{ 56.0f,0.0f,54.0f },
-		{ 56.0f,0.0f,54.0f },
-		{ 56.0f,0.0f,54.0f },
+		{ 60.0f,0.0f,50.0f },
+		{ 60.0f,0.0f,50.0f},
+		{ 60.0f,0.0f,50.0f },
+		{ 60.0f,0.0f,50.0f },
+		{ 60.0f,0.0f,50.0f },
 	};
 	//クリアしたか
 	bool isClear_ = false;
