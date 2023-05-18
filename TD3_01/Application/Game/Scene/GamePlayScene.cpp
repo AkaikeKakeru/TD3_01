@@ -317,15 +317,15 @@ void GamePlayScene::Update3d() {
 			case Stage0:
 
 				//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
-				positionPlayer = { 28.0f,0.0f,26.0f };
+				positionPlayer = { 24.0f,0.0f,30.0f };
 				player_->SetStartDirection(Player::Left);
 				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 1);
 
-				positionFan[0] = { 60.0f,0.0f,50.0f };
-				positionFan[1] = { -12.0f,0.0f,18.0f };
-				positionFan[2] = { -36.0f,0.0f,34.0f };
-				positionFan[3] = { 36.0f,0.0f,66.0f };
-				positionFan[4] = { 20.0f,0.0f,90.0f };
+				positionFan[0] = { 56.0f,0.0f,54.0f };
+				positionFan[1] = { -16.0f,0.0f,22.0f };
+				positionFan[2] = { -40.0f,0.0f,38.0f };
+				positionFan[3] = { 32.0f,0.0f,70.0f };
+				positionFan[4] = { 24.0f,0.0f,94.0f };
 
 				fan_[0]->SetIsControl(true);
 				fan_[0]->SetFanDirection(Fan::Up);
@@ -344,15 +344,15 @@ void GamePlayScene::Update3d() {
 				break;
 
 			case Stage1:
-				positionPlayer = { -28.0f,0.0f,42.0f };
+				positionPlayer = { -32.0f,0.0f,46.0f };
 				player_->SetStartDirection(Player::Down);
 				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 2);
 
-				positionFan[0] = { 60.0f,0.0f,66.0f };
-				positionFan[1] = { 60.0f,0.0f,34.0f };
-				positionFan[2] = { -36.0f,0.0f,26.0f };
-				positionFan[3] = { 28.0f,0.0f,18.0f };
-				positionFan[4] = { 20.0f,0.0f,90.0f };
+				positionFan[0] = { 56.0f,0.0f,70.0f };
+				positionFan[1] = { 56.0f,0.0f,38.0f };
+				positionFan[2] = { -40.0f,0.0f,30.0f };
+				positionFan[3] = { 24.0f,0.0f,22.0f };
+				positionFan[4] = { 16.0f,0.0f,94.0f };
 
 				fan_[0]->SetIsControl(true);
 				fan_[0]->SetFanDirection(Fan::Up);
@@ -370,15 +370,15 @@ void GamePlayScene::Update3d() {
 				break;
 
 			case Stage2:
-				positionPlayer = { 36.0f,0.0f,82.0f };
+				positionPlayer = { 32.0f,0.0f,86.0f };
 				player_->SetStartDirection(Player::Left);
 				ParameterPlayer(positionPlayer,player_->GetStartDirection(), 3);
 
-				positionFan[0] = { 60.0f,0.0f,90.0f };
-				positionFan[1] = { 60.0f,0.0f,50.0f };
-				positionFan[2] = { 60.0f,0.0f,10.0f };
-				positionFan[3] = { 12.0f,0.0f,90.0f };
-				positionFan[4] = { -12.0f,0.0f,66.0f };
+				positionFan[0] = { 56.0f,0.0f,94.0f };
+				positionFan[1] = { 56.0f,0.0f,54.0f };
+				positionFan[2] = { 56.0f,0.0f,14.0f };
+				positionFan[3] = { 8.0f,0.0f,94.0f };
+				positionFan[4] = { -16.0f,0.0f,70.0f };
 
 				fan_[0]->SetIsControl(true);
 				fan_[0]->SetFanDirection(Fan::Up);
