@@ -57,7 +57,7 @@ void Stage::Initialize(Camera* camera) {
 	modelSwitchB_ = Model::LoadFromOBJ("bswitch", true);
 	modelWallR_ = Model::LoadFromOBJ("cubeR", true);
 	modelWallB_ = Model::LoadFromOBJ("cubeB", true);
-	modelGoal_ = Model::LoadFromOBJ("goal", true);
+	modelGoal_ = Model::LoadFromOBJ("cubeB", true);
 
 	//3Dオブジェクトとカメラのセット
 	obj_ = Object3d::Create();
