@@ -69,7 +69,7 @@ void Framework::Update(){
 
 	imGuiManager_->Begin();
 	
-	ImGui::End();
+	//ImGui::End();
 
 #ifdef _DEBUG
 #endif

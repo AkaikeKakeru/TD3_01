@@ -12,7 +12,7 @@
 
 #include "SceneManager.h"
 
-class TitleScene : public BaseScene{
+class TitleScene : public BaseScene {
 public://構造体
 
 public:
@@ -40,5 +40,7 @@ private:
 	/// </summary>
 	Sprite* sprite_ = new Sprite();
 	Sprite* sprite2_ = new Sprite();
+	Sprite* sprite3_ = new Sprite();
 	bool spriteChange = false;
+	int ruleCount = 0;
 };

@@ -132,6 +132,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)$()3121_P.Plane$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,6 +156,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)$()3121_P.Plane$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

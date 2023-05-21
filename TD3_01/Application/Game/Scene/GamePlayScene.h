@@ -135,7 +135,10 @@ private:
 	/// <summary>
 	/// スプライト
 	/// </summary>
-	Sprite* sprite_ = new Sprite();
+	Sprite* spritePause_ = new Sprite();
+
+	Sprite* rule_ = new Sprite();
+	Sprite* rule2_ = new Sprite();
 
 	//ポジション
 	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
@@ -149,4 +152,10 @@ private:
 	};
 	//クリアしたか
 	bool isClear_ = false;
+	//ポーズしたか
+	bool isPause_ = false;
+	//ルール説明か
+	bool isrule_ = false;
+	int ruleCount = 0;
+
 };
