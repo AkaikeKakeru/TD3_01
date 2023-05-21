@@ -136,6 +136,7 @@ private:
 	/// スプライト
 	/// </summary>
 	Sprite* spritePause_ = new Sprite();
+	Sprite* spritePauseInfo_ = new Sprite();
 
 	Sprite* rule_ = new Sprite();
 	Sprite* rule2_ = new Sprite();

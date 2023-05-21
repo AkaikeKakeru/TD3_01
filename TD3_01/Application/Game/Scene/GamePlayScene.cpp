@@ -267,10 +267,12 @@ void GamePlayScene::Initialize2d() {
 	drawBas_->LoadTexture(10, "pause.png");
 	drawBas_->LoadTexture(11, "tutorial.png");
 	drawBas_->LoadTexture(12, "tutorial2.png");
+	drawBas_->LoadTexture(13, "pauseinfo.png");
 
 	spritePause_->Initialize(drawBas_, 10);
-	rule_->Initialize(drawBas_, 1);
-	rule2_->Initialize(drawBas_, 2);
+	spritePauseInfo_->Initialize(drawBas_, 13);
+	rule_->Initialize(drawBas_, 11);
+	rule2_->Initialize(drawBas_, 12);
 
 	spritePause_->SetColor({ 1.0f,1.0f,1.0f,0.75f });
 }
@@ -472,6 +474,11 @@ void GamePlayScene::Update3d() {
 				ReSetPositionPlayer(positionPlayer);
 				ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 			}
+			//Pause機能
+			if (input_->TriggerKey(DIK_Q))
+			{
+				isPause_ = true;
+			}
 		}
 
 		skydome_->Update();
@@ -505,10 +512,7 @@ void GamePlayScene::Update3d() {
 		pm1_->Update();
 		pm2_->Update();
 		windpm_->Update();
-		if (input_->TriggerKey(DIK_Q))
-		{
-			isPause_ = true;
-		}
+
 	}
 	else if (isPause_)
 	{
@@ -581,6 +585,10 @@ void GamePlayScene::Draw2d() {
 	{
 		spritePause_->Draw();
 	}
+	else
+	{
+		spritePauseInfo_->Draw();
+	}
 }
 
 void GamePlayScene::Finalize() {
@@ -609,6 +617,7 @@ void GamePlayScene::Finalize() {
 	SafeDelete(windpm_);
 
 	SafeDelete(spritePause_);
+	SafeDelete(spritePauseInfo_);
 	SafeDelete(rule_);
 	SafeDelete(rule2_);
 
