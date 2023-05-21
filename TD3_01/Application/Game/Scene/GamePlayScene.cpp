@@ -268,13 +268,16 @@ void GamePlayScene::Initialize2d() {
 	drawBas_->LoadTexture(11, "tutorial.png");
 	drawBas_->LoadTexture(12, "tutorial2.png");
 	drawBas_->LoadTexture(13, "pauseinfo.png");
+	drawBas_->LoadTexture(14, "resetinfo.png");
 
 	spritePause_->Initialize(drawBas_, 10);
 	spritePauseInfo_->Initialize(drawBas_, 13);
+	spriteResetInfo_->Initialize(drawBas_, 14);
 	rule_->Initialize(drawBas_, 11);
 	rule2_->Initialize(drawBas_, 12);
 
 	spritePause_->SetColor({ 1.0f,1.0f,1.0f,0.75f });
+	spriteResetInfo_->SetPosition({ 900.0f,0.0f });
 }
 
 void GamePlayScene::Update3d() {
@@ -548,6 +551,7 @@ void GamePlayScene::Update2d() {
 
 	// 座標の変更を反映
 	spritePause_->Update();
+	spriteResetInfo_->Update();
 
 }
 
@@ -587,7 +591,11 @@ void GamePlayScene::Draw2d() {
 	}
 	else
 	{
-		spritePauseInfo_->Draw();
+		if (!isClear_)
+		{
+			spritePauseInfo_->Draw();
+			spriteResetInfo_->Draw();
+		}
 	}
 }
 
@@ -618,6 +626,7 @@ void GamePlayScene::Finalize() {
 
 	SafeDelete(spritePause_);
 	SafeDelete(spritePauseInfo_);
+	SafeDelete(spriteResetInfo_);
 	SafeDelete(rule_);
 	SafeDelete(rule2_);
 
