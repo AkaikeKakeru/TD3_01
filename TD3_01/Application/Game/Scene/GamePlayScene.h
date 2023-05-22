@@ -136,9 +136,12 @@ private:
 	/// スプライト
 	/// </summary>
 	Sprite* spritePause_ = new Sprite();
+	Sprite* spritePauseInfo_ = new Sprite();
+	Sprite* spriteResetInfo_ = new Sprite();
 
 	Sprite* rule_ = new Sprite();
 	Sprite* rule2_ = new Sprite();
+	Sprite* really_ = new Sprite();
 
 	//ポジション
 	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
@@ -154,6 +157,8 @@ private:
 	bool isClear_ = false;
 	//ポーズしたか
 	bool isPause_ = false;
+	//タイトルに戻るか
+	bool isReally_ = false;
 	//ルール説明か
 	bool isrule_ = false;
 	int ruleCount = 0;

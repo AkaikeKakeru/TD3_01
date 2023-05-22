@@ -261,18 +261,27 @@ void GamePlayScene::Initialize3d() {
 	ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 
 	isPause_ = false;
+	isReally_ = false;
+	isrule_ = false;
 }
 
 void GamePlayScene::Initialize2d() {
 	drawBas_->LoadTexture(10, "pause.png");
 	drawBas_->LoadTexture(11, "tutorial.png");
 	drawBas_->LoadTexture(12, "tutorial2.png");
+	drawBas_->LoadTexture(13, "pauseinfo.png");
+	drawBas_->LoadTexture(14, "resetinfo.png");
+	drawBas_->LoadTexture(15, "really.png");
 
 	spritePause_->Initialize(drawBas_, 10);
-	rule_->Initialize(drawBas_, 1);
-	rule2_->Initialize(drawBas_, 2);
+	spritePauseInfo_->Initialize(drawBas_, 13);
+	spriteResetInfo_->Initialize(drawBas_, 14);
+	rule_->Initialize(drawBas_, 11);
+	rule2_->Initialize(drawBas_, 12);
+	really_->Initialize(drawBas_, 15);
 
 	spritePause_->SetColor({ 1.0f,1.0f,1.0f,0.75f });
+	spriteResetInfo_->SetPosition({ 900.0f,0.0f });
 }
 
 void GamePlayScene::Update3d() {
@@ -472,6 +481,11 @@ void GamePlayScene::Update3d() {
 				ReSetPositionPlayer(positionPlayer);
 				ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 			}
+			//Pause機能
+			if (input_->TriggerKey(DIK_Q))
+			{
+				isPause_ = true;
+			}
 		}
 
 		skydome_->Update();
@@ -505,9 +519,17 @@ void GamePlayScene::Update3d() {
 		pm1_->Update();
 		pm2_->Update();
 		windpm_->Update();
+
+	}
+	else if (isrule_)
+	{
 		if (input_->TriggerKey(DIK_Q))
 		{
-			isPause_ = true;
+			if (input_->TriggerKey(DIK_Q) && ruleCount == 1) {
+				isrule_ = false;
+
+			}
+			ruleCount++;
 		}
 	}
 	else if (isPause_)
@@ -522,18 +544,31 @@ void GamePlayScene::Update3d() {
 		{
 			isPause_ = false;
 		}
+		if (input_->TriggerKey(DIK_E))
+		{
+			isReally_ = true;
+			isPause_ = false;
+		}
+
 	}
-	else if (isrule_)
+
+	if (isReally_)
 	{
+		//タイトルへ
 		if (input_->TriggerKey(DIK_Q))
 		{
-			if (input_->TriggerKey(DIK_Q) && ruleCount == 1) {
-				isrule_ = false;
+			//シーンの切り替えを依頼
+			SceneManager::GetInstance()->ChangeScene("TITLE");
 
-			}
-			ruleCount++;
+		}
+		//Pauseへ
+		if (input_->TriggerKey(DIK_W))
+		{
+			isPause_ = true;
+			isReally_ = false;
 		}
 	}
+
 }
 
 void GamePlayScene::Update2d() {
@@ -544,6 +579,7 @@ void GamePlayScene::Update2d() {
 
 	// 座標の変更を反映
 	spritePause_->Update();
+	spriteResetInfo_->Update();
 
 }
 
@@ -576,10 +612,27 @@ void GamePlayScene::Draw2d() {
 		{
 			rule2_->Draw();
 		}
+
+
 	}
 	else if (isPause_)
 	{
 		spritePause_->Draw();
+
+
+	}
+	else
+	{
+		if (!isClear_)
+		{
+			spritePauseInfo_->Draw();
+			spriteResetInfo_->Draw();
+		}
+	}
+
+	if (isReally_)
+	{
+		really_->Draw();
 	}
 }
 
@@ -609,8 +662,11 @@ void GamePlayScene::Finalize() {
 	SafeDelete(windpm_);
 
 	SafeDelete(spritePause_);
+	SafeDelete(spritePauseInfo_);
+	SafeDelete(spriteResetInfo_);
 	SafeDelete(rule_);
 	SafeDelete(rule2_);
+	SafeDelete(really_);
 
 	SafeDelete(lightGroup_);
 	SafeDelete(camera_);
