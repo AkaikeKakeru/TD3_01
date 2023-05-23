@@ -44,7 +44,7 @@ public://メンバ関数
 	void Finalize();
 
 	//音声再生
-	void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData);
+	void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, bool loop);
 
 	//音声データ読み込み
 	SoundData SoundLoadWave(const char* filename);

@@ -47,7 +47,7 @@ void WinApp::Initialize(){
 	hwnd_ = CreateWindow(
 		w_.lpszClassName,
 		L"3121_P.Plane",
-		WS_OVERLAPPEDWINDOW,
+		WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE,	//通常＝WS_OVERLAPPEDWINDOW　閉じるだけWS_OVERLAPPED | WS_SYSMENU
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		wrc.right - wrc.left,
