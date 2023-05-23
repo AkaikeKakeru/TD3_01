@@ -173,14 +173,22 @@ void GamePlayScene::Initialize3d() {
 	camera_ = new Camera();
 
 	//視点等セット
-	camera_->SetEye({ 15.0f, 70.0f, -40.0f });
-	camera_->SetTarget({ 15.0f,20.0f,10.0f });
-	/*
-	camera_->SetEye({ 0.0f, 90.0f, -100.0f });
-	camera_->SetTarget({ 0.0f,25.0f,0.0f });
-	*/
-	camera_->SetUp({ 0.0f, 1.0f, 0.0f });
+	//camera_->SetEye({ 15.0f, 70.0f, -40.0f });
+	//camera_->SetTarget({ 15.0f,20.0f,10.0f });
+	///*
+	//camera_->SetEye({ 0.0f, 90.0f, -100.0f });
+	//camera_->SetTarget({ 0.0f,25.0f,0.0f });
+	//*/
+	//camera_->SetUp({ 0.0f, 1.0f, 0.0f });
 
+	cameraFixed_.SetEye({ 15.0f, 70.0f, -40.0f });
+	cameraFixed_.SetTarget({ 15.0f,20.0f,10.0f });
+	cameraFixed_.SetUp({ 0.0f, 1.0f, 0.0f });
+
+
+	camera_->SetEye(cameraFixed_.GetEye());
+	camera_->SetTarget(cameraFixed_.GetTarget());
+	camera_->SetUp(cameraFixed_.GetUp());
 
 	//各種モデル
 	playerModel_ = new Model();
@@ -286,6 +294,40 @@ void GamePlayScene::Update3d() {
 	//	if (input_->PressKey(DIK_D)) { camera_->MoveVector({ +1.0f,0.0f,0.0f }); }
 	//	else if (input_->PressKey(DIK_A)) { camera_->MoveVector({ -1.0f,0.0f,0.0f }); }
 	//}
+
+	//if (Input::GetInstance()->TriggerMouse(2)) {
+	//	isCameraLerp_ = true;
+	//}
+
+	//if (isCameraLerp_) {
+	//	if (time_ <= 0) {
+	//		time_ = defTime_;
+	//		isCameraLerp_ = false;
+
+	//		camera_->SetEye(cameraFixed_.GetEye());
+	//		camera_->SetTarget(cameraFixed_.GetTarget());
+	//		camera_->SetUp(cameraFixed_.GetUp());
+	//	}
+	//	else{
+	//		time_--;
+
+	//		Vector3 eyeMove = cameraFixed_.GetEye();
+	//		Vector3 targetMove = cameraFixed_.GetEye() + cameraFixed_.GetTarget();
+
+	//		Vector3 move = EaseInOut(
+	//			player_->GetPosition(),
+	//			targetMove,
+	//			time_ / defTime_
+	//		);
+
+	//		eyeMove += move;
+
+	//		camera_->SetEye(move);
+	//		camera_->SetTarget(move - targetMove);
+	//	}
+	//}
+
+
 
 	RaycastHit raycastHit_;
 
@@ -440,6 +482,10 @@ void GamePlayScene::Update3d() {
 	}
 	else
 	{
+		if (isReset_) {
+			ResetCameraMove();
+		}
+
 		player_->Update();
 
 		for (int i = 0; i < FanCount_; i++) {
@@ -460,6 +506,8 @@ void GamePlayScene::Update3d() {
 		//リセット
 		if (input_->TriggerKey(DIK_R))
 		{
+			isReset_ = true;
+			
 			ReSetPositionPlayer(positionPlayer);
 			ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 		}
@@ -531,6 +579,48 @@ void GamePlayScene::DrawParticle()
 
 void GamePlayScene::Draw2d() {
 	//sprite_->Draw();
+}
+
+void GamePlayScene::ClearCameraMove() {
+	time_--;
+
+	Vector3 eyeMove = cameraFixed_.GetEye();
+	Vector3 targetMove = cameraFixed_.GetEye() + cameraFixed_.GetTarget();
+
+	Vector3 move = EaseInOut(
+		player_->GetPosition(),
+		cameraFixed_.GetEye(),
+		time_ / defTime_
+	);
+}
+
+void GamePlayScene::ResetCameraMove() {
+	if (time_ <= 0) {
+		time_ = defTime_;
+
+		isReset_ = false;
+
+		camera_->SetEye(cameraFixed_.GetEye());
+		camera_->SetTarget(cameraFixed_.GetTarget());
+		camera_->SetUp(cameraFixed_.GetUp());
+	}
+	else{
+		time_--;
+
+		Vector3 eyeMove = cameraFixed_.GetEye();
+		Vector3 targetMove = cameraFixed_.GetEye() + cameraFixed_.GetTarget();
+
+		Vector3 move = EaseInOut(
+			player_->GetPosition(),
+			targetMove,
+			time_ / defTime_
+		);
+
+		eyeMove += move;
+
+		camera_->SetEye(move);
+		camera_->SetTarget(move - targetMove);
+	}
 }
 
 void GamePlayScene::Finalize() {
