@@ -142,6 +142,7 @@ private:
 	Sprite* rule_ = new Sprite();
 	Sprite* rule2_ = new Sprite();
 	Sprite* really_ = new Sprite();
+	Sprite* stageClear_ = new Sprite();
 
 	//ポジション
 	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
