@@ -424,11 +424,11 @@ void GamePlayScene::Update3d() {
 					player_->SetStartDirection(Player::Up);
 					ParameterPlayer(positionPlayer, player_->GetStartDirection(), 4);
 
-					positionFan[0] = { 60.0f, 0.0f, 100.0f };
-					positionFan[1] = { 60.0f,0.0f,78.0f };
-					positionFan[2] = { 60.0f,0.0f,56.0f };
-					positionFan[3] = { 60.0f,0.0f,34.0f };
-					positionFan[4] = { 60.0f,0.0f,12.0f };
+					positionFan[0] = { 60.0f, 0.0f, 98.0f };
+					positionFan[1] = { 60.0f,0.0f,74.0f };
+					positionFan[2] = { 60.0f,0.0f,50.0f };
+					positionFan[3] = { 60.0f,0.0f,26.0f };
+					positionFan[4] = { 60.0f,0.0f,2.0f };
 					//ファン下向き時の数値設定
 					fan_[0]->SetFanDirection(Fan::Down);
 					fan_[0]->SetIsControl(true);
@@ -450,7 +450,39 @@ void GamePlayScene::Update3d() {
 
 					scene_ = Stage4;
 					break;
+
 				case Stage4:
+					positionPlayer = { -4.0f,0.0f,50.0f };
+					player_->SetStartDirection(Player::Down);
+					ParameterPlayer(positionPlayer, player_->GetStartDirection(), 5);
+
+					positionFan[0] = { 60.0f, 0.0f, 90.0f };
+					positionFan[1] = { 60.0f,0.0f,50.0f };
+					positionFan[2] = { 60.0f,0.0f,10.0f };
+					positionFan[3] = { 28.0f,0.0f,58.0f };
+					positionFan[4] = { 36.0f,0.0f,82.0f };
+					//ファン下向き時の数値設定
+					fan_[0]->SetFanDirection(Fan::Down);
+					fan_[0]->SetIsControl(true);
+
+					//ファン左向き時の数値設定
+					fan_[1]->SetFanDirection(Fan::Down);
+					fan_[1]->SetIsControl(true);
+
+					//ファン右向き時の数値設定
+					fan_[2]->SetFanDirection(Fan::Down);
+					fan_[2]->SetIsControl(true);
+
+					fan_[3]->SetFanDirection(Fan::Up);
+					fan_[3]->SetIsControl(false);
+
+					fan_[4]->SetFanDirection(Fan::Left);
+					fan_[4]->SetIsControl(false);
+					ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+
+					scene_ = Stage5;
+					break;
+				case Stage5:
 					if (input_->TriggerMouse(0)) {
 						//シーンの切り替えを依頼
 						SceneManager::GetInstance()->ChangeScene("TITLE");

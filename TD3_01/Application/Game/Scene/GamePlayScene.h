@@ -95,12 +95,13 @@ private:
 	/// </summary>
 
 	Stage* stage_ = nullptr;
-	const std::string filename_[5] = {
+	const std::string filename_[6] = {
 		"0",
 		"1",
 		"2",
 		"3",
 		"4",
+		"5",
 	};
 
 	enum GameScene
@@ -110,6 +111,7 @@ private:
 		Stage2,
 		Stage3,
 		Stage4,
+		Stage5,
 	};
 	size_t scene_ = Stage0;
 
