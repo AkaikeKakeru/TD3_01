@@ -326,9 +326,9 @@ void GamePlayScene::Update3d() {
 			ImGui::SetWindowPos(ImVec2(10, 10));
 			ImGui::SetWindowSize(ImVec2(500, 200));
 			ImGui::SetWindowFontScale(2.0f);
-			ImGui::Text("Pless Enter Next Stage");
+			ImGui::Text("Mouse left click Next Stage");
 			ImGui::End();
-			if (input_->TriggerKey(DIK_RETURN))
+			if (input_->TriggerMouse(0))
 			{
 				switch (scene_)
 				{
@@ -441,7 +441,7 @@ void GamePlayScene::Update3d() {
 					//ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 
 					//scene_ = Stage0;
-					if (input_->TriggerKey(DIK_RETURN)) {
+					if (input_->TriggerMouse(0)) {
 						//シーンの切り替えを依頼
 						SceneManager::GetInstance()->ChangeScene("TITLE");
 					}
