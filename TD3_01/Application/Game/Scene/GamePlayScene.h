@@ -55,6 +55,10 @@ private:
 	void DrawParticle();
 	void Draw2d();
 
+	//カメラ
+	void ClearCameraMove();
+	void ResetCameraMove();
+
 public://定数
 	static const int Vector3Count_ = 3;
 
@@ -158,6 +162,20 @@ private:
 	};
 	//クリアしたか
 	bool isClear_ = false;
+
+	//リセットしたか
+	bool isReset_ = false;
+
+	bool isInputTrigger_ = false;
+
+	//固定カメラ
+	Camera cameraFixed_;
+
+	float defTime_ = 30;
+	float time_ = defTime_;
+
+	bool isCameraLerp_ = true;
+
 	//ポーズしたか
 	bool isPause_ = false;
 	//タイトルに戻るか
@@ -165,5 +183,4 @@ private:
 	//ルール説明か
 	bool isrule_ = false;
 	int ruleCount = 0;
-
 };
