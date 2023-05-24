@@ -166,15 +166,27 @@ private:
 	//リセットしたか
 	bool isReset_ = false;
 
-	bool isInputTrigger_ = false;
 
 	//固定カメラ
 	Camera cameraFixed_;
 
+	//カメララープのデフォルト時間
 	float defTime_ = 30;
-	float time_ = defTime_;
+	//カメララープの経過時間
+	float timeCameraLerpProgress_ = defTime_;
 
-	bool isCameraLerp_ = true;
+	//プレイヤーが画面外に出たであろうと判断できる範囲を定数化
+	const int Num_OffScreen_Multi_ = 4;
+
+	//プレイヤー強制停止フラグ
+	bool isStopForcedPlayer_ = false;
+	//プレイヤー強制停止フラグ
+	float timeMovingPlayerProgress_ = defTime_ * Num_OffScreen_Multi_;
+
+	//カメララープの実行中フラグ
+	bool isCameraLerp_ = false;
+	//カメララープの終わりフラグ
+	bool isEndCameraLerp_ = false;
 
 	//ポーズしたか
 	bool isPause_ = false;
