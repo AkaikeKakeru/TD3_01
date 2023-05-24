@@ -99,12 +99,13 @@ private:
 	/// </summary>
 
 	Stage* stage_ = nullptr;
-	const std::string filename_[5] = {
+	const std::string filename_[6] = {
 		"0",
 		"1",
 		"2",
 		"3",
 		"4",
+		"5",
 	};
 
 	enum GameScene
@@ -114,6 +115,7 @@ private:
 		Stage2,
 		Stage3,
 		Stage4,
+		Stage5,
 	};
 	size_t scene_ = Stage0;
 
@@ -139,7 +141,14 @@ private:
 	/// <summary>
 	/// スプライト
 	/// </summary>
-	Sprite* sprite_ = new Sprite();
+	Sprite* spritePause_ = new Sprite();
+	Sprite* spritePauseInfo_ = new Sprite();
+	Sprite* spriteResetInfo_ = new Sprite();
+
+	Sprite* rule_ = new Sprite();
+	Sprite* rule2_ = new Sprite();
+	Sprite* really_ = new Sprite();
+	Sprite* stageClear_ = new Sprite();
 
 	//ポジション
 	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
@@ -166,4 +175,12 @@ private:
 	float time_ = defTime_;
 
 	bool isCameraLerp_ = true;
+
+	//ポーズしたか
+	bool isPause_ = false;
+	//タイトルに戻るか
+	bool isReally_ = false;
+	//ルール説明か
+	bool isrule_ = false;
+	int ruleCount = 0;
 };

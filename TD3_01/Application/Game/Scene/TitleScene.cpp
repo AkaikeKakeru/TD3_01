@@ -49,12 +49,15 @@ void TitleScene::Initialize() {
 
 	drawBas_->LoadTexture(0, "title.png");
 	drawBas_->LoadTexture(1, "tutorial.png");
+	drawBas_->LoadTexture(2, "tutorial2.png");
 
 	//描画スプライト
 
 	sprite_->Initialize(drawBas_, 0);
 	sprite2_->Initialize(drawBas_, 1);
+	sprite3_->Initialize(drawBas_, 2);
 	spriteChange = false;
+	ruleCount = 0;
 }
 
 void TitleScene::Update() {
@@ -74,10 +77,17 @@ void TitleScene::Update() {
 	}
 	if (spriteChange)
 	{
-		if (input_->TriggerKey(DIK_RETURN)) {
-			//シーンの切り替えを依頼
-			SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+		if (input_->TriggerKey(DIK_Q))
+		{
+
+			if (input_->TriggerKey(DIK_Q) && ruleCount == 1) {
+				//シーンの切り替えを依頼
+				SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+				ruleCount = 0;
+			}
+			ruleCount++;
 		}
+
 	}
 
 }
@@ -95,7 +105,14 @@ void TitleScene::Draw() {
 	drawBas_->PreDraw();
 	if (spriteChange)
 	{
-		sprite2_->Draw();
+		if (ruleCount == 0)
+		{
+			sprite2_->Draw();
+		}
+		else
+		{
+			sprite3_->Draw();
+		}
 	}
 	else
 	{
@@ -112,6 +129,7 @@ void TitleScene::Finalize() {
 	SafeDelete(skydomeModel_);
 	SafeDelete(sprite_);
 	SafeDelete(sprite2_);
+	SafeDelete(sprite3_);
 
 	SafeDelete(lightGroup_);
 	SafeDelete(camera_);

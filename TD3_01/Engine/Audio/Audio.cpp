@@ -17,7 +17,7 @@ void Audio::Finalize() {
 	xAudio2_.Reset();
 }
 
-void Audio::SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
+void Audio::SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, bool loop) {
 	HRESULT result;
 
 	//波形フォーマットを元にソースボイスを生成
@@ -30,7 +30,10 @@ void Audio::SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
 	buf.pAudioData = soundData.pBuffer_;
 	buf.AudioBytes = soundData.bufferSize_;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
-
+	if (loop)
+	{
+		buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+	}
 	//波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
 	result = pSourceVoice->Start();
