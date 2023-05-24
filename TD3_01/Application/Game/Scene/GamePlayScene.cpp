@@ -272,6 +272,7 @@ void GamePlayScene::Initialize2d() {
 	drawBas_->LoadTexture(13, "pauseinfo.png");
 	drawBas_->LoadTexture(14, "resetinfo.png");
 	drawBas_->LoadTexture(15, "really.png");
+	drawBas_->LoadTexture(16, "stageclear.png");
 
 	spritePause_->Initialize(drawBas_, 10);
 	spritePauseInfo_->Initialize(drawBas_, 13);
@@ -279,6 +280,7 @@ void GamePlayScene::Initialize2d() {
 	rule_->Initialize(drawBas_, 11);
 	rule2_->Initialize(drawBas_, 12);
 	really_->Initialize(drawBas_, 15);
+	stageClear_->Initialize(drawBas_, 16);
 
 	spritePause_->SetColor({ 1.0f,1.0f,1.0f,0.75f });
 	spriteResetInfo_->SetPosition({ 900.0f,0.0f });
@@ -319,15 +321,19 @@ void GamePlayScene::Update3d() {
 
 		if (isClear_)//クリアしたら
 		{
-			pm1_->Active(particle1_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
+			//pm1_->Active(particle1_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
+			//pm1_->Active(particle2_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
+			pm1_->ActiveY(particle1_, { 30.0f ,-10.0f,0.0f }, { 20.0f ,0.0f,10.0f }, { 1.4f,5.0f,0.0f }, { 0.0f,0.001f,0.0f }, 3, { 3.0f, 0.0f });
+			pm1_->ActiveY(particle1_, { -10.0f ,-10.0f,0.0f }, { 20.0f ,0.0f,10.0f }, { 1.4f,5.0f,0.0f }, { 0.0f,0.001f,0.0f }, 3, { 3.0f, 0.0f });
+
 			//pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
 
-			ImGui::Begin("Stage Clear!");
-			ImGui::SetWindowPos(ImVec2(10, 10));
-			ImGui::SetWindowSize(ImVec2(500, 200));
-			ImGui::SetWindowFontScale(2.0f);
-			ImGui::Text("Mouse left click Next Stage");
-			ImGui::End();
+			//ImGui::Begin("Stage Clear!");
+			//ImGui::SetWindowPos(ImVec2(10, 10));
+			//ImGui::SetWindowSize(ImVec2(500, 200));
+			//ImGui::SetWindowFontScale(2.0f);
+			//ImGui::Text("Mouse left click Next Stage");
+			//ImGui::End();
 			if (input_->TriggerMouse(0))
 			{
 				switch (scene_)
@@ -412,46 +418,76 @@ void GamePlayScene::Update3d() {
 					ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 					scene_ = Stage3;
 					break;
+
 				case Stage3:
-					//positionPlayer = { 8.0f,0.0f,20.0f };
-					//ParameterPlayer(positionPlayer, 0);
+					positionPlayer = { 28.0f,0.0f,26.0f };
+					player_->SetStartDirection(Player::Up);
+					ParameterPlayer(positionPlayer, player_->GetStartDirection(), 4);
 
-					//positionFan[0] = { 60.0f, 0.0f, 50.0f };
-					//positionFan[1] = { 60.0f,0.0f,50.0f };
-					//positionFan[2] = { 60.0f,0.0f,50.0f };
-					//positionFan[3] = { 60.0f,0.0f,50.0f };
-					//positionFan[4] = { 60.0f,0.0f,50.0f };
-					////ファン下向き時の数値設定
-					//fan_[0]->SetFanDirection(Fan::Down);
-					//fan_[0]->SetIsControl(true);
+					positionFan[0] = { 60.0f, 0.0f, 98.0f };
+					positionFan[1] = { 60.0f,0.0f,74.0f };
+					positionFan[2] = { 60.0f,0.0f,50.0f };
+					positionFan[3] = { 60.0f,0.0f,26.0f };
+					positionFan[4] = { 60.0f,0.0f,2.0f };
+					//ファン下向き時の数値設定
+					fan_[0]->SetFanDirection(Fan::Down);
+					fan_[0]->SetIsControl(true);
 
-					////ファン左向き時の数値設定
-					//fan_[1]->SetFanDirection(Fan::Down);
-					//fan_[1]->SetIsControl(true);
+					//ファン左向き時の数値設定
+					fan_[1]->SetFanDirection(Fan::Down);
+					fan_[1]->SetIsControl(true);
 
-					////ファン右向き時の数値設定
-					//fan_[2]->SetFanDirection(Fan::Down);
-					//fan_[2]->SetIsControl(true);
+					//ファン右向き時の数値設定
+					fan_[2]->SetFanDirection(Fan::Down);
+					fan_[2]->SetIsControl(true);
 
-					//fan_[3]->SetFanDirection(Fan::Down);
-					//fan_[3]->SetIsControl(true);
+					fan_[3]->SetFanDirection(Fan::Down);
+					fan_[3]->SetIsControl(true);
 
-					//fan_[4]->SetFanDirection(Fan::Down);
-					//fan_[4]->SetIsControl(true);
-					//ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+					fan_[4]->SetFanDirection(Fan::Down);
+					fan_[4]->SetIsControl(true);
+					ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 
-					//scene_ = Stage0;
+					scene_ = Stage4;
+					break;
+
+				case Stage4:
+					positionPlayer = { -4.0f,0.0f,50.0f };
+					player_->SetStartDirection(Player::Down);
+					ParameterPlayer(positionPlayer, player_->GetStartDirection(), 5);
+
+					positionFan[0] = { 60.0f, 0.0f, 90.0f };
+					positionFan[1] = { 60.0f,0.0f,50.0f };
+					positionFan[2] = { 60.0f,0.0f,10.0f };
+					positionFan[3] = { 28.0f,0.0f,58.0f };
+					positionFan[4] = { 36.0f,0.0f,82.0f };
+					//ファン下向き時の数値設定
+					fan_[0]->SetFanDirection(Fan::Down);
+					fan_[0]->SetIsControl(true);
+
+					//ファン左向き時の数値設定
+					fan_[1]->SetFanDirection(Fan::Down);
+					fan_[1]->SetIsControl(true);
+
+					//ファン右向き時の数値設定
+					fan_[2]->SetFanDirection(Fan::Down);
+					fan_[2]->SetIsControl(true);
+
+					fan_[3]->SetFanDirection(Fan::Up);
+					fan_[3]->SetIsControl(false);
+
+					fan_[4]->SetFanDirection(Fan::Left);
+					fan_[4]->SetIsControl(false);
+					ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+
+					scene_ = Stage5;
+					break;
+				case Stage5:
 					if (input_->TriggerMouse(0)) {
 						//シーンの切り替えを依頼
 						SceneManager::GetInstance()->ChangeScene("TITLE");
 					}
-					break;
-				case Stage4:
-
-					player_->SetStartDirection(Player::Up);
-					ParameterPlayer(positionPlayer, player_->GetStartDirection(), 0);
-					ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
-					scene_ = Stage0;
+					
 					break;
 				}
 			}
@@ -628,6 +664,10 @@ void GamePlayScene::Draw2d() {
 			spritePauseInfo_->Draw();
 			spriteResetInfo_->Draw();
 		}
+		else
+		{
+			stageClear_->Draw();
+		}
 	}
 
 	if (isReally_)
@@ -667,6 +707,7 @@ void GamePlayScene::Finalize() {
 	SafeDelete(rule_);
 	SafeDelete(rule2_);
 	SafeDelete(really_);
+	SafeDelete(stageClear_);
 
 	SafeDelete(lightGroup_);
 	SafeDelete(camera_);

@@ -95,12 +95,13 @@ private:
 	/// </summary>
 
 	Stage* stage_ = nullptr;
-	const std::string filename_[5] = {
+	const std::string filename_[6] = {
 		"0",
 		"1",
 		"2",
 		"3",
 		"4",
+		"5",
 	};
 
 	enum GameScene
@@ -110,6 +111,7 @@ private:
 		Stage2,
 		Stage3,
 		Stage4,
+		Stage5,
 	};
 	size_t scene_ = Stage0;
 
@@ -142,6 +144,7 @@ private:
 	Sprite* rule_ = new Sprite();
 	Sprite* rule2_ = new Sprite();
 	Sprite* really_ = new Sprite();
+	Sprite* stageClear_ = new Sprite();
 
 	//ポジション
 	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
