@@ -328,8 +328,8 @@ void GamePlayScene::Update3d() {
 
 		if (isClear_)//クリアしたら
 		{
-      ClearCameraMove();
-      
+			ClearCameraMove();
+
 			//pm1_->Active(particle1_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
 			//pm1_->Active(particle2_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
 			pm1_->ActiveY(particle1_, { 30.0f ,-10.0f,0.0f }, { 20.0f ,0.0f,10.0f }, { 1.4f,5.0f,0.0f }, { 0.0f,0.001f,0.0f }, 3, { 3.0f, 0.0f });
@@ -496,7 +496,7 @@ void GamePlayScene::Update3d() {
 						//シーンの切り替えを依頼
 						SceneManager::GetInstance()->ChangeScene("TITLE");
 					}
-					
+
 					break;
 				}
 			}
@@ -547,9 +547,9 @@ void GamePlayScene::Update3d() {
 			ReSetPositionPlayer(positionPlayer);
 			ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 		}
-	}
-	//player_->Update();
-	skydome_->Update();
+
+		//player_->Update();
+		skydome_->Update();
 
 		//レイキャストをチェック
 		for (int i = 0; i < FanCount_; i++) {
