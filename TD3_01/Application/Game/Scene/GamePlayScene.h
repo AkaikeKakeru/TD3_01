@@ -157,11 +157,13 @@ private:
 	//リセットしたか
 	bool isReset_ = false;
 
+	bool isInputTrigger_ = false;
+
 	//固定カメラ
 	Camera cameraFixed_;
 
-	float defTime_ = 60;
+	float defTime_ = 30;
 	float time_ = defTime_;
 
-	bool isCameraLerp_ = false;
+	bool isCameraLerp_ = true;
 };
