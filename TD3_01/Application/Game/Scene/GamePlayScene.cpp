@@ -552,8 +552,7 @@ void GamePlayScene::Update3d() {
 
 			if (isReset_) {
 				ResetCameraMove();
-				ReSetPositionPlayer(positionPlayer);
-				ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+				
 			}
 			//Pause機能
 			if (input_->TriggerKey(DIK_Q))
@@ -764,7 +763,8 @@ void GamePlayScene::ClearCameraMove() {
 void GamePlayScene::ResetCameraMove() {
 	if (timeCameraLerpProgress_ <= 0) {
 		timeCameraLerpProgress_ = defTime_;
-
+		ReSetPositionPlayer(positionPlayer);
+		ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 		isReset_ = false;
 
 		camera_->SetEye(cameraFixed_.GetEye());
