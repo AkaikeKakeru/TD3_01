@@ -32,7 +32,7 @@ void Skydome::Update() {
 			{ 0.0f,1.0f,0.0f }, ConvertToRadian(1.0f));
 
 		//1F“–‚½‚è‚Ì‰ñ“]Šp“x‚ðŽw’è
-		Vector3 pointY = { 0.0f,ConvertToRadian(0.1f),0.0f };
+		Vector3 pointY = { 0.0f,0.0f ,ConvertToRadian(0.1f)};
 
 		rot += RotateVector(pointY, rotation);
 
