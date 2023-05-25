@@ -909,6 +909,7 @@ void GamePlayScene::ReSetPositionPlayer(const Vector3& playerPos)
 	Vector3 pos = playerPos;
 	player_->SetPosition(pos);
 	player_->SetDirection(player_->GetStartDirection());
+	player_->Stop(pos, player_->GetStartDirection());
 }
 
 void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5)
