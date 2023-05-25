@@ -890,7 +890,7 @@ void GamePlayScene::ParameterPlayer(const Vector3& playerPos, const float direct
 
 	stage_->StageInitialize(filename_[stageNum]);
 	isClear_ = false;
-
+	isReset_ = false;
 }
 
 void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2, const Vector3& fanPos3, const Vector3& fanPos4, const Vector3& fanPos5)
