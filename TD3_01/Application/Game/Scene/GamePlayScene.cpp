@@ -316,9 +316,6 @@ void GamePlayScene::Update3d() {
 
 		RaycastHit raycastHit_;
 
-		lightGroup_->Update();
-		camera_->Update();
-
 		stageCollision = CollisionStageFlag(player_, stage_);
 
 		if (stage_->GetIsGoal())
@@ -328,8 +325,7 @@ void GamePlayScene::Update3d() {
 
 		if (isClear_)//クリアしたら
 		{
-      ClearCameraMove();
-      
+
 			//pm1_->Active(particle1_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
 			//pm1_->Active(particle2_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
 			pm1_->ActiveY(particle1_, { 30.0f ,-10.0f,0.0f }, { 20.0f ,0.0f,10.0f }, { 1.4f,5.0f,0.0f }, { 0.0f,0.001f,0.0f }, 3, { 3.0f, 0.0f });
@@ -343,8 +339,36 @@ void GamePlayScene::Update3d() {
 			//ImGui::SetWindowFontScale(2.0f);
 			//ImGui::Text("Mouse left click Next Stage");
 			//ImGui::End();
+			if (timeMovingPlayerProgress_ <= 0) {
+				isStopForcedPlayer_ = true;
+			}
+
+			if (isStopForcedPlayer_) {
+				player_->SetIsRun(false);
+			}
+			else {
+				timeMovingPlayerProgress_--;
+			}
+
+			if (!isEndCameraLerp_) {
+				isCameraLerp_ = true;
+			}
+
 			if (input_->TriggerMouse(0))
 			{
+				isEndCameraLerp_ = false;
+
+				camera_->SetEye(cameraFixed_.GetEye());
+				camera_->SetTarget(cameraFixed_.GetTarget());
+				camera_->SetUp(cameraFixed_.GetUp());
+
+				timeCameraLerpProgress_ = defTime_;
+				isCameraLerp_ = false;
+				isEndCameraLerp_ = false;
+
+				timeMovingPlayerProgress_ = defTime_ * Num_OffScreen_Multi_;
+				isStopForcedPlayer_ = false;
+
 				switch (scene_)
 				{
 				case Stage0:
@@ -496,20 +520,14 @@ void GamePlayScene::Update3d() {
 						//シーンの切り替えを依頼
 						SceneManager::GetInstance()->ChangeScene("TITLE");
 					}
-					
+
 					break;
 				}
 			}
-
-			camera_->SetEye(cameraFixed_.GetEye());
-			camera_->SetTarget(cameraFixed_.GetTarget());
-			camera_->SetUp(cameraFixed_.GetUp());
-
-			isCameraLerp_ = true;
 		}
 		else
 		{
-			player_->Update();
+			//player_->Update();
 
 			for (int i = 0; i < FanCount_; i++) {
 				fan_[i]->SetStage(stage_);
@@ -529,6 +547,11 @@ void GamePlayScene::Update3d() {
 			//リセット
 			if (input_->TriggerKey(DIK_R))
 			{
+				isReset_ = true;
+			}
+
+			if (isReset_) {
+				ResetCameraMove();
 				ReSetPositionPlayer(positionPlayer);
 				ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
 			}
@@ -537,19 +560,22 @@ void GamePlayScene::Update3d() {
 			{
 				isPause_ = true;
 			}
+
+			player_->OnCollisionStage(stageCollision, positionPlayer);
+			//全ての衝突をチェック
+			collisionManager_->CheckAllCollisions();
+
 		}
 
-		//リセット
-		if (input_->TriggerKey(DIK_R))
-		{
-			isReset_ = true;
-
-			ReSetPositionPlayer(positionPlayer);
-			ReSetPositionFan(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+		if (isCameraLerp_) {
+			if (!isEndCameraLerp_) {
+				ClearCameraMove();
+			}
 		}
-	}
-	//player_->Update();
-	skydome_->Update();
+
+		lightGroup_->Update();
+		camera_->Update();
+
 
 		//レイキャストをチェック
 		for (int i = 0; i < FanCount_; i++) {
@@ -571,16 +597,17 @@ void GamePlayScene::Update3d() {
 			}
 		}
 
+		skydome_->Update();
 		stage_->Update();
-		//全ての衝突をチェック
-		collisionManager_->CheckAllCollisions();
+		for (int i = 0; i < FanCount_; i++) {
+			fan_[i]->Update();
+		}
 
-		player_->OnCollisionStage(stageCollision, positionPlayer);
+		player_->Update();
 
 		pm1_->Update();
 		pm2_->Update();
 		windpm_->Update();
-
 	}
 	else if (isrule_)
 	{
@@ -629,7 +656,6 @@ void GamePlayScene::Update3d() {
 			isReally_ = false;
 		}
 	}
-
 }
 
 void GamePlayScene::Update2d() {
@@ -702,47 +728,42 @@ void GamePlayScene::Draw2d() {
 }
 
 void GamePlayScene::ClearCameraMove() {
+	if (timeCameraLerpProgress_ <= 0) {
+		timeCameraLerpProgress_ = defTime_;
+		isCameraLerp_ = false;
+		isEndCameraLerp_ = true;
+	}
+	else {
+		timeCameraLerpProgress_--;
 
-	if (isCameraLerp_) {
-		if (time_ <= 0) {
-			time_ = defTime_;
-			isCameraLerp_ = false;
-		}
-		else {
-			time_--;
+		Vector3 eye = cameraFixed_.GetEye();
+		Vector3 target =
+			cameraFixed_.GetTarget();
 
-			Vector3 eye = cameraFixed_.GetEye();
-			Vector3 target =
-				cameraFixed_.GetTarget();
+		Vector3 goal = player_->GetPosition()
+			+ Vector3{ -20,30,10 };
 
-			Vector3 goal = player_->GetPosition()
-				+ Vector3{ -20,30,10 };
+		Vector3 moveE = EaseInOut(
+			goal,
+			eye,
+			timeCameraLerpProgress_ / defTime_
+		);
 
-			Vector3 moveE = EaseInOut(
-				goal,
-				eye,
-				time_ / defTime_
-			);
+		Vector3 moveT = EaseInOut(
+			player_->GetPosition(),
+			target,
+			timeCameraLerpProgress_ / defTime_
+		);
+		
+		camera_->SetEye(moveE);
 
-			Vector3 moveT = EaseInOut(
-				player_->GetPosition(),
-				target,
-				time_ / defTime_
-			);
-
-			camera_->SetEye(moveE);
-
-			Vector3 goalTarget =
-				camera_->GetTarget();
-
-			camera_->SetTarget(moveT);
-		}
+		camera_->SetTarget(moveT);
 	}
 }
 
 void GamePlayScene::ResetCameraMove() {
-	if (time_ <= 0) {
-		time_ = defTime_;
+	if (timeCameraLerpProgress_ <= 0) {
+		timeCameraLerpProgress_ = defTime_;
 
 		isReset_ = false;
 
@@ -751,18 +772,18 @@ void GamePlayScene::ResetCameraMove() {
 		camera_->SetUp(cameraFixed_.GetUp());
 	}
 	else {
-		time_--;
+		timeCameraLerpProgress_--;
 
 		Vector3 moveE = EaseInOut(
 			player_->GetPosition(),
 			cameraFixed_.GetEye(),
-			time_ / defTime_
+			timeCameraLerpProgress_ / defTime_
 		);
 
 		Vector3 moveT = EaseInOut(
 			player_->GetPosition(),
 			cameraFixed_.GetTarget(),
-			time_ / defTime_
+			timeCameraLerpProgress_ / defTime_
 		);
 
 		camera_->SetEye(moveE);
@@ -833,7 +854,9 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 				isFloor++;
 			}
 			if (isFloor == 2) {
-				p->Stop(positionPlayer, player_->GetStartDirection());
+				if (!isClear_) {
+					p->Stop(positionPlayer, player_->GetStartDirection());
+				}
 			}
 			s->CheckBlock(pLT[0] + i, pLT[1] + j);
 			// 各座標変数の宣言

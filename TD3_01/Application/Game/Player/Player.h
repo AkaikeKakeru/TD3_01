@@ -41,6 +41,11 @@ public://アクセッサ
 	bool GetIsRun() {
 		return IsRun_;
 	}
+	//前進フラグセット
+	void SetIsRun(bool isRun) {
+		IsRun_ = isRun;
+	}
+
 	void Stop(const Vector3& pos,const float direction);
 	const Vector3& GetPosition() const { return worldTransform_.position_; }
 	float GetRadius() const { return radius_; }
