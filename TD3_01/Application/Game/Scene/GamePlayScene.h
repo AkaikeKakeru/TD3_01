@@ -176,7 +176,7 @@ private:
 	float timeCameraLerpProgress_ = defTime_;
 
 	//プレイヤーが画面外に出たであろうと判断できる範囲を定数化
-	const int Num_OffScreen_Multi_ = 4;
+	const int Num_OffScreen_Multi_ = 8;
 
 	//プレイヤー強制停止フラグ
 	bool isStopForcedPlayer_ = false;
