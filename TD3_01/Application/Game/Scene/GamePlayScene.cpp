@@ -532,7 +532,10 @@ void GamePlayScene::Update3d() {
 			for (int i = 0; i < FanCount_; i++) {
 				fan_[i]->SetStage(stage_);
 				//風の演出
-				ActiveWind(fan_[i]->GetFanDirection(), fan_[i]->GetPosition());
+				if (!isReset_)
+				{
+					ActiveWind(fan_[i]->GetFanDirection(), fan_[i]->GetPosition());
+				}
 				//ファンが動かせるかどうかかどうか
 				if (fan_[i]->GetIsControl())
 				{
