@@ -10,6 +10,9 @@ Input* TitleScene::input_ = Input::GetInstance();
 
 void TitleScene::Initialize() {
 	/// 描画初期化
+	audio_ = Audio::GetInstance();
+	audio_->Initialize();
+
 	//オブジェクト基盤
 	Object3d::StaticInitialize(dxBas_->GetDevice().Get());
 	ParticleManager::StaticInitialize(dxBas_->GetDevice().Get());
@@ -52,10 +55,15 @@ void TitleScene::Initialize() {
 	drawBas_->LoadTexture(2, "tutorial2.png");
 
 	//描画スプライト
-
 	sprite_->Initialize(drawBas_, 0);
 	sprite2_->Initialize(drawBas_, 1);
 	sprite3_->Initialize(drawBas_, 2);
+	
+	//音
+	titleBGM = audio_->SoundLoadWave("Resource/sound/title.wav");
+	doneSE = audio_->SoundLoadWave("Resource/sound/done.wav");
+	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), titleBGM, true);
+
 	spriteChange = false;
 	ruleCount = 0;
 }
@@ -73,13 +81,14 @@ void TitleScene::Update() {
 
 	if (input_->TriggerKey(DIK_SPACE))
 	{
+		audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 		spriteChange = true;
 	}
 	if (spriteChange)
 	{
 		if (input_->TriggerKey(DIK_Q))
 		{
-
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 			if (input_->TriggerKey(DIK_Q) && ruleCount == 1) {
 				//シーンの切り替えを依頼
 				SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
@@ -123,6 +132,10 @@ void TitleScene::Draw() {
 }
 
 void TitleScene::Finalize() {
+	//音声
+	audio_->Finalize();
+	audio_->SoundUnload(&titleBGM);
+	audio_->SoundUnload(&doneSE);
 	SafeDelete(planeObj_);
 	SafeDelete(skydomeObj_);
 	SafeDelete(planeModel_);
