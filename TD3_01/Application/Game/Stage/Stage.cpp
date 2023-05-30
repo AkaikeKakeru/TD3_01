@@ -73,13 +73,13 @@ void Stage::Update() {
 	isGoal_ = false;
 
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
-		block->worldTransform_.UpdateMatrix();
+		//block->worldTransform_.UpdateMatrix();
 		block->obj->SetWorldTransform(block->worldTransform_);
 		block->obj->Update();
 	}
 
 	for (std::unique_ptr<StageData>& block : floorBlocks_) {
-		block->worldTransform_.UpdateMatrix();
+		//block->worldTransform_.UpdateMatrix();
 		block->obj->SetWorldTransform(block->worldTransform_);
 		block->obj->Update();
 	}
