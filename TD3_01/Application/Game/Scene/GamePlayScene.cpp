@@ -518,7 +518,7 @@ void GamePlayScene::Update3d() {
 				case Stage5:
 					if (input_->TriggerMouse(0)) {
 						//シーンの切り替えを依頼
-						SceneManager::GetInstance()->ChangeScene("TITLE");
+						SceneManager::GetInstance()->ChangeScene("GAMECLEAR");
 					}
 
 					break;

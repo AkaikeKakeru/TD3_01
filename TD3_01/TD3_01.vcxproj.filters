@@ -155,6 +155,9 @@
     <ClCompile Include="Engine\3d\Particle\ParticleManager.cpp">
       <Filter>Source File\Engine\3d\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Game\Scene\GameClearScene.cpp">
+      <Filter>Source File\Application\Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\DrawBasis.h">
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\Particle\ParticleManager.h">
       <Filter>Header File\Engine\3d\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Game\Scene\GameClearScene.h">
+      <Filter>Header File\Application\Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
