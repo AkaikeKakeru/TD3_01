@@ -147,6 +147,7 @@ private:
 	//Audio::SoundData crashSE;
 	Audio::SoundData doneSE;
 	Audio::SoundData clearSE;
+	Audio::SoundData resetSE;
 
 	/// <summary>
 	/// スプライト

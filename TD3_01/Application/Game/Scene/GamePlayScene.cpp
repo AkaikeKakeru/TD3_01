@@ -268,6 +268,7 @@ void GamePlayScene::Initialize3d() {
 	stageBGM = audio_->SoundLoadWave("Resource/sound/stage.wav");
 	clearSE = audio_->SoundLoadWave("Resource/sound/stageclear.wav");
 	doneSE = audio_->SoundLoadWave("Resource/sound/done.wav");
+	resetSE = audio_->SoundLoadWave("Resource/sound/reset.wav");
 	
 	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), stageBGM, true);
 
@@ -562,6 +563,7 @@ void GamePlayScene::Update3d() {
 			//リセット
 			if (input_->TriggerKey(DIK_R))
 			{
+				if(!isReset_)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), resetSE, false);
 				isReset_ = true;
 			}
 
@@ -629,6 +631,7 @@ void GamePlayScene::Update3d() {
 		if (input_->TriggerKey(DIK_Q))
 		{
 			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
+
 			if (input_->TriggerKey(DIK_Q) && ruleCount == 1) {
 				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 				isrule_ = false;
@@ -665,7 +668,6 @@ void GamePlayScene::Update3d() {
 		//タイトルへ
 		if (input_->TriggerKey(DIK_Q))
 		{
-			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 			//シーンの切り替えを依頼
 			SceneManager::GetInstance()->ChangeScene("TITLE");
 
@@ -835,6 +837,7 @@ void GamePlayScene::Finalize() {
 	audio_->SoundUnload(&stageBGM);
 	audio_->SoundUnload(&clearSE);
 	audio_->SoundUnload(&doneSE);
+	audio_->SoundUnload(&resetSE);
 	//パーティクル
 	SafeDelete(particle1_);
 	SafeDelete(pm1_);
