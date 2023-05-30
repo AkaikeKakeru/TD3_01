@@ -3,7 +3,6 @@
 #include "Model.h"
 #include "Object3d.h"
 #include "Camera.h"
-#include "Switch.h"
 
 class Stage {
 private: // 定数
@@ -15,11 +14,7 @@ public:
 	enum STAGE {
 		NONE,		// 穴
 		BLOCK,		// 地面, 壁
-		SWITCHR,	// スイッチR
-		WALLR,		// 消える壁R
-		SWITCHB,	// スイッチB
-		WALLB,		// 消える壁B
-		GOAL,		// ゴール
+		GOAL=6,		// ゴール
 
 		NONE2,
 		NONE3,
@@ -81,18 +76,10 @@ private:
 	// モデル
 	Model* model_ = nullptr;
 	Model* modelFloor_ = nullptr;
-	Model* modelSwitchR_ = nullptr;
-	Model* modelSwitchB_ = nullptr;
-	Model* modelWallR_ = nullptr;
-	Model* modelWallB_ = nullptr;
 	Model* modelGoal_ = nullptr;
 
 	Object3d* obj_ = nullptr;
 	Object3d* objFloor_ = nullptr;
-	Object3d* objSwitchR_ = nullptr;
-	Object3d* objSwitchB_ = nullptr;
-	Object3d* objWallR_ = nullptr;
-	Object3d* objWallB_ = nullptr;
 	Object3d* objGoal_ = nullptr;
 
 	// テクスチャハンドル
@@ -103,10 +90,6 @@ private:
 	// ワールド変換データ
 	std::list<std::unique_ptr<StageData>> stageBlocks_;
 	std::list<std::unique_ptr<StageData>> floorBlocks_;
-
-	Switch* switchR_ = nullptr;
-	Switch* switchB_ = nullptr;
-
 	//カメラ
 	static Camera* cameraStage_;
 
@@ -119,9 +102,7 @@ private:
 	float floorDepth_ = -8.0f;
 	// ゴールフラグ
 	bool isGoal_ = false;
-	bool isSwitchDrawR_ = false;
-	bool isSwitchDrawB_ = false;
-
+	
 public: // アクセッサ
 	const float& GetRadius() { return radius_; }
 	const bool& GetIsGoal() { return isGoal_; }

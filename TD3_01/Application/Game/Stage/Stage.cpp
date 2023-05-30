@@ -10,23 +10,10 @@ Stage::~Stage() {
 	SafeDelete(model_);
 	SafeDelete(modelFloor_);
 	SafeDelete(modelGoal_);
-	SafeDelete(modelSwitchR_);
-	SafeDelete(modelSwitchB_);
-	SafeDelete(modelWallR_);
-	SafeDelete(modelWallB_);
 
 	SafeDelete(obj_);
 	SafeDelete(objFloor_);
 	SafeDelete(objGoal_);
-	SafeDelete(objSwitchR_);
-	SafeDelete(objSwitchB_);
-	SafeDelete(objWallR_);
-	SafeDelete(objWallB_);
-
-	SafeDelete(switchR_);
-	SafeDelete(switchB_);
-
-
 }
 
 void Stage::Initialize(Camera* camera) {
@@ -36,27 +23,15 @@ void Stage::Initialize(Camera* camera) {
 	//インスタンス生成
 	model_ = new Model();
 	modelFloor_ = new Model();
-	modelSwitchR_ = new Model();
-	modelSwitchB_ = new Model();
-	modelWallR_ = new Model();
-	modelWallB_ = new Model();
 	modelGoal_ = new Model();
 
 	obj_ = new Object3d();
 	objFloor_ = new Object3d();
-	objSwitchR_ = new Object3d();
-	objSwitchB_ = new Object3d();
-	objWallR_ = new Object3d();
-	objWallB_ = new Object3d();
 	objGoal_ = new Object3d();
 
 	// モデル読み込み
 	model_ = Model::LoadFromOBJ("cube", true);
 	modelFloor_ = Model::LoadFromOBJ("floor", true);
-	modelSwitchR_ = Model::LoadFromOBJ("rswitch", true);
-	modelSwitchB_ = Model::LoadFromOBJ("bswitch", true);
-	modelWallR_ = Model::LoadFromOBJ("cubeR", true);
-	modelWallB_ = Model::LoadFromOBJ("cubeB", true);
 	modelGoal_ = Model::LoadFromOBJ("cubeB", true);
 
 	//3Dオブジェクトとカメラのセット
@@ -68,32 +43,9 @@ void Stage::Initialize(Camera* camera) {
 	objFloor_->SetModel(modelFloor_);
 	objFloor_->SetCamera(cameraStage_);
 
-	objSwitchR_ = Object3d::Create();
-	objSwitchR_->SetModel(modelSwitchR_);
-	objSwitchR_->SetCamera(cameraStage_);
-
-	objSwitchB_ = Object3d::Create();
-	objSwitchB_->SetModel(modelSwitchB_);
-	objSwitchB_->SetCamera(cameraStage_);
-
-	objWallR_ = Object3d::Create();
-	objWallR_->SetModel(modelWallR_);
-	objWallR_->SetCamera(cameraStage_);
-
-	objWallB_ = Object3d::Create();
-	objWallB_->SetModel(modelWallB_);
-	objWallB_->SetCamera(cameraStage_);
-
 	objGoal_ = Object3d::Create();
 	objGoal_->SetModel(modelGoal_);
 	objGoal_->SetCamera(cameraStage_);
-
-	// スイッチ
-	switchR_ = new Switch();
-	switchB_ = new Switch();
-	switchR_->Initialize(modelSwitchR_, objSwitchR_);
-	switchB_->Initialize(modelSwitchB_, objSwitchB_);
-
 
 	// ステージの床を初期化
 	LoadFloorBlock();
@@ -102,9 +54,6 @@ void Stage::Initialize(Camera* camera) {
 void Stage::StageInitialize(const std::string& stageNum) {
 	// 最初に残っている要素を削除
 	stageBlocks_.clear();
-
-	isSwitchDrawR_ = false;
-	isSwitchDrawB_ = false;
 
 	// バッファをクリア
 	stageCommands.str("");
@@ -120,38 +69,6 @@ void Stage::StageInitialize(const std::string& stageNum) {
 }
 
 void Stage::Update() {
-	if (switchR_->GetFlag()) {
-		for (std::unique_ptr<StageData>& block : stageBlocks_) {
-			if (block->type_ == WALLR) {
-				block->type_ = NONE2;
-			}
-		}
-	}
-	else if (!switchR_->GetFlag()) {
-		for (std::unique_ptr<StageData>& block : stageBlocks_) {
-			if (block->type_ == NONE2) {
-				block->type_ = WALLR;
-			}
-		}
-	}
-
-	if (switchB_->GetFlag()) {
-		for (std::unique_ptr<StageData>& block : stageBlocks_) {
-			if (block->type_ == WALLB) {
-				block->type_ = NONE3;
-			}
-		}
-	}
-	else if (!switchB_->GetFlag()) {
-		for (std::unique_ptr<StageData>& block : stageBlocks_) {
-			if (block->type_ == NONE3) {
-				block->type_ = WALLB;
-			}
-		}
-	}
-
-	switchR_->Update();
-	switchB_->Update();
 
 	isGoal_ = false;
 
@@ -175,14 +92,7 @@ void Stage::Draw() {
 			// 壁描画
 			obj_->Draw(block->worldTransform_);
 		}
-		else if (block->type_ == WALLR) {
-			// 赤壁描画
-			objWallR_->Draw(block->worldTransform_);
-		}
-		else if (block->type_ == WALLB) {
-			// 青壁描画
-			objWallB_->Draw(block->worldTransform_);
-		}
+	
 		else
 			if (block->type_ == GOAL) {
 				// ゴール描画
@@ -198,9 +108,6 @@ void Stage::Draw() {
 		objFloor_->Draw(block->worldTransform_);
 	}
 
-	// スイッチ描画
-	if (isSwitchDrawR_) switchR_->Draw();
-	if (isSwitchDrawB_) switchB_->Draw();
 }
 
 void Stage::LoadStageData(const std::string& stageNum) {
@@ -253,30 +160,6 @@ void Stage::LoadStageCommands() {
 			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
 				// ステージのブロックを追加
 				PushStageBlockList(stageBlocks_, objFloor_, BLOCK, mapLine, mapRow, stageDepth_);
-				// インクリメント
-				mapLine++;
-			}
-			else if (word.find("SWITCH") == 0 || word.find("2") == 0) {
-				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, objSwitchR_, SWITCHR, mapLine, mapRow, stageDepth_);
-				// インクリメント
-				mapLine++;
-			}
-			else if (word.find("WALL") == 0 || word.find("3") == 0) {
-				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, objWallR_, WALLR, mapLine, mapRow, stageDepth_);
-				// インクリメント
-				mapLine++;
-			}
-			else if (word.find("SWITCH") == 0 || word.find("4") == 0) {
-				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, objSwitchB_, SWITCHB, mapLine, mapRow, stageDepth_);
-				// インクリメント
-				mapLine++;
-			}
-			else if (word.find("WALL") == 0 || word.find("5") == 0) {
-				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, objWallB_, WALLB, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
@@ -347,38 +230,12 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, O
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
 
-	if (type == SWITCHR) {
-		pos.x -= 8.0f;
-		pos.z += 8.0f;
-		switchR_->Seting(pos, magnification_);
-		isSwitchDrawR_ = true;
-	}
-	if (type == SWITCHB) {
-		pos.x -= 8.0f;
-		pos.z += 8.0f;
-		switchB_->Seting(pos, magnification_);
-		isSwitchDrawB_ = true;
-	}
-
 }
 
 void Stage::CheckBlock(int line, int row) {
 	// 範囲for
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
-		// NONEは返さない
-		if (block->type_ == SWITCHR) {
-			// 指定した番号に合った座標を返す
-			if (block->line_ == line && block->row_ == row) {
-				switchR_->OnCollisionSwitch();
-			}
-		}
-		else if (block->type_ == SWITCHB) {
-			// 指定した番号に合った座標を返す
-			if (block->line_ == line && block->row_ == row) {
-				switchB_->OnCollisionSwitch();
-			}
-		}
-		else if (block->type_ == GOAL) {
+		if (block->type_ == GOAL) {
 			// 指定した番号に合った座標を返す
 			if (block->line_ == line && block->row_ == row) {
 				isGoal_ = true;
@@ -398,7 +255,7 @@ Vector3 Stage::GetBlockPosition(int line, int row) {
 	// 範囲for
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		// ブロックと壁の時は返す
-		if (block->type_ == BLOCK || block->type_ == WALLR || block->type_ == WALLB) {
+		if (block->type_ == BLOCK) {
 			// 指定した番号に合った座標を返す
 			if (block->line_ == line && block->row_ == row) {
 				return block->worldTransform_.position_;
