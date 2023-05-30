@@ -31,7 +31,7 @@ void WinApp::Initialize(){
 	//ウィンドウクラス
 	w_.cbSize = sizeof(WNDCLASSEX);
 	w_.lpfnWndProc = (WNDPROC)WindowProc;
-	w_.lpszClassName = L"3121_P.Plane";
+	w_.lpszClassName = L"P.Plane";
 	w_.hInstance = GetModuleHandle(nullptr);
 	w_.hCursor = LoadCursor(NULL, IDC_ARROW);
 
@@ -46,7 +46,7 @@ void WinApp::Initialize(){
 #pragma region ウィンドウの生成
 	hwnd_ = CreateWindow(
 		w_.lpszClassName,
-		L"3121_P.Plane",
+		L"P.Plane",
 		WS_OVERLAPPEDWINDOW ^ WS_MAXIMIZEBOX ^ WS_THICKFRAME | WS_VISIBLE,	//最大化だけ封印
 		//通常＝WS_OVERLAPPEDWINDOW　閉じるだけWS_OVERLAPPED | WS_SYSMENU
 		CW_USEDEFAULT,
