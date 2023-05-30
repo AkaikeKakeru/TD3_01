@@ -574,7 +574,7 @@ void GamePlayScene::Update3d() {
 			//Pause機能
 			if (input_->TriggerKey(DIK_Q))
 			{
-				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
+				if(!isPause_)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 				isPause_ = true;
 			}
 

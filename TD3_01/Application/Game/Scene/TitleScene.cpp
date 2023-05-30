@@ -81,7 +81,7 @@ void TitleScene::Update() {
 
 	if (input_->TriggerKey(DIK_SPACE))
 	{
-		audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
+		if (!spriteChange)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 		spriteChange = true;
 	}
 	if (spriteChange)
