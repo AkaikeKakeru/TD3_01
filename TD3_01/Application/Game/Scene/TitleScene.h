@@ -10,6 +10,8 @@
 #include "Camera.h"
 #include "LightGroup.h"
 
+#include "Audio.h"
+
 #include "SceneManager.h"
 
 class TitleScene : public BaseScene {
@@ -36,6 +38,10 @@ private:
 
 	Object3d* skydomeObj_ = nullptr;
 	Model* skydomeModel_ = nullptr;
+	//音
+	Audio* audio_ = nullptr;
+	Audio::SoundData titleBGM;
+	Audio::SoundData doneSE;
 	/// スプライト
 	/// </summary>
 	Sprite* sprite_ = new Sprite();

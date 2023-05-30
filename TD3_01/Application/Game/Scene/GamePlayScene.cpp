@@ -169,6 +169,9 @@ void GamePlayScene::Draw() {
 }
 
 void GamePlayScene::Initialize3d() {
+	audio_ = Audio::GetInstance();
+	audio_->Initialize();
+
 	collisionManager_ = CollisionManager::GetInstance();
 	//カメラの初期化
 	camera_ = new Camera();
@@ -261,6 +264,14 @@ void GamePlayScene::Initialize3d() {
 	windpm_->SetParticleModel(wind_);
 	windpm_->SetCamera(camera_);
 
+	//音
+	stageBGM = audio_->SoundLoadWave("Resource/sound/stage.wav");
+	clearSE = audio_->SoundLoadWave("Resource/sound/stageclear.wav");
+	doneSE = audio_->SoundLoadWave("Resource/sound/done.wav");
+	resetSE = audio_->SoundLoadWave("Resource/sound/reset.wav");
+	
+	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), stageBGM, true);
+
 	//ステージ生成
 	stage_ = new Stage();
 	stage_->Initialize(camera_);
@@ -318,10 +329,7 @@ void GamePlayScene::Update3d() {
 
 		stageCollision = CollisionStageFlag(player_, stage_);
 
-		if (stage_->GetIsGoal())
-		{
-			isClear_ = true;
-		}
+		
 
 		if (isClear_)//クリアしたら
 		{
@@ -356,6 +364,7 @@ void GamePlayScene::Update3d() {
 
 			if (input_->TriggerMouse(0))
 			{
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 				isEndCameraLerp_ = false;
 
 				camera_->SetEye(cameraFixed_.GetEye());
@@ -371,8 +380,7 @@ void GamePlayScene::Update3d() {
 
 				switch (scene_)
 				{
-				case Stage0:
-
+				case Stage0:	
 					//ここで次のステージ(ここだとステージ1の値)の値をセット(サンプル)
 					positionPlayer = { 28.0f,0.0f,26.0f };
 					player_->SetStartDirection(Player::Left);
@@ -527,6 +535,11 @@ void GamePlayScene::Update3d() {
 		}
 		else
 		{
+			if (stage_->GetIsGoal())
+			{
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), clearSE, false);
+				isClear_ = true;
+			}
 			//player_->Update();
 
 			for (int i = 0; i < FanCount_; i++) {
@@ -550,6 +563,7 @@ void GamePlayScene::Update3d() {
 			//リセット
 			if (input_->TriggerKey(DIK_R))
 			{
+				if(!isReset_)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), resetSE, false);
 				isReset_ = true;
 			}
 
@@ -560,6 +574,7 @@ void GamePlayScene::Update3d() {
 			//Pause機能
 			if (input_->TriggerKey(DIK_Q))
 			{
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 				isPause_ = true;
 			}
 
@@ -615,7 +630,10 @@ void GamePlayScene::Update3d() {
 	{
 		if (input_->TriggerKey(DIK_Q))
 		{
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
+
 			if (input_->TriggerKey(DIK_Q) && ruleCount == 1) {
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 				isrule_ = false;
 
 			}
@@ -626,16 +644,19 @@ void GamePlayScene::Update3d() {
 	{
 		if (input_->TriggerKey(DIK_W))
 		{
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 			ruleCount = 0;
 			isrule_ = true;
 			isPause_ = false;
 		}
 		if (input_->TriggerKey(DIK_Q))
 		{
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 			isPause_ = false;
 		}
 		if (input_->TriggerKey(DIK_E))
 		{
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 			isReally_ = true;
 			isPause_ = false;
 		}
@@ -654,6 +675,7 @@ void GamePlayScene::Update3d() {
 		//Pauseへ
 		if (input_->TriggerKey(DIK_W))
 		{
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 			isPause_ = true;
 			isReally_ = false;
 		}
@@ -810,7 +832,12 @@ void GamePlayScene::Finalize() {
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
-
+	//音声
+	audio_->Finalize();
+	audio_->SoundUnload(&stageBGM);
+	audio_->SoundUnload(&clearSE);
+	audio_->SoundUnload(&doneSE);
+	audio_->SoundUnload(&resetSE);
 	//パーティクル
 	SafeDelete(particle1_);
 	SafeDelete(pm1_);

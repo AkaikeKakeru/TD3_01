@@ -20,6 +20,8 @@
 
 #include "Skydome.h"
 
+#include "Audio.h"
+
 #include "CollisionPrimitive.h"
 
 class CollisionManager;
@@ -138,6 +140,15 @@ private:
 	//風
 	Particle* wind_ = nullptr;
 	ParticleManager* windpm_ = nullptr;
+	
+	//音
+	Audio* audio_ = nullptr;
+	Audio::SoundData stageBGM;
+	//Audio::SoundData crashSE;
+	Audio::SoundData doneSE;
+	Audio::SoundData clearSE;
+	Audio::SoundData resetSE;
+
 	/// <summary>
 	/// スプライト
 	/// </summary>
