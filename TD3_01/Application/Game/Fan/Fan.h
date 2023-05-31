@@ -19,7 +19,7 @@ public: //enum
 	} Direction;
 
 public: //静的メンバ関数
-	static Fan* Create(Model* model);
+	static Fan* Create(Model* model, Audio* audio);
 public: //メンバ関数
 	bool Initialize() override;
 	void Update() override;
@@ -83,7 +83,10 @@ private://メンバ変数
 	//ステージ
 	Stage* stage_;
 	//音
-	//Audio* audio_ = nullptr;
+	Audio* audio_ = nullptr;
+	Audio::SoundData grabSE;
+	Audio::SoundData changeDirSE;
+	Audio::SoundData fanSetSE;
 	//ステージのデフォルト座標
 	Vector3 defaultFloorPos_;
 };

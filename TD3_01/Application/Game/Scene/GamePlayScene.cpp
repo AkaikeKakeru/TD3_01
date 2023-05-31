@@ -217,7 +217,7 @@ void GamePlayScene::Initialize3d() {
 
 	for (int i = 0; i < FanCount_; i++) {
 		//ファンの初期化
-		fan_[i] = Fan::Create(fanModel_);
+		fan_[i] = Fan::Create(fanModel_, audio_);
 		fan_[i]->SetScale({ 1.0f,1.0f,1.0f });
 		fan_[i]->SetCamera(camera_);
 	}
@@ -826,6 +826,17 @@ void GamePlayScene::ResetCameraMove() {
 }
 
 void GamePlayScene::Finalize() {
+	
+	//音声
+	audio_->Finalize();
+	audio_->SoundUnload(&stageBGM);
+	audio_->SoundUnload(&hitSE);
+	audio_->SoundUnload(&clearSE);
+	audio_->SoundUnload(&doneSE);
+	audio_->SoundUnload(&resetSE);
+	audio_->SoundUnload(&backSE);
+	audio_->SoundUnload(&runSE);
+
 	player_->Finalize();
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
@@ -841,15 +852,7 @@ void GamePlayScene::Finalize() {
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
-	//音声
-	audio_->Finalize();
-	audio_->SoundUnload(&stageBGM);
-	audio_->SoundUnload(&hitSE);
-	audio_->SoundUnload(&clearSE);
-	audio_->SoundUnload(&doneSE);
-	audio_->SoundUnload(&resetSE);
-	audio_->SoundUnload(&backSE);
-	audio_->SoundUnload(&runSE);
+	
 	//パーティクル
 	SafeDelete(particle1_);
 	SafeDelete(pm1_);
