@@ -141,11 +141,12 @@ private:
 	//音
 	Audio* audio_ = nullptr;
 	Audio::SoundData stageBGM;
-	Audio::SoundData windSE;
 	Audio::SoundData hitSE;
 	Audio::SoundData doneSE;
 	Audio::SoundData clearSE;
 	Audio::SoundData resetSE;
+	Audio::SoundData backSE;
+	Audio::SoundData runSE;
 
 	/// <summary>
 	/// スプライト
@@ -197,8 +198,6 @@ private:
 	//カメララープの終わりフラグ
 	bool isEndCameraLerp_ = false;
 
-	//風が吹いてるか
-	bool isWind_ = true;
 	//ポーズしたか
 	bool isPause_ = false;
 	//タイトルに戻るか

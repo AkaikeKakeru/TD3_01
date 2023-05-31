@@ -32,6 +32,8 @@ public://メンバ関数
 	void OnCollision(const CollisionInfo & info) override;
 
 	void OnCollisionStage(const bool& collisionFlag, const Vector3& pos);
+
+	bool GetActive() { return IsRun_; }
 public://アクセッサ
 	void SetFan(Fan*fan) {
 		fan_ = fan;
@@ -122,6 +124,7 @@ private:
 
 	//開始時方向
 	float startDir_ = Up;
+
 public:
 	Player() = default;
 	~Player() = default;
