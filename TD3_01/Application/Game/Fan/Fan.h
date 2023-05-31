@@ -3,7 +3,7 @@
 #include "Object3d.h"
 #include "CollisionPrimitive.h"
 #include "Quaternion.h"
-
+#include "Audio.h"
 #include "Cursor.h"
 
 #include "Stage.h"
@@ -82,6 +82,8 @@ private://メンバ変数
 
 	//ステージ
 	Stage* stage_;
+	//音
+	//Audio* audio_ = nullptr;
 	//ステージのデフォルト座標
 	Vector3 defaultFloorPos_;
 };
