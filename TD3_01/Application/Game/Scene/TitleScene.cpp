@@ -15,7 +15,6 @@ void TitleScene::Initialize() {
 
 	//描画基盤
 	drawBas_ = DrawBasis::GetInstance();
-	drawBas_->Initialize();
 
 	drawBas_->LoadTexture(0, "title.png");
 	drawBas_->LoadTexture(1, "tutorial.png");

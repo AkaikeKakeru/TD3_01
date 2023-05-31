@@ -69,7 +69,7 @@ private:
 	//入力
 	static Input* input_;
 	//スプライト基盤
-	static DrawBasis* drawBas_;
+	DrawBasis* drawBas_ = nullptr;
 	//ImGuiマネージャー
 	static ImGuiManager* imGuiManager_;
 
@@ -155,11 +155,13 @@ private:
 	Sprite* spritePause_ = new Sprite();
 	Sprite* spritePauseInfo_ = new Sprite();
 	Sprite* spriteResetInfo_ = new Sprite();
+	Sprite* spriteActiveInfo_ = new Sprite();
 
 	Sprite* rule_ = new Sprite();
 	Sprite* rule2_ = new Sprite();
 	Sprite* really_ = new Sprite();
 	Sprite* stageClear_ = new Sprite();
+	
 
 	//ポジション
 	Vector3 positionPlayer = { 4.0f,0.0f,18.0f };
