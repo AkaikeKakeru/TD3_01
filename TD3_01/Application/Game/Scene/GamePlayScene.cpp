@@ -23,13 +23,14 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Update() {
 	input_->Update();
-	imGuiManager_->Begin();
-
+	
 	Update3d();
 	Update2d();
 
 #ifdef _DEBUG
 	{
+		imGuiManager_->Begin();
+
 		float playerPos[Vector3Count_] = {
 			player_->GetPosition().x,
 			player_->GetPosition().y,
@@ -147,10 +148,10 @@ void GamePlayScene::Update() {
 		ImGui::InputFloat("RayCol", rayCol);
 		ImGui::End();
 
-	}
+	}imGuiManager_->End();
 #endif
 
-	imGuiManager_->End();
+	
 }
 
 void GamePlayScene::Draw() {
@@ -266,6 +267,8 @@ void GamePlayScene::Initialize3d() {
 
 	//音
 	stageBGM = audio_->SoundLoadWave("Resource/sound/stage.wav");
+	windSE = audio_->SoundLoadWave("Resource/sound/wind.wav");
+	hitSE = audio_->SoundLoadWave("Resource/sound/hit.wav");
 	clearSE = audio_->SoundLoadWave("Resource/sound/stageclear.wav");
 	doneSE = audio_->SoundLoadWave("Resource/sound/done.wav");
 	resetSE = audio_->SoundLoadWave("Resource/sound/reset.wav");
@@ -278,6 +281,8 @@ void GamePlayScene::Initialize3d() {
 
 	ParameterPlayer(positionPlayer, player_->GetStartDirection(), 0);
 	ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
+
+	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), windSE, true);
 
 	isPause_ = false;
 	isReally_ = false;
@@ -336,9 +341,8 @@ void GamePlayScene::Update3d() {
 
 			//pm1_->Active(particle1_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
 			//pm1_->Active(particle2_, { camera_->GetEye() }, { 100.0f, 100.0f, 100.0f }, { 0.2f ,0.2f,0.2f }, { 0.0f,0.001f,0.0f }, 5, { 13.0f, 0.0f });
-			pm1_->ActiveY(particle1_, { 30.0f ,-10.0f,0.0f }, { 100.0f ,0.0f,100.0f }, { 1.4f,5.0f,0.0f }, { 0.0f,0.001f,0.0f }, 5, { 3.0f, 0.0f });
-			pm1_->ActiveY(particle1_, { -10.0f ,-10.0f,0.0f }, { 100.0f ,0.0f,100.0f }, { 1.4f,5.0f,0.0f }, { 0.0f,0.001f,0.0f }, 5, { 3.0f, 0.0f });
-
+			pm1_->ActiveY(particle1_, { 30.0f ,-10.0f,50.0f }, { 150.0f ,0.0f,150.0f }, { 1.4f,5.0f,1.5f }, { 0.0f,0.001f,0.0f }, 10, { 3.0f, 0.0f });
+	
 			//pm2_->Active(particle2_, 30.0f, 0.2f, 0.001f, 5, { 6.0f,0.0f });
 
 			//ImGui::Begin("Stage Clear!");
@@ -835,6 +839,7 @@ void GamePlayScene::Finalize() {
 	//音声
 	audio_->Finalize();
 	audio_->SoundUnload(&stageBGM);
+	audio_->SoundUnload(&hitSE);
 	audio_->SoundUnload(&clearSE);
 	audio_->SoundUnload(&doneSE);
 	audio_->SoundUnload(&resetSE);
@@ -901,6 +906,7 @@ bool GamePlayScene::CollisionStageFlag(Player* p, Stage* s)
 
 			// 当たり判定
 			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), hitSE, false);
 				pm2_->Active(particle2_, pPos, { 0.0f ,0.0f,25.0f }, { 3.0f,3.0f,3.0f }, { 0.0f,0.001f,0.0f }, 100, { 1.0f, 0.0f });
 				return true;
 
@@ -977,5 +983,5 @@ void GamePlayScene::ActiveWind(const int dir, const Vector3& position)
 		break;
 
 	}
-
+	
 }

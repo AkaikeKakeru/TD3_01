@@ -91,7 +91,7 @@ private:
 	std::list<std::unique_ptr<StageData>> stageBlocks_;
 	std::list<std::unique_ptr<StageData>> floorBlocks_;
 	//カメラ
-	static Camera* cameraStage_;
+	Camera* cameraStage_=nullptr;
 
 	// ブロックの倍率(Scale)
 	float magnification_ = 4.0f;

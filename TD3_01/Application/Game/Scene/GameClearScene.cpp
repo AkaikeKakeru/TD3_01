@@ -7,6 +7,10 @@ Input* GameClearScene::input_ = Input::GetInstance();
 
 void GameClearScene::Initialize()
 {
+	//音声
+	audio_ = Audio::GetInstance();
+	audio_->Initialize();
+
 	//カメラ生成
 	camera_ = new Camera();
 	camera_->SetEye({ 0,10,-30 });
@@ -30,14 +34,20 @@ void GameClearScene::Initialize()
 	drawBas_->Initialize();
 
 	drawBas_->LoadTexture(20, "gameclear.png");
+	drawBas_->LoadTexture(21, "gameclearback.png");
 
 	sprite_->Initialize(drawBas_, 20);
+	spriteBack_->Initialize(drawBas_, 21);
 
 	//パーティクル
 	particle1_ = Particle::LoadFromParticleTexture("particle6.png");
 	pm1_ = ParticleManager::Create();
 	pm1_->SetParticleModel(particle1_);
 	pm1_->SetCamera(camera_);
+	
+	clearBGM = audio_->SoundLoadWave("Resource/sound/gameclear.wav");
+
+	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), clearBGM, true);
 
 	change = false;
 }
@@ -55,6 +65,7 @@ void GameClearScene::Update()
 	planeObj_->Update();
 
 	sprite_->Update();
+	spriteBack_->Update();
 
 	if (input_->TriggerMouse(0)) {
 		//シーンの切り替えを依頼
@@ -70,12 +81,12 @@ void GameClearScene::Draw()
 {
 	//スプライト本命処理
 	drawBas_->PreDraw();
+	spriteBack_->Draw();
 	sprite_->Draw();
 	drawBas_->PostDraw();//モデル本命処理
 
 	Object3d::PreDraw(dxBas_->GetCommandList().Get());
 	planeObj_->Draw();
-
 	Object3d::PostDraw();
 
 	ParticleManager::PreDraw(dxBas_->GetCommandList().Get());
@@ -88,6 +99,9 @@ void GameClearScene::Finalize()
 	SafeDelete(planeModel_);
 	SafeDelete(planeObj_);
 	SafeDelete(sprite_);
+	SafeDelete(spriteBack_);
+	audio_->Finalize();
+	audio_->SoundUnload(&clearBGM);
 	//パーティクル
 	SafeDelete(particle1_);
 	SafeDelete(pm1_);

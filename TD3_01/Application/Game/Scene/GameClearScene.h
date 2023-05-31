@@ -11,6 +11,7 @@
 
 #include "Camera.h"
 #include "LightGroup.h"
+#include "Audio.h"
 
 #include "SceneManager.h"
 
@@ -39,10 +40,14 @@ private:
 
 	// スプライト
 	Sprite* sprite_ = new Sprite();
+	Sprite* spriteBack_ = new Sprite();
 
 	//パーティクル
 	Particle* particle1_ = nullptr;
 	ParticleManager* pm1_ = nullptr;
 	Vector3 rot = { 0.0f,0.0f,0.0f };
+
+	Audio* audio_ = nullptr;
+	Audio::SoundData clearBGM;
 
 };

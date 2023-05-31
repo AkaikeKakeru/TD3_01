@@ -4,8 +4,6 @@
 #include "SafeDelete.h"
 
 //using namespace std;
-Camera* Stage::cameraStage_ = nullptr;
-
 Stage::~Stage() {
 	SafeDelete(model_);
 	SafeDelete(modelFloor_);
@@ -18,7 +16,7 @@ Stage::~Stage() {
 
 void Stage::Initialize(Camera* camera) {
 
-	this->cameraStage_ = camera;
+	cameraStage_ = camera;
 
 	//インスタンス生成
 	model_ = new Model();
@@ -30,8 +28,8 @@ void Stage::Initialize(Camera* camera) {
 	objGoal_ = new Object3d();
 
 	// モデル読み込み
-	model_ = Model::LoadFromOBJ("cube", true);
-	modelFloor_ = Model::LoadFromOBJ("floor", true);
+	model_ = Model::LoadFromOBJ("cube", false);
+	modelFloor_ = Model::LoadFromOBJ("floor", false);
 	modelGoal_ = Model::LoadFromOBJ("cubeB", true);
 
 	//3Dオブジェクトとカメラのセット
@@ -46,7 +44,6 @@ void Stage::Initialize(Camera* camera) {
 	objGoal_ = Object3d::Create();
 	objGoal_->SetModel(modelGoal_);
 	objGoal_->SetCamera(cameraStage_);
-
 	// ステージの床を初期化
 	LoadFloorBlock();
 }
@@ -151,19 +148,19 @@ void Stage::LoadStageCommands() {
 
 		while (mapLine != STAGE_WIDTH) {
 			// コマンド読み込み
-			if (word.find("NONE") == 0 || word.find("0") == 0 || word.find("7") == 0) {
+			if (/*word.find("NONE") == 0 ||*/ word.find("0") == 0) {
 				// ステージのブロックを追加
 				PushStageBlockList(stageBlocks_, obj_, NONE, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
-			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
+			else if (/*word.find("BLOCK") == 0 ||*/ word.find("1") == 0) {
 				// ステージのブロックを追加
 				PushStageBlockList(stageBlocks_, objFloor_, BLOCK, mapLine, mapRow, stageDepth_);
 				// インクリメント
 				mapLine++;
 			}
-			else if (word.find("GOAL") == 0 || word.find("6") == 0) {
+			else if (/*word.find("GOAL") == 0 ||*/ word.find("6") == 0) {
 				// ステージのブロックを追加
 				PushStageBlockList(stageBlocks_, objGoal_, GOAL, mapLine, mapRow, stageDepth_);
 				// インクリメント
@@ -196,17 +193,17 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Object3d* ob
 	block->obj = obj;
 
 	// スケール設定
-	block->worldTransform_.scale_ = block->obj->GetScale();
+	//block->worldTransform_.scale_ = block->obj->GetScale();
 	block->worldTransform_.scale_ = { magnification_, magnification_, magnification_ };
 
 	// 座標設定
-	block->worldTransform_.position_ = block->obj->GetPosition();
+	//block->worldTransform_.position_ = block->obj->GetPosition();
 	block->worldTransform_.position_ = pos;
 
 	block->line_ = line;
 	block->row_ = row;
 
-	obj->SetWorldTransform(block->worldTransform_);
+	//obj->SetWorldTransform(block->worldTransform_);
 
 	obj->Update();
 

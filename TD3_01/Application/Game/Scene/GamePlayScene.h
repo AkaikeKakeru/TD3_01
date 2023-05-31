@@ -42,10 +42,7 @@ public:
 	//風
 	void ActiveWind(const int dir, const Vector3& position);
 
-	Stage* GetStage() {
-		return stage_;
-	}
-
+	
 private:
 	void Initialize3d();
 	void Initialize2d();
@@ -144,7 +141,8 @@ private:
 	//音
 	Audio* audio_ = nullptr;
 	Audio::SoundData stageBGM;
-	//Audio::SoundData crashSE;
+	Audio::SoundData windSE;
+	Audio::SoundData hitSE;
 	Audio::SoundData doneSE;
 	Audio::SoundData clearSE;
 	Audio::SoundData resetSE;
@@ -199,6 +197,8 @@ private:
 	//カメララープの終わりフラグ
 	bool isEndCameraLerp_ = false;
 
+	//風が吹いてるか
+	bool isWind_ = true;
 	//ポーズしたか
 	bool isPause_ = false;
 	//タイトルに戻るか
