@@ -8,7 +8,7 @@
 #include <cassert>
 #include <WinApp.h>
 
-Fan* Fan::Create(Model* model) {
+Fan* Fan::Create(Model* model, Audio* audio) {
 	//オブジェクトのインスタンスを生成
 	Fan* instance = new Fan();
 	if (instance == nullptr) {
@@ -26,6 +26,8 @@ Fan* Fan::Create(Model* model) {
 		instance->SetModel(model);
 	}
 
+	instance->audio_ = audio;
+
 	return instance;
 }
 
@@ -34,6 +36,11 @@ bool Fan::Initialize() {
 	if (!Object3d::Initialize()) {
 		return false;
 	}
+
+	//音
+	grabSE = audio_->SoundLoadWave("Resource/sound/grab.wav");
+	changeDirSE = audio_->SoundLoadWave("Resource/sound/fanchange.wav");
+	fanSetSE = audio_->SoundLoadWave("Resource/sound/setfan.wav");
 
 	ray_ = new Ray();
 	ray_->start_ = Object3d::GetPosition();
@@ -91,6 +98,7 @@ void Fan::Update() {
 				Object3d::GetPosition().x > worldTransform3dReticle_.position_.x - 10.0f &&
 				Object3d::GetPosition().z < worldTransform3dReticle_.position_.z + 10.0f &&
 				Object3d::GetPosition().z > worldTransform3dReticle_.position_.z - 10.0f) {
+				if (!isGrab_)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), grabSE, false);
 				isGrab_ = true;
 			}
 		}
@@ -116,7 +124,7 @@ void Fan::Update() {
 				};
 
 				Object3d::SetPosition(localPos);
-
+				if (isGrab_)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), fanSetSE, false);
 				isGrab_ = false;
 			}
 		}
@@ -124,6 +132,7 @@ void Fan::Update() {
 		if (isGrab_) {
 			//移動後の座標を計算
 			if (input_->TriggerKey(DIK_W)) {
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), changeDirSE, false);
 				rotVector_ = CreateRotationVector(angleY, verticalAngle * 2);
 
 				rot = angleY * verticalAngle * 2;
@@ -132,6 +141,7 @@ void Fan::Update() {
 			}
 
 			else if (input_->TriggerKey(DIK_S)) {
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), changeDirSE, false);
 				rotVector_ = CreateRotationVector(angleY, 0);
 
 				rot = angleY * verticalAngle * 0;
@@ -140,6 +150,7 @@ void Fan::Update() {
 			}
 
 			if (input_->TriggerKey(DIK_A)) {
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), changeDirSE, false);
 				rotVector_ = CreateRotationVector(angleY, verticalAngle);
 
 				rot = angleY * verticalAngle;
@@ -148,6 +159,7 @@ void Fan::Update() {
 			}
 
 			else if (input_->TriggerKey(DIK_D)) {
+				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), changeDirSE, false);
 				rotVector_ = CreateRotationVector(angleY, -verticalAngle);
 
 				rot = angleY * -verticalAngle;
@@ -174,7 +186,9 @@ void Fan::Draw() {
 
 void Fan::Finalize() {
 	delete ray_;
-
+	audio_->SoundUnload(&grabSE);
+	audio_->SoundUnload(&changeDirSE);
+	audio_->SoundUnload(&fanSetSE);
 }
 
 void Fan::OnCollision(const CollisionInfo& info) {

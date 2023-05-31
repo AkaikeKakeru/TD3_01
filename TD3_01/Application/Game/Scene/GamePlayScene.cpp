@@ -217,7 +217,7 @@ void GamePlayScene::Initialize3d() {
 
 	for (int i = 0; i < FanCount_; i++) {
 		//ファンの初期化
-		fan_[i] = Fan::Create(fanModel_);
+		fan_[i] = Fan::Create(fanModel_, audio_);
 		fan_[i]->SetScale({ 1.0f,1.0f,1.0f });
 		fan_[i]->SetCamera(camera_);
 	}
@@ -267,11 +267,13 @@ void GamePlayScene::Initialize3d() {
 
 	//音
 	stageBGM = audio_->SoundLoadWave("Resource/sound/stage.wav");
-	windSE = audio_->SoundLoadWave("Resource/sound/wind.wav");
 	hitSE = audio_->SoundLoadWave("Resource/sound/hit.wav");
 	clearSE = audio_->SoundLoadWave("Resource/sound/stageclear.wav");
 	doneSE = audio_->SoundLoadWave("Resource/sound/done.wav");
 	resetSE = audio_->SoundLoadWave("Resource/sound/reset.wav");
+	backSE = audio_->SoundLoadWave("Resource/sound/back.wav");
+	runSE = audio_->SoundLoadWave("Resource/sound/active.wav");
+	windSE = audio_->SoundLoadWave("Resource/sound/wind.wav");
 	
 	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), stageBGM, true);
 
@@ -281,7 +283,6 @@ void GamePlayScene::Initialize3d() {
 
 	ParameterPlayer(positionPlayer, player_->GetStartDirection(), 0);
 	ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
-
 	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), windSE, true);
 
 	isPause_ = false;
@@ -539,6 +540,11 @@ void GamePlayScene::Update3d() {
 		}
 		else
 		{
+			if (input_->TriggerKey(DIK_SPACE) && !isReally_)
+			{
+				if (!player_->GetIsRun())audio_->SoundPlayWave(audio_->GetXAudio2().Get(), runSE, false);
+			}
+			
 			if (stage_->GetIsGoal())
 			{
 				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), clearSE, false);
@@ -637,7 +643,7 @@ void GamePlayScene::Update3d() {
 			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
 
 			if (input_->TriggerKey(DIK_Q) && ruleCount == 1) {
-				audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
+				
 				isrule_ = false;
 
 			}
@@ -655,7 +661,7 @@ void GamePlayScene::Update3d() {
 		}
 		if (input_->TriggerKey(DIK_Q))
 		{
-			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), backSE, false);
 			isPause_ = false;
 		}
 		if (input_->TriggerKey(DIK_E))
@@ -679,7 +685,7 @@ void GamePlayScene::Update3d() {
 		//Pauseへ
 		if (input_->TriggerKey(DIK_W))
 		{
-			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), doneSE, false);
+			audio_->SoundPlayWave(audio_->GetXAudio2().Get(), backSE, false);
 			isPause_ = true;
 			isReally_ = false;
 		}
@@ -821,6 +827,18 @@ void GamePlayScene::ResetCameraMove() {
 }
 
 void GamePlayScene::Finalize() {
+	
+	//音声
+	audio_->Finalize();
+	audio_->SoundUnload(&stageBGM);
+	audio_->SoundUnload(&hitSE);
+	audio_->SoundUnload(&clearSE);
+	audio_->SoundUnload(&doneSE);
+	audio_->SoundUnload(&resetSE);
+	audio_->SoundUnload(&backSE);
+	audio_->SoundUnload(&runSE);
+	audio_->SoundUnload(&windSE);
+
 	player_->Finalize();
 	SafeDelete(player_);
 	SafeDelete(playerModel_);
@@ -836,13 +854,7 @@ void GamePlayScene::Finalize() {
 
 	skydome_->Finalize();
 	SafeDelete(skydome_);
-	//音声
-	audio_->Finalize();
-	audio_->SoundUnload(&stageBGM);
-	audio_->SoundUnload(&hitSE);
-	audio_->SoundUnload(&clearSE);
-	audio_->SoundUnload(&doneSE);
-	audio_->SoundUnload(&resetSE);
+	
 	//パーティクル
 	SafeDelete(particle1_);
 	SafeDelete(pm1_);
@@ -937,7 +949,7 @@ void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2,
 		fan_[i]->SetPosition(pos[i]);
 		fan_[i]->Update();
 	}
-
+	
 }
 
 void GamePlayScene::ReSetPositionPlayer(const Vector3& playerPos)
@@ -956,7 +968,7 @@ void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanP
 		fan_[i]->SetPosition(pos[i]);
 
 	}
-
+	
 }
 
 void GamePlayScene::ActiveWind(const int dir, const Vector3& position)
