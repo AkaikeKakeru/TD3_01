@@ -31,7 +31,6 @@ void GameClearScene::Initialize()
 
 	//•`‰æŠî”Õ
 	drawBas_ = DrawBasis::GetInstance();
-	drawBas_->Initialize();
 
 	drawBas_->LoadTexture(20, "gameclear.png");
 	drawBas_->LoadTexture(21, "gameclearback.png");

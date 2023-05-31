@@ -13,7 +13,6 @@
 
 DirectXBasis* GamePlayScene::dxBas_ = DirectXBasis::GetInstance();
 Input* GamePlayScene::input_ = Input::GetInstance();
-DrawBasis* GamePlayScene::drawBas_ = DrawBasis::GetInstance();
 ImGuiManager* GamePlayScene::imGuiManager_ = ImGuiManager::GetInstance();
 
 void GamePlayScene::Initialize() {
@@ -291,6 +290,9 @@ void GamePlayScene::Initialize3d() {
 }
 
 void GamePlayScene::Initialize2d() {
+	//描画基盤
+	drawBas_ = DrawBasis::GetInstance();
+
 	drawBas_->LoadTexture(10, "pause.png");
 	drawBas_->LoadTexture(11, "tutorial.png");
 	drawBas_->LoadTexture(12, "tutorial2.png");
@@ -298,10 +300,12 @@ void GamePlayScene::Initialize2d() {
 	drawBas_->LoadTexture(14, "resetinfo.png");
 	drawBas_->LoadTexture(15, "really.png");
 	drawBas_->LoadTexture(16, "stageclear.png");
+	drawBas_->LoadTexture(17, "active.png");
 
 	spritePause_->Initialize(drawBas_, 10);
 	spritePauseInfo_->Initialize(drawBas_, 13);
 	spriteResetInfo_->Initialize(drawBas_, 14);
+	spriteActiveInfo_->Initialize(drawBas_, 17);
 	rule_->Initialize(drawBas_, 11);
 	rule2_->Initialize(drawBas_, 12);
 	really_->Initialize(drawBas_, 15);
@@ -309,6 +313,7 @@ void GamePlayScene::Initialize2d() {
 
 	spritePause_->SetColor({ 1.0f,1.0f,1.0f,0.75f });
 	spriteResetInfo_->SetPosition({ 900.0f,0.0f });
+	spriteActiveInfo_->SetPosition({ 200.0f,600.0f });
 }
 
 void GamePlayScene::Update3d() {
@@ -699,6 +704,7 @@ void GamePlayScene::Update2d() {
 	//移動後の座標を計算
 
 	// 座標の変更を反映
+	spriteActiveInfo_->Update();
 	spritePause_->Update();
 	spriteResetInfo_->Update();
 
@@ -748,6 +754,7 @@ void GamePlayScene::Draw2d() {
 		{
 			spritePauseInfo_->Draw();
 			spriteResetInfo_->Draw();
+			spriteActiveInfo_->Draw();
 		}
 		else
 		{
@@ -866,6 +873,7 @@ void GamePlayScene::Finalize() {
 	SafeDelete(spritePause_);
 	SafeDelete(spritePauseInfo_);
 	SafeDelete(spriteResetInfo_);
+	SafeDelete(spriteActiveInfo_);
 	SafeDelete(rule_);
 	SafeDelete(rule2_);
 	SafeDelete(really_);
