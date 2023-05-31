@@ -147,6 +147,7 @@ private:
 	Audio::SoundData resetSE;
 	Audio::SoundData backSE;
 	Audio::SoundData runSE;
+	Audio::SoundData windSE;
 
 	/// <summary>
 	/// スプライト

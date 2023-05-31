@@ -273,6 +273,7 @@ void GamePlayScene::Initialize3d() {
 	resetSE = audio_->SoundLoadWave("Resource/sound/reset.wav");
 	backSE = audio_->SoundLoadWave("Resource/sound/back.wav");
 	runSE = audio_->SoundLoadWave("Resource/sound/active.wav");
+	windSE = audio_->SoundLoadWave("Resource/sound/wind.wav");
 	
 	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), stageBGM, true);
 
@@ -282,7 +283,7 @@ void GamePlayScene::Initialize3d() {
 
 	ParameterPlayer(positionPlayer, player_->GetStartDirection(), 0);
 	ParamaterFun(positionFan[0], positionFan[1], positionFan[2], positionFan[3], positionFan[4]);
-
+	audio_->SoundPlayWave(audio_->GetXAudio2().Get(), windSE, true);
 
 	isPause_ = false;
 	isReally_ = false;
@@ -836,6 +837,7 @@ void GamePlayScene::Finalize() {
 	audio_->SoundUnload(&resetSE);
 	audio_->SoundUnload(&backSE);
 	audio_->SoundUnload(&runSE);
+	audio_->SoundUnload(&windSE);
 
 	player_->Finalize();
 	SafeDelete(player_);
@@ -947,7 +949,7 @@ void GamePlayScene::ParamaterFun(const Vector3& fanPos1, const Vector3& fanPos2,
 		fan_[i]->SetPosition(pos[i]);
 		fan_[i]->Update();
 	}
-
+	
 }
 
 void GamePlayScene::ReSetPositionPlayer(const Vector3& playerPos)
@@ -966,7 +968,7 @@ void GamePlayScene::ReSetPositionFan(const Vector3& fanPos1, const Vector3& fanP
 		fan_[i]->SetPosition(pos[i]);
 
 	}
-
+	
 }
 
 void GamePlayScene::ActiveWind(const int dir, const Vector3& position)

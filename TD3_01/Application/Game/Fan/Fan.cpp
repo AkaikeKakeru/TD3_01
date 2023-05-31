@@ -8,7 +8,7 @@
 #include <cassert>
 #include <WinApp.h>
 
-Fan* Fan::Create(Model* model,Audio* audio) {
+Fan* Fan::Create(Model* model, Audio* audio) {
 	//オブジェクトのインスタンスを生成
 	Fan* instance = new Fan();
 	if (instance == nullptr) {
@@ -26,7 +26,7 @@ Fan* Fan::Create(Model* model,Audio* audio) {
 		instance->SetModel(model);
 	}
 
-		instance->audio_ = audio;
+	instance->audio_ = audio;
 
 	return instance;
 }
@@ -36,12 +36,12 @@ bool Fan::Initialize() {
 	if (!Object3d::Initialize()) {
 		return false;
 	}
-	
-		//音
-		grabSE = audio_->SoundLoadWave("Resource/sound/grab.wav");
-		changeDirSE = audio_->SoundLoadWave("Resource/sound/fanchange.wav");
-		fanSetSE = audio_->SoundLoadWave("Resource/sound/setfan.wav");
-	
+
+	//音
+	grabSE = audio_->SoundLoadWave("Resource/sound/grab.wav");
+	changeDirSE = audio_->SoundLoadWave("Resource/sound/fanchange.wav");
+	fanSetSE = audio_->SoundLoadWave("Resource/sound/setfan.wav");
+
 	ray_ = new Ray();
 	ray_->start_ = Object3d::GetPosition();
 	ray_->dir_ = Object3d::GetRotation();
@@ -98,7 +98,7 @@ void Fan::Update() {
 				Object3d::GetPosition().x > worldTransform3dReticle_.position_.x - 10.0f &&
 				Object3d::GetPosition().z < worldTransform3dReticle_.position_.z + 10.0f &&
 				Object3d::GetPosition().z > worldTransform3dReticle_.position_.z - 10.0f) {
-				if(!isGrab_)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), grabSE, false);
+				if (!isGrab_)audio_->SoundPlayWave(audio_->GetXAudio2().Get(), grabSE, false);
 				isGrab_ = true;
 			}
 		}
